@@ -33,8 +33,9 @@ class _UserFormState extends State<UserForm> {
 
   Map<String, bool> hobbies = {};
 
-  bool isPassword = true;
-  bool isCPassword = true;
+  bool isPassword = false;
+  bool isCPassword = false;
+
   String gender = 'Female';
 
   int first = 0, last = 0;
@@ -98,9 +99,7 @@ class _UserFormState extends State<UserForm> {
                     return null;
                   },
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20,),
                 // endregion Name
 
                 // For email
@@ -129,7 +128,8 @@ class _UserFormState extends State<UserForm> {
                 // region Mobile
                 getInput(mobileController, 'Phone Number',
                     formatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      LengthLimitingTextInputFormatter(10)
                     ],
                     keyboard: TextInputType.phone, validator: (value) {
                   if (value!.isEmpty) {
@@ -267,7 +267,6 @@ class _UserFormState extends State<UserForm> {
                               initialDate: DateTime(last - 1),
                               firstDate: DateTime(first),
                               lastDate: DateTime(last),
-
                               helpText: "Date of Birth",
                             );
                             dob = DateFormat("dd/MM/yyyy").format(date!);
@@ -315,13 +314,19 @@ class _UserFormState extends State<UserForm> {
 
                 // Password
                 // region Password
-                getInput(passwordController, 'Password', isObs: isPassword,
+                getInput(passwordController, 'Password',
+                    isObs: true,
                     validator: (value) {
                   if (value!.isEmpty) {
                     return "Enter your password";
                   }
                   return null;
-                }),
+                },
+                  isPasswordVisible: isPassword,
+                  onToggle:  (){ setState(() {
+                    isPassword = !isPassword;
+                  });}
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -330,7 +335,7 @@ class _UserFormState extends State<UserForm> {
                 //Confirm Password
                 // region CPassword
                 getInput(confirmPasswordController, 'Confirm Password',
-                    isObs: isCPassword, validator: (value) {
+                    isObs: true, validator: (value) {
                   if (value!.isEmpty) {
                     return "Enter your password to confirm";
                   }
@@ -338,7 +343,10 @@ class _UserFormState extends State<UserForm> {
                     return "confirm password doesn't match";
                   }
                   return null;
-                }),
+                },
+                  isPasswordVisible: isCPassword,
+                  onToggle: ()=> setState(() { isCPassword = !isCPassword; })
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -385,7 +393,10 @@ class _UserFormState extends State<UserForm> {
       {List<TextInputFormatter>? formatters,
       validator,
       TextInputType? keyboard,
-      bool? isObs}) {
+      bool? isObs,
+      bool? isPasswordVisible,
+        onToggle
+      }) {
     return Row(
       children: [
         SizedBox(width: 150, child: Text("$txt : ")),
@@ -394,36 +405,24 @@ class _UserFormState extends State<UserForm> {
         ),
         Expanded(
           child: TextFormField(
+            obscureText: (isObs ?? false) && (isPasswordVisible == false),
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            obscureText: isObs ?? false,
-            obscuringCharacter: '*',
             validator: validator,
             controller: controller,
+            keyboardType: keyboard,
+            inputFormatters: formatters,
             decoration: InputDecoration(
                 border: const OutlineInputBorder(
                     borderRadius: BorderRadius.horizontal(
                         right: Radius.circular(10), left: Radius.circular(10))),
                 labelText: 'Enter your $txt',
                 hintText: 'Enter your $txt',
-                suffixIcon: isObs != null
-                    ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (controller == passwordController) {
-                              isPassword = !isPassword;
-                            } else {
-                              isCPassword = !isCPassword;
-                            }
-                          });
-                        },
-                        icon: Icon(isPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off))
-                    : null),
-            keyboardType: keyboard,
-            inputFormatters: formatters,
-          ),
+              suffixIcon: isObs != null ?
+                  IconButton(
+                      onPressed: onToggle,
+                      icon: Icon(isPasswordVisible! ? Icons.visibility : Icons.visibility_off )) : null          ),
         ),
+        )
       ],
     );
   }
