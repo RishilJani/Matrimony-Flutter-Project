@@ -1,4 +1,4 @@
-# matrimony_application
+# Matrimony Application
 
 Flutter project Matrimony Application
 
