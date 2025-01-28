@@ -24,11 +24,12 @@ class _UserFormState extends State<UserForm> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-  List<String> cities = ['Jamnagar', 'Rajkot', 'Ahmedabad', 'Baroda'];
+  List<String> cities = ['Jamnagar', 'Rajkot', 'Ahmedabad', 'Baroda','Dwarka'];
   String selectCity = '';
   bool isEdit = false;
 
-  DateTime? date = DateTime.now();
+  DateTime date = DateTime.now();
+  DateTime? pikedDate = DateTime.now();
   String dob = 'Select DOB';
 
   Map<String, bool> hobbies = {};
@@ -38,7 +39,6 @@ class _UserFormState extends State<UserForm> {
 
   String gender = 'Female';
 
-  int first = 0, last = 0;
   @override
   void initState() {
     super.initState();
@@ -56,9 +56,8 @@ class _UserFormState extends State<UserForm> {
     } else {
       selectCity = cities[0];
       hobbies = {"Reading": false, "Music": false, "Dance": false};
-      dob = DateFormat("dd/MM/yyyy").format(date!);
-      first = date!.year - 88;
-      last = date!.year - 18;
+      dob = DateFormat("dd/MM/yyyy").format(DateTime(date.year - 20));
+      pikedDate = DateTime(date.year - 20);
     }
   }
 
@@ -261,15 +260,15 @@ class _UserFormState extends State<UserForm> {
                               left: Radius.circular(10))),
                       child: TextButton(
                           onPressed: () async {
-                            date = await showDatePicker(
+                            pikedDate = await showDatePicker(
                               context: context,
                               initialEntryMode: DatePickerEntryMode.calendar,
-                              initialDate: DateTime(last - 1),
-                              firstDate: DateTime(first),
-                              lastDate: DateTime(last),
+                              initialDate: DateTime(date.year - 20),
+                              firstDate: DateTime(date.year - 80),
+                              lastDate: DateTime(date.year - 18),
                               helpText: "Date of Birth",
-                            );
-                            dob = DateFormat("dd/MM/yyyy").format(date!);
+                            ) ?? DateTime(date.year - 20);
+                            dob = DateFormat("dd/MM/yyyy").format(date);
                             setState(() {});
                           },
                           child: Text(
@@ -323,9 +322,7 @@ class _UserFormState extends State<UserForm> {
                   return null;
                 },
                   isPasswordVisible: isPassword,
-                  onToggle:  (){ setState(() {
-                    isPassword = !isPassword;
-                  });}
+                  onToggle:  (){ setState(() { isPassword = !isPassword; });}
                 ),
                 const SizedBox(
                   height: 20,

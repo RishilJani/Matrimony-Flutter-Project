@@ -25,7 +25,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
