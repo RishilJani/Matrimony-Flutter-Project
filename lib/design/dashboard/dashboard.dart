@@ -17,7 +17,6 @@ class Dashboard extends StatelessWidget {
           'Matrimony',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

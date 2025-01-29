@@ -42,7 +42,7 @@ class _UserListPageState extends State<UserListPage> {
           // region AllFavourite
           IconButton(
             tooltip: isAllFavourite ? "Remove all from favourite" : "Add All to favourite",
-              onPressed:(){
+              onPressed: data.isEmpty ? null : (){
                 unFavourite(0,isAllFavourite);
               },
               icon: Icon(isAllFavourite ? Icons.favorite : Icons.favorite_border_rounded,color: Colors.pink),
@@ -51,7 +51,7 @@ class _UserListPageState extends State<UserListPage> {
 
           // region DeleteAll
           IconButton(
-              onPressed: (){
+              onPressed: data.isEmpty ? null : (){
                 deleteDialog(0,true);
               },
               icon: const Icon(Icons.delete,color: Colors.red,),

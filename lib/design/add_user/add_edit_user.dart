@@ -267,8 +267,9 @@ class _UserFormState extends State<UserForm> {
                               firstDate: DateTime(date.year - 80),
                               lastDate: DateTime(date.year - 18),
                               helpText: "Date of Birth",
-                            ) ?? DateTime(date.year - 20);
-                            dob = DateFormat("dd/MM/yyyy").format(date);
+                            ) ?? DateTime(date.year - 20,1,1);
+
+                            dob = DateFormat("dd/MM/yyyy").format(pikedDate!);
                             setState(() {});
                           },
                           child: Text(
@@ -403,7 +404,7 @@ class _UserFormState extends State<UserForm> {
         Expanded(
           child: TextFormField(
             obscureText: (isObs ?? false) && (isPasswordVisible == false),
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            autovalidateMode: AutovalidateMode.onUnfocus,
             validator: validator,
             controller: controller,
             keyboardType: keyboard,

@@ -7,14 +7,15 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title:  const Text(
           'About Us',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: const Column(
+      body: Column(
         children: [
-          Center(child: Text('About us')),
+          Image.asset('assets/images/Three_Hearts.jpg'),
         ],
       ),
     );

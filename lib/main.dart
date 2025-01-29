@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matrimony_application/design/about_us/about_us.dart';
 import 'design/dashboard/dashboard.dart';
 import 'design/user_list/user_list_page.dart';
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Dashboard(),
+      home: AboutUs(),
     );
   }
 }
