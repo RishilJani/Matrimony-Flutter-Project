@@ -51,24 +51,28 @@ class Dashboard extends StatelessWidget {
             },
           ));
         },
-        child: Card(
-            shadowColor: Colors.lightBlue,
-            margin: const EdgeInsets.all(20),
-            elevation: 10,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                  Icon(
-                    icon,
-                    size: 35,
-                  ),
+        child: Container(
+          height: 200,
+          child: Card(
+              shadowColor: Colors.lightBlue,
+              margin: const EdgeInsets.all(20),
+              elevation: 10,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                    Icon(
+                      icon,
+                      size: 35,
+                    ),
 
-                Text(
-                  txt,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ],
-            )),
+                  Text(
+                    txt,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ],
+              )),
+        ),
       ),
     );
   }

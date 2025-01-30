@@ -35,7 +35,9 @@ class _UserListPageState extends State<UserListPage> {
       appBar: AppBar(
 
         backgroundColor: widget.isFav ? Colors.pinkAccent : Colors.blueAccent,
-        title: Text( widget.isFav ? "Favourite Users" : "User List" ,style: const TextStyle(fontWeight: FontWeight.bold),),
+        title: Text( widget.isFav ? "Favourite Users" : "User List" ,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         actions: [
 

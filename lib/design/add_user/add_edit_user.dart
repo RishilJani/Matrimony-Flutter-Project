@@ -85,6 +85,7 @@ class _UserFormState extends State<UserForm> {
                 getInput(
                   nameController,
                   'Name',
+                  suffix: Icon(Icons.person),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Enter your name';
@@ -104,7 +105,8 @@ class _UserFormState extends State<UserForm> {
                 // For email
                 // region Email
                 getInput(emailController, 'Email Address',
-                    keyboard: TextInputType.emailAddress, validator: (value) {
+                    keyboard: TextInputType.emailAddress, 
+                    validator: (value) {
                   if (value!.isEmpty) {
                     return 'Enter your Email Address';
                   }
@@ -117,7 +119,9 @@ class _UserFormState extends State<UserForm> {
                     return 'Enter Unique email';
                   }
                   return null;
-                }),
+                },
+                    suffix: Icon(Icons.email)
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -130,7 +134,8 @@ class _UserFormState extends State<UserForm> {
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       LengthLimitingTextInputFormatter(10)
                     ],
-                    keyboard: TextInputType.phone, validator: (value) {
+                    keyboard: TextInputType.phone, 
+                    validator: (value) {
                   if (value!.isEmpty) {
                     return "Enter your mobile number";
                   }
@@ -144,7 +149,9 @@ class _UserFormState extends State<UserForm> {
                     return 'Enter Unique Phone number';
                   }
                   return null;
-                }),
+                },
+                    suffix: Icon(Icons.phone)
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -155,7 +162,7 @@ class _UserFormState extends State<UserForm> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(width: 150, child: Text('Hobbies : ')),
+                    const SizedBox(width: 150, child: Text('Hobbies : ',style: TextStyle(fontSize: 15),)),
                     const SizedBox(
                       width: 8,
                     ),
@@ -190,7 +197,7 @@ class _UserFormState extends State<UserForm> {
                 // region Gender
                 Row(
                   children: [
-                    const SizedBox(width: 150, child: Text('Gender : ')),
+                    const SizedBox(width: 150, child: Text('Gender : ',style: TextStyle(fontSize: 15),)),
                     const SizedBox(
                       width: 8,
                     ),
@@ -247,7 +254,7 @@ class _UserFormState extends State<UserForm> {
                 // region DOB
                 Row(
                   children: [
-                    const SizedBox(width: 150, child: Text('DOB : ')),
+                    const SizedBox(width: 150, child: Text('DOB : ',style: TextStyle(fontSize: 15),)),
                     const SizedBox(
                       width: 8,
                     ),
@@ -288,11 +295,13 @@ class _UserFormState extends State<UserForm> {
                 // region City
                 Row(
                   children: [
-                    const SizedBox(width: 150, child: Text('City : ')),
+                    const SizedBox(width: 150, child: Text('City : ',style: TextStyle(fontSize: 15),)),
                     const SizedBox(
                       width: 8,
                     ),
                     DropdownButton(
+                      menuWidth: 200,
+                      icon: const Icon(Icons.location_city),
                         value: selectCity,
                         items: cities.map((city) {
                           return DropdownMenuItem(
@@ -390,6 +399,7 @@ class _UserFormState extends State<UserForm> {
   Widget getInput(TextEditingController controller, String txt,
       {List<TextInputFormatter>? formatters,
       validator,
+        suffix,
       TextInputType? keyboard,
       bool? isObs,
       bool? isPasswordVisible,
@@ -397,10 +407,14 @@ class _UserFormState extends State<UserForm> {
       }) {
     return Row(
       children: [
-        SizedBox(width: 150, child: Text("$txt : ")),
-        const SizedBox(
-          width: 8,
+        SizedBox(
+            width: 150,
+            child:  Text(
+                "$txt : ",
+                style: TextStyle(fontSize: 15),
+            )
         ),
+        const SizedBox( width: 8, ),
         Expanded(
           child: TextFormField(
             obscureText: (isObs ?? false) && (isPasswordVisible == false),
@@ -418,7 +432,7 @@ class _UserFormState extends State<UserForm> {
               suffixIcon: isObs != null ?
                   IconButton(
                       onPressed: onToggle,
-                      icon: Icon(isPasswordVisible! ? Icons.visibility : Icons.visibility_off )) : null          ),
+                      icon: Icon(isPasswordVisible! ? Icons.visibility : Icons.visibility_off )) : suffix ),
         ),
         )
       ],

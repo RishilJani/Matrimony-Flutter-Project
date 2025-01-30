@@ -63,6 +63,8 @@ flutter:
   assets:
      - assets/images/Three_Hearts.jpg
      - assets/images/Two_Hearts.jpg
+     - assets/images/DU_Logo.jpg
+     - assets/images/ASWDC.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
