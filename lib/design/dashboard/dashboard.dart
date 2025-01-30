@@ -15,7 +15,11 @@ class Dashboard extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           'Matrimony',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'StyleScript'
+          ),
         ),
       ),
       body: Padding(
@@ -41,22 +45,22 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget myItem(String txt, IconData icon, [context, my_page]) {
+  Widget myItem(String txt, IconData icon, [context, myPage]) {
     return Expanded(
       child: InkWell(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return my_page;
+              return myPage;
             },
           ));
         },
-        child: Container(
+        child: SizedBox(
           height: 200,
           child: Card(
               shadowColor: Colors.lightBlue,
               margin: const EdgeInsets.all(20),
-              elevation: 10,
+              elevation: 15,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,

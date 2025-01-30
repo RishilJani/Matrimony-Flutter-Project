@@ -8,10 +8,15 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.limeAccent,
         centerTitle: true,
         title: const Text(
           'About Us',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'StyleScript'
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -194,7 +199,7 @@ class AboutUs extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               const Column(
                 children: [
                   Row(

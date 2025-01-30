@@ -68,7 +68,11 @@ class _UserFormState extends State<UserForm> {
         backgroundColor: Colors.lightBlue,
         title: Text(
           isEdit ? 'Edit Details' : "Register User",
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'StyleScript'
+          ),
         ),
         centerTitle: true,
       ),
@@ -85,7 +89,7 @@ class _UserFormState extends State<UserForm> {
                 getInput(
                   nameController,
                   'Name',
-                  suffix: Icon(Icons.person),
+                  suffix: const Icon(Icons.person),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Enter your name';
@@ -120,7 +124,7 @@ class _UserFormState extends State<UserForm> {
                   }
                   return null;
                 },
-                    suffix: Icon(Icons.email)
+                    suffix: const Icon(Icons.email)
                 ),
                 const SizedBox(
                   height: 20,
@@ -150,7 +154,7 @@ class _UserFormState extends State<UserForm> {
                   }
                   return null;
                 },
-                    suffix: Icon(Icons.phone)
+                    suffix: const Icon(Icons.phone)
                 ),
                 const SizedBox(
                   height: 20,
@@ -325,9 +329,12 @@ class _UserFormState extends State<UserForm> {
                 // region Password
                 getInput(passwordController, 'Password',
                     isObs: true,
-                    validator: (value) {
+                    validator: (String? value) {
                   if (value!.isEmpty) {
                     return "Enter your password";
+                  }
+                  if(!RegExp(r'[a-z]+').hasMatch(value)){
+                    return "Password must contain at least one lower case letter";
                   }
                   return null;
                 },
@@ -411,7 +418,7 @@ class _UserFormState extends State<UserForm> {
             width: 150,
             child:  Text(
                 "$txt : ",
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
             )
         ),
         const SizedBox( width: 8, ),

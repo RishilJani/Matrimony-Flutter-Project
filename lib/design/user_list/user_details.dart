@@ -31,8 +31,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
         centerTitle: true,
-        title: Text(widget.userDetail[Name]),
-        titleTextStyle: const TextStyle(fontSize: 35,fontWeight: FontWeight.bold),
+        title: Text(
+            widget.userDetail[Name],
+            style: const TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'StyleScript'
+          ),
+        ),
 
         actions: [
           // Favourite
