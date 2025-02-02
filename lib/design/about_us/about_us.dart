@@ -15,8 +15,7 @@ class AboutUs extends StatelessWidget {
           style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
-              fontFamily: 'StyleScript'
-          ),
+              fontFamily: 'StyleScript'),
         ),
       ),
       body: SingleChildScrollView(
@@ -24,8 +23,10 @@ class AboutUs extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
+
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // region heading
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -50,23 +51,17 @@ class AboutUs extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
+
+              // endregion heading
+
+
+              const SizedBox( height: 10, ),
 
               // region MeetOurTeam
 
-              getTitleContainer("Meet Our Team"),
-              Container(
-                padding: const EdgeInsets.only(left: 5, top: 5),
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 235, 245),
-                    border: Border.all(
-                      color: Colors.purple,
-                    )),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
+              getContainers(
+                  "Meet Our Team",
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       getRow("Developed by", "Rishil Jani (23010101105)"),
@@ -74,7 +69,7 @@ class AboutUs extends StatelessWidget {
                         height: 10,
                       ),
                       getRow('Mentored by',
-                          "Prof. Mehul Bhundiya (Computer Engineering Department),School of Computer Science "),
+                          "Prof. Mehul Bhundiya ( Computer Engineering Department ) , School of Computer Science "),
                       const SizedBox(
                         height: 10,
                       ),
@@ -86,88 +81,79 @@ class AboutUs extends StatelessWidget {
                       getRow('Eulogized by',
                           'Darshan University, Rajkot, Gujarat - INDIA'),
                     ],
-                  ),
-                ),
+                  )
               ),
 
               // endregion MeetOurTeam
 
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
 
               // region AboutASWDC
 
-              getTitleContainer("About ASWDC"),
-              Container(
-                padding: const EdgeInsets.only(left: 5, top: 5),
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 235, 245),
-                    border: Border.all(
-                      color: Colors.purple,
-                    )),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
+              getContainers(
+                  "About ASWDC",
+                  Column(
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Image.asset(
-                              "assets/images/DU_Logo.jpg",
-                              height: 80,
-                            ),
-                          ),
-                          Expanded(
-                            child: Image.asset(
-                              "assets/images/ASWDC.jpg",
-                              height: 75,
-                            ),
-                          )
-                        ],
+                      Expanded(
+                        child: Image.asset(
+                          "assets/images/DU_Logo.jpg",
+                          height: 80,
+                        ),
                       ),
-                      const SizedBox(height: 15,),
-
-                      const Row(
-                        children: [
-                          Expanded( child: Text(
-                                  'ASWDC is Application , Software and Website Development Center @ Darshan University run by Students and Staff of School of Computer Science.',
-                                style: TextStyle(
-                                  fontSize: 16
-                                ),
-                              ), ),
-                        ],
-                      ),
-                      const SizedBox(height: 10,),
-                      const Row(
-                        children: [
-                          Expanded( child: Text(
-                            'Sole purpose of Aswdc is to bridge gap between university curriculum & industry demands. Students learn cutting edge technologies, develop real world application & experience professional environment @ ASWDC under guidance of industry experts & faculty members.',
-                            style: TextStyle(
-                                fontSize: 16
-                            ),
-                          ), ),
-                        ],
+                      Expanded(
+                        child: Image.asset(
+                          "assets/images/ASWDC.jpg",
+                          height: 75,
+                        ),
                       )
-
                     ],
                   ),
-                ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'ASWDC is Application , Software and Website Development Center @ Darshan University run by Students and Staff of School of Computer Science.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Sole purpose of Aswdc is to bridge gap between university curriculum & industry demands. Students learn cutting edge technologies, develop real world application & experience professional environment @ ASWDC under guidance of industry experts & faculty members.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
               ),
+
 
               // endregion AboutASWDC
 
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
 
               // region ContactUs
 
-              getTitleContainer('Contact Us'),
-              Container(
-                padding: const EdgeInsets.only(left: 5, top: 5),
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 235, 245),
-                    border: Border.all(
-                      color: Colors.purple,
-                    )),
-                child: Column(
+              getContainers(
+                "Contact Us",
+                Column(
                   children: [
                     getInfo(Icons.mail, 'aswdc@darshan.ac.in'),
                     getInfo(Icons.phone, '+91-9727747317'),
@@ -176,10 +162,12 @@ class AboutUs extends StatelessWidget {
                 ),
               ),
 
+
               // endregion ContactUs
 
-              const SizedBox(height: 20,),
-
+              const SizedBox(
+                height: 20,
+              ),
 
               Container(
                 padding: const EdgeInsets.only(left: 5, top: 5),
@@ -194,27 +182,36 @@ class AboutUs extends StatelessWidget {
                     getInfo(CupertinoIcons.circle_grid_3x3_fill, 'More Apps'),
                     getInfo(CupertinoIcons.star, 'Rate Us'),
                     getInfo(Icons.thumb_up, 'Like us on Facebook'),
-                    getInfo(CupertinoIcons.arrow_2_circlepath, 'Like us on Facebook'),
+                    getInfo(CupertinoIcons.arrow_2_circlepath,
+                        'Like us on Facebook'),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               const Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.copyright,size: 20,),
-                      Text("2025 Darshan University"),],
+                      Icon(
+                        Icons.copyright,
+                        size: 20,
+                      ),
+                      Text("2025 Darshan University"),
+                    ],
                   ),
                   Text("All Rights Reserved - Privacy Policy"),
-                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Made With "),
-                      Icon(CupertinoIcons.heart_solid,color: Colors.red,),
+                      Icon(
+                        CupertinoIcons.heart_solid,
+                        color: Colors.red,
+                      ),
                       Text(" in India")
                     ],
                   )
@@ -227,19 +224,40 @@ class AboutUs extends StatelessWidget {
     );
   }
 
-  Widget getTitleContainer(String txt) {
-    return Container(
-      margin: const EdgeInsets.only(left: 15),
-      padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-          color: Colors.deepPurpleAccent,
-          borderRadius: BorderRadius.all(Radius.circular(5))),
-      child: Text(
-        txt,
-        style: const TextStyle(color: Colors.white, fontSize: 15),
+  Widget getContainers(String txt, item) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+      Container(
+        margin: const EdgeInsets.only(left: 15),
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+            color: Colors.deepPurpleAccent,
+            borderRadius: BorderRadius.all(Radius.circular(5))),
+        child: Text(
+          txt,
+          style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            fontFamily: "RobotoFlex"
+          ),
+        ),
       ),
-    );
+      Container(
+        padding: const EdgeInsets.only(left: 5, top: 5),
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 255, 235, 245),
+            border: Border.all(
+              color: Colors.purple,
+            )),
+        child: Padding(
+            padding: EdgeInsets.all(10),
+          child: item,
+        ),
+      )
+    ]);
   }
+
 
   Widget getRow(String left, String right) {
     return Row(
@@ -249,25 +267,31 @@ class AboutUs extends StatelessWidget {
           child: Text(
             left,
             style: const TextStyle(
-              color: Colors.purple,
+                color: Colors.purple,
+                fontFamily: "RobotoFlex",
+                fontSize: 15
             ),
           ),
         ),
+
         const Expanded(
           flex: 1,
           child: Text(
             ":",
             style: TextStyle(
+              fontFamily: "RobotoFlex",
               color: Colors.purple,
               fontSize: 15,
             ),
           ),
         ),
+
         Expanded(
           flex: 3,
           child: Text(
             right,
             style: const TextStyle(
+              fontFamily: "RobotoFlex",
               fontSize: 15,
             ),
           ),
@@ -276,10 +300,19 @@ class AboutUs extends StatelessWidget {
     );
   }
 
-  Widget getInfo(IconData icon,String txt){
+  Widget getInfo(IconData icon, String txt) {
     return ListTile(
-      leading: Icon(icon,color: Colors.purple,),
-      title: Text(txt),
+      leading: Icon(
+        icon,
+        color: Colors.purple,
+      ),
+      title: Text(
+          txt,
+        style: const TextStyle(
+          fontFamily: "RobotoFlex",
+
+        ),
+      ),
     );
   }
 }

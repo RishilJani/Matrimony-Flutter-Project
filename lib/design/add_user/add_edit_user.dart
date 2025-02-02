@@ -333,9 +333,28 @@ class _UserFormState extends State<UserForm> {
                   if (value!.isEmpty) {
                     return "Enter your password";
                   }
-                  if(!RegExp(r'[a-z]+').hasMatch(value)){
-                    return "Password must contain at least one lower case letter";
+                  if(value.length < 8) {
+                    return 'Too short : Password must \ncontain at least 8 letters';
                   }
+                  if(value.length > 16) {
+                    return 'Too long : Password must \ncontain at most 16 letters';
+                  }
+                  if(!RegExp(r'(?=.*[a-z])').hasMatch(value)) {
+                    return "Password must contain \nat least one lower case letter";
+                  }
+                  if(!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
+                    return "Password must contain \nat least one Upper case letter";
+                  }
+                  if(!RegExp(r'(?=.*\d)').hasMatch(value)){
+                    return "Password must contain \nat least one digit";
+                  }
+                  if(!RegExp(r'(?=.*[@#$%^&+=*!])').hasMatch(value)){
+                    return "Password must contain \nat least one special character\n(@#\$%^&+=*!)";
+                  }
+
+                  // if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=*!])(?=.{8,16}$).*$').hasMatch(value)){
+                  //   return "Password must contain at least one lower case letter";
+                  // }
                   return null;
                 },
                   isPasswordVisible: isPassword,

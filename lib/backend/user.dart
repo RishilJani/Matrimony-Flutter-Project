@@ -154,7 +154,7 @@ class User {
   }
 
   List<Map<String, dynamic>> getAll() {
-    return userList.reversed.toList();
+    return userList;
   }
 
   Map<String,dynamic> getById(i){
@@ -168,7 +168,7 @@ class User {
         temp.add(ele);
       }
     }
-    return temp.reversed.toList();
+    return temp;
   }
 
   void updateUser(int id, Map<String, dynamic> mp) {
@@ -247,7 +247,7 @@ class User {
         filterList.add(ele);
       }
     }
-    return filterList.reversed.toList();
+    return filterList;
   }
 
   List<Map<String, dynamic>> searchFavouriteUser(String value) {
@@ -262,7 +262,7 @@ class User {
         filterList.add(ele);
       }
     }
-    return filterList.reversed.toList();
+    return filterList;
   }
 
   bool _isSame(element, value) {

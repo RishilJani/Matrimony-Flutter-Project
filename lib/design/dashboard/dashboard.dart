@@ -28,15 +28,15 @@ class Dashboard extends StatelessWidget {
           children: [
             Row(
               children: [
-                myItem('Add User', Icons.add, context, UserForm()),
-                myItem('User List', Icons.list_rounded, context, UserListPage(isFav: false,)),
+                myItem('Add User', Icons.add, context: context,myPage:  UserForm(),fontColor: Colors.black),
+                myItem('User List', Icons.list_rounded, context:  context, myPage:  UserListPage(isFav: false,),fontColor: Colors.black),
               ],
             ),
             const SizedBox( height: 20, ),
             Row(
               children: [
-                myItem('Favourite', CupertinoIcons.heart_fill, context, UserListPage( isFav: true,)),
-                myItem('About Us', Icons.person, context, const AboutUs()),
+                myItem('Favourite', CupertinoIcons.heart_fill, context:  context,myPage:  UserListPage( isFav: true,),fontColor: Colors.black),
+                myItem('About Us', Icons.person, context:  context, myPage:  const AboutUs(),fontColor: Colors.black),
               ],
             ),
           ],
@@ -45,7 +45,7 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget myItem(String txt, IconData icon, [context, myPage]) {
+  Widget myItem(String txt, IconData icon,{context, myPage,Color? fontColor}) {
     return Expanded(
       child: InkWell(
         onTap: () {
@@ -58,26 +58,53 @@ class Dashboard extends StatelessWidget {
         child: SizedBox(
           height: 200,
           child: Card(
-              shadowColor: Colors.lightBlue,
+              shadowColor: fontColor,
               margin: const EdgeInsets.all(20),
-              elevation: 15,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                    Icon(
-                      icon,
-                      size: 35,
-                    ),
-
-                  Text(
-                    txt,
-                    style: const TextStyle(fontSize: 20),
+              elevation: 30,
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                      colors: [
+                        Color.fromARGB(255,23 , 234, 247),
+                        Color.fromARGB(255, 96, 120, 234),
+                      ],
                   ),
-                ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                        icon,
+                        size: 35,
+                        color: fontColor,
+                      ),
+
+                    Text(
+                      txt,
+                      style: TextStyle(
+                          color: fontColor,
+                          fontFamily: 'RobotoFlex',
+                          fontSize: 20
+                      ),
+                    ),
+                  ],
+                ),
               )),
         ),
       ),
     );
   }
 }
+
+
+// region Redial
+// RadialGradient(
+// colors: [Colors.pinkAccent,Colors.blueAccent,Colors.blueGrey],
+// focalRadius: 1,
+// center: Alignment.center,
+// radius: 0.5
+// )
+// endregion Redial

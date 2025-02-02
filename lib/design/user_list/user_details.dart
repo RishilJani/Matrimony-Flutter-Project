@@ -36,7 +36,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             style: const TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
-              fontFamily: 'StyleScript'
+              fontFamily: 'RobotoFlex'
           ),
         ),
 
@@ -154,11 +154,18 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         ),
         const Expanded(
             flex: 1,
-            child: Text(":")
+            child: Text(":",)
         ),
         Expanded(
             flex: 3,
-            child: Text(widget.userDetail[txt].toString(),style: const TextStyle(fontWeight: FontWeight.w600),)
+            child: Text(
+              widget.userDetail[txt].toString(),
+              style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                fontFamily: "RobotoFlex"
+              ),
+            )
         ),
       ],
     );

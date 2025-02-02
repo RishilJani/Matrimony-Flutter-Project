@@ -20,7 +20,7 @@ class _UserListPageState extends State<UserListPage> {
   List<Map<String, dynamic>> data = [];
   TextEditingController searchController = TextEditingController();
 
-  bool isAllFavourite = false;
+  bool isAllFavourite = true;
 
   @override
   void initState() {
@@ -74,94 +74,71 @@ class _UserListPageState extends State<UserListPage> {
           // endregion DeleteALl
         ],
       ),
-      body: Stack(
-        children: [
-          // background image
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Image.asset(
-                  "assets/images/ring.jpg",
-                  fit: BoxFit.fill,
-                  color: Colors.black.withOpacity(0.2),
-                  colorBlendMode: BlendMode.srcATop,
-                ),
-              )
-            ],
-          ),
-
-          // user list
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            // Search Bar
+            Row(
               children: [
-                // Search Bar
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        onChanged: (value) {
-                          if (value == '') {
-                            setState(() {
-                              getData();
-                            });
-                          } else {
-                            setState(() {
-                              getData(value);
-                            });
-                          }
-                          // search code here
-                        },
-                        controller: searchController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.horizontal(
-                            right: Radius.circular(10),
-                            left: Radius.circular(10),
-                          )),
-                          labelText: 'Search user',
-                          labelStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontFamily: 'GreatVibes'),
-                          hintStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontFamily: 'GreatVibes'),
-                          hintText: 'Search user',
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-
-                const SizedBox(
-                  height: 15,
-                ),
-
-                data.isEmpty
-                    ? const Center(
-                        child: Text(
-                          "No user found",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontFamily: 'GreatVibes'),
-                        ),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          return getListItem(index);
-                        },
-                      ))
+                Expanded(
+                  child: TextFormField(
+                    onChanged: (value) {
+                      if (value == '') {
+                        setState(() {
+                          getData();
+                        });
+                      } else {
+                        setState(() {
+                          getData(value);
+                        });
+                      }
+                      // search code here
+                    },
+                    controller: searchController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.horizontal(
+                        right: Radius.circular(10),
+                        left: Radius.circular(10),
+                      )),
+                      labelText: 'Search user',
+                      labelStyle: TextStyle(
+                          fontSize: 30,
+                          fontFamily: 'GreatVibes'),
+                      hintStyle: TextStyle(
+                          fontSize: 30,
+                          fontFamily: 'GreatVibes'),
+                    ),
+                  ),
+                )
               ],
             ),
-          )
-        ],
+
+            const SizedBox(
+              height: 15,
+            ),
+
+            data.isEmpty
+                ? const Center(
+                    child: Text(
+                      "No user found",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontFamily: 'GreatVibes'),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return getListItem(index);
+                    },
+                  ))
+          ],
+        ),
       ),
     );
   }
@@ -172,13 +149,15 @@ class _UserListPageState extends State<UserListPage> {
   Widget getListItem(i) {
     int ind = 0;
     return Card(
-      color: Colors.teal,
+      margin: const EdgeInsets.all(15),
+      color: const Color.fromARGB(255, 204, 198, 198),
       elevation: 10,
       child: ListTile(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return UserDetailsPage(userDetail: data[i]);
+              ind = findIndex(data[i]);
+              return UserDetailsPage(userDetail: _user.getById(ind));
             },
           )).then((value) {
             setState(() {
@@ -193,7 +172,7 @@ class _UserListPageState extends State<UserListPage> {
             Text(
               data[i][Name],
               style: const TextStyle(
-                  fontFamily: 'GreatVibes',
+                  fontFamily: 'RobotoFlex',
                   color: Colors.white,
                   fontSize: 30),
             ),
@@ -247,7 +226,7 @@ class _UserListPageState extends State<UserListPage> {
                       getData();
                     });
                   } else {
-                    ind = findIndex(data[i]);
+                    // ind = findIndex(data[i]);
                     unFavourite(ind);
                   }
                 }),
@@ -273,7 +252,7 @@ class _UserListPageState extends State<UserListPage> {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
                     ind = findIndex(data[i]);
-                    return UserForm(userDetail: _user.getById(ind), ind: i);
+                    return UserForm(userDetail: _user.getById(ind), ind: ind);
                   },
                 )).then((value) => setState(() {}));
               },
@@ -299,6 +278,7 @@ class _UserListPageState extends State<UserListPage> {
         data = _user.searchUser(searchController.text);
       }
     }
+    data = data.reversed.toList();
   }
 
   void unFavourite(int i, [bool? isAll]) {

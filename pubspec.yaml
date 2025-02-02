@@ -85,6 +85,9 @@ flutter:
      - family: GreatVibes
        fonts:
          - asset: assets/fonts/GreatVibes-Regular.ttf
+     - family: RobotoFlex
+       fonts:
+         - asset: assets/fonts/RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf
   #       - asset: fonts/Schuyler-Italic.ttf
   #         style: italic
   #       - asset: fonts/TrajanPro_Bold.ttf
