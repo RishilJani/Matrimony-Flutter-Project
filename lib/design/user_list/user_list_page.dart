@@ -4,6 +4,7 @@ import 'package:matrimony_application/design/user_list/user_details.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 
 import '../../backend/user.dart';
+import '../../utils/utils.dart';
 import '../add_user/add_edit_user.dart';
 
 //ignore: must_be_immutable
@@ -33,7 +34,10 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: widget.isFav ? Colors.pinkAccent : Colors.amber,
+        flexibleSpace: appBarGredient([
+          const Color.fromARGB(255, 240, 47, 194),
+          const Color.fromARGB(255, 96, 148, 234),
+        ]),
         title: Text(
           widget.isFav ? "Favourite Users" : "User List",
           style: const TextStyle(
@@ -75,7 +79,7 @@ class _UserListPageState extends State<UserListPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -149,115 +153,129 @@ class _UserListPageState extends State<UserListPage> {
   Widget getListItem(i) {
     int ind = 0;
     return Card(
-      margin: const EdgeInsets.all(15),
-      color: const Color.fromARGB(255, 204, 198, 198),
+      margin: const EdgeInsets.all(10),
+      // color: const Color.fromARGB(255, 73, 3, 3),
       elevation: 10,
-      child: ListTile(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              ind = findIndex(data[i]);
-              return UserDetailsPage(userDetail: _user.getById(ind));
-            },
-          )).then((value) {
-            setState(() {
-              getData();
-            });
-          });
-        },
-        title: Wrap(
-          direction: Axis.vertical,
-          children: [
-            // Name
-            Text(
-              data[i][Name],
-              style: const TextStyle(
-                  fontFamily: 'RobotoFlex',
-                  color: Colors.white,
-                  fontSize: 30),
-            ),
+      child: Container(
 
-            // Email
-            Text(
-              data[i][Email],
-              style: const TextStyle(
-                  fontFamily: 'GreatVibes',
-                  fontSize: 27
-              ),
-            ),
-
-            // Mobile
-            Text(
-              data[i][Mobile],
-              style: const TextStyle(
-                  fontFamily: 'GreatVibes',
-                  fontSize: 27
-              ),
-            ),
-
-            // City
-            Text(
-              data[i][City].toString(),
-              style: const TextStyle(fontFamily: 'GreatVibes', fontSize: 27),
-            ),
-
-            // Age
-            Text(
-              "Age : ${data[i][Age].toString()}",
-              style: const TextStyle(fontFamily: 'GreatVibes', fontSize: 27),
-            ),
-          ],
+        // list tile  gradient
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+                Color.fromARGB(255, 72, 219, 232),
+                Color.fromARGB(255, 54, 97, 204),
+              ],
+          )
         ),
-        trailing: Wrap(
-          direction: Axis.vertical,
-          children: [
-            // Favourite
-            IconButton(
-                icon: Icon(
-                  data[i][isFavourite] ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.pink,
-                ),
-                onPressed: () {
-                  ind = findIndex(data[i]);
-                  if (!data[i][isFavourite]) {
-                    _user.changeFavourite(ind);
-                    setState(() {
-                      isAllFavourite = changeAllFavourite();
-                      getData();
-                    });
-                  } else {
-                    // ind = findIndex(data[i]);
-                    unFavourite(ind);
-                  }
-                }),
 
-            // delete
-            IconButton(
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                ),
-                onPressed: () {
-                  ind = findIndex(data[i]);
-                  deleteDialog(ind);
-                }),
+        child: ListTile(
 
-            // Edit
-            IconButton(
-              icon: const Icon(
-                Icons.edit,
-                color: Colors.blueGrey,
-              ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    ind = findIndex(data[i]);
-                    return UserForm(userDetail: _user.getById(ind), ind: ind);
-                  },
-                )).then((value) => setState(() {}));
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                ind = findIndex(data[i]);
+                return UserDetailsPage(userDetail: _user.getById(ind));
               },
-            ),
-          ],
+            )).then((value) {
+              setState(() {
+                getData();
+              });
+            });
+          },
+
+          title: Wrap(
+            direction: Axis.vertical,
+            children: [
+              // Name
+              Text(
+                data[i][Name],
+                style: const TextStyle(
+                    fontFamily: 'RobotoFlex',
+                    color: Colors.white,
+                    fontSize: 30),
+              ),
+
+              // Mobile
+              Text(
+                data[i][Mobile],
+                style: const TextStyle(
+                    fontFamily: 'RobotoFlex',
+                    fontSize: 25
+                ),
+              ),
+
+              // City
+              Text(
+                data[i][City].toString(),
+                style: const TextStyle(
+                    fontFamily: 'RobotoFlex',
+                    fontSize: 25
+                ),
+              ),
+
+              // Email
+              Text(
+                data[i][Email],
+                style: const TextStyle(
+                    fontFamily: 'RobotoFlex',
+                    fontSize: 27
+                ),
+              ),
+            ],
+          ),
+
+          trailing: Wrap(
+            direction: Axis.vertical,
+            children: [
+              IconButton(
+                  icon: Icon(
+                    data[i][isFavourite] ? Icons.favorite : Icons.favorite_border,
+                    color: Colors.pink,
+                  ),
+                  onPressed: () {
+                    ind = findIndex(data[i]);
+                    if (!data[i][isFavourite]) {
+                      _user.changeFavourite(ind);
+                      setState(() {
+                        isAllFavourite = changeAllFavourite();
+                        getData();
+                      });
+                    } else {
+                      // ind = findIndex(data[i]);
+                      unFavourite(ind);
+                    }
+                  }),
+
+              // delete
+              IconButton(
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    ind = findIndex(data[i]);
+                    deleteDialog(ind);
+                  }),
+
+              // Edit
+              IconButton(
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.blueGrey,
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      ind = findIndex(data[i]);
+                      return UserForm(userDetail: _user.getById(ind), ind: ind);
+                    },
+                  )).then((value) => setState(() {}));
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

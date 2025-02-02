@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/utils.dart';
+
 class AboutUs extends StatelessWidget {
   const AboutUs({super.key});
 
@@ -8,7 +10,10 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.limeAccent,
+        flexibleSpace: appBarGredient([
+          const Color.fromARGB(255, 240, 47, 194),
+          const Color.fromARGB(255, 96, 148, 234),
+        ]),
         centerTitle: true,
         title: const Text(
           'About Us',
@@ -18,6 +23,7 @@ class AboutUs extends StatelessWidget {
               fontFamily: 'StyleScript'),
         ),
       ),
+
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -26,6 +32,7 @@ class AboutUs extends StatelessWidget {
 
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
               // region heading
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +60,6 @@ class AboutUs extends StatelessWidget {
               ),
 
               // endregion heading
-
 
               const SizedBox( height: 10, ),
 
@@ -112,9 +118,11 @@ class AboutUs extends StatelessWidget {
                       )
                     ],
                   ),
+
                   const SizedBox(
                     height: 15,
                   ),
+
                   const Row(
                     children: [
                       Expanded(
@@ -125,14 +133,16 @@ class AboutUs extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   const SizedBox(
                     height: 10,
                   ),
+
                   const Row(
                     children: [
                       Expanded(
                         child: Text(
-                          'Sole purpose of Aswdc is to bridge gap between university curriculum & industry demands. Students learn cutting edge technologies, develop real world application & experience professional environment @ ASWDC under guidance of industry experts & faculty members.',
+                          'Sole purpose of ASWDC is to bridge gap between university curriculum & industry demands. Students learn cutting edge technologies, develop real world application & experience professional environment @ ASWDC under guidance of industry experts & faculty members.',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),

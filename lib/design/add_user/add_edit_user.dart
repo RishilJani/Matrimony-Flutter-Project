@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:matrimony_application/backend/user.dart';
 import 'package:intl/intl.dart';
 import '../../utils/string_constants.dart';
+import '../../utils/utils.dart';
 
 // ignore: must_be_immutable
 class UserForm extends StatefulWidget {
@@ -15,6 +16,8 @@ class UserForm extends StatefulWidget {
 }
 
 class _UserFormState extends State<UserForm> {
+
+  // region variables
   final GlobalKey<FormState> _formKey = GlobalKey();
   final User _user = User();
 
@@ -38,6 +41,8 @@ class _UserFormState extends State<UserForm> {
   bool isCPassword = false;
 
   String gender = 'Female';
+ // endregion variables
+
 
   @override
   void initState() {
@@ -65,7 +70,10 @@ class _UserFormState extends State<UserForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
+        flexibleSpace: appBarGredient([
+          const Color.fromARGB(255, 240, 47, 194),
+          const Color.fromARGB(255, 96, 148, 234),
+        ]),
         title: Text(
           isEdit ? 'Edit Details' : "Register User",
           style: const TextStyle(

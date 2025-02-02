@@ -4,6 +4,7 @@ import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 
 import '../../backend/user.dart';
+import '../../utils/utils.dart';
 import '../add_user/add_edit_user.dart';
 
 // ignore: must_be_immutable
@@ -29,14 +30,17 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
+        flexibleSpace: appBarGredient([
+          const Color.fromARGB(255, 240, 47, 194),
+          const Color.fromARGB(255, 96, 148, 234),
+        ]),
         centerTitle: true,
-        title: Text(
-            widget.userDetail[Name],
-            style: const TextStyle(
+        title: const Text(
+            'User details',
+            style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
-              fontFamily: 'RobotoFlex'
+              fontFamily: 'GreatVibes'
           ),
         ),
 
@@ -86,6 +90,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
           const SizedBox(width: 8,)
         ],
       ),
+
+
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -94,11 +100,24 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.userDetail[Name].toString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 40,
+                        fontFamily: "RobotoFlex"
+                    ),
+                  )
+                ],
+              ),
               const Text("About",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
               const SizedBox( height: 10,),
 
-              userItem(Name),
-              const SizedBox( height: 8,),
+              // userItem(Name),
+              // const SizedBox( height: 8,),
 
               userItem(Gender),
               const SizedBox( height: 8,),

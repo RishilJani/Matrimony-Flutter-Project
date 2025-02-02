@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/about_us/about_us.dart';
 import 'package:matrimony_application/design/add_user/add_edit_user.dart';
 import 'package:matrimony_application/design/user_list/user_list_page.dart';
+import 'package:matrimony_application/utils/utils.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -11,7 +12,11 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: appBarGredient([
+          const Color.fromARGB(255, 240, 47, 194),
+          const Color.fromARGB(255, 96, 148, 234),
+        ]),
         centerTitle: true,
         title: const Text(
           'Matrimony',
@@ -22,6 +27,7 @@ class Dashboard extends StatelessWidget {
           ),
         ),
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
@@ -97,6 +103,7 @@ class Dashboard extends StatelessWidget {
       ),
     );
   }
+
 }
 
 
