@@ -8,3 +8,7 @@ const String Hobbies = 'Hobbies';
 const String Password = 'Password';
 const String isFavourite = "isFavourite";
 const String Age = 'Age';
+
+const String RobotoFlex = "RobotoFlex";
+const String StyleScript = "StyleScript";
+const String GreatVibes = "GreatVibes";

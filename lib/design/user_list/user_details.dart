@@ -20,9 +20,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
 
   final User _user = User();
   int ind = 0;
-
+  int age = 0;
   @override
   void initState() {
+    age = _user.ageCalculate(widget.userDetail);
+    widget.userDetail[Age] = age;
     super.initState();
   }
 
@@ -164,7 +166,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
-  Widget userItem(txt){
+  Widget userItem(String txt){
     return Row(
       children: [
         Expanded(

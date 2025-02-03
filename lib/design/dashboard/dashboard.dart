@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/about_us/about_us.dart';
 import 'package:matrimony_application/design/add_user/add_edit_user.dart';
 import 'package:matrimony_application/design/user_list/user_list_page.dart';
+import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
 
 class Dashboard extends StatelessWidget {
@@ -23,7 +24,7 @@ class Dashboard extends StatelessWidget {
           style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
-              fontFamily: 'StyleScript'
+              fontFamily: StyleScript
           ),
         ),
       ),
@@ -92,7 +93,7 @@ class Dashboard extends StatelessWidget {
                       txt,
                       style: TextStyle(
                           color: fontColor,
-                          fontFamily: 'RobotoFlex',
+                          fontFamily: RobotoFlex,
                           fontSize: 20
                       ),
                     ),

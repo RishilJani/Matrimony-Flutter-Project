@@ -65,7 +65,7 @@ flutter:
      - assets/images/Two_Hearts.jpg
      - assets/images/DU_Logo.jpg
      - assets/images/ASWDC.jpg
-     - assets/images/ring.jpg
+     - assets/images/Two_Hearts_Transparent.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

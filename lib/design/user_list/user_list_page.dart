@@ -192,7 +192,7 @@ class _UserListPageState extends State<UserListPage> {
               Text(
                 data[i][Name],
                 style: const TextStyle(
-                    fontFamily: 'RobotoFlex',
+                    fontFamily: RobotoFlex,
                     color: Colors.white,
                     fontSize: 30),
               ),
@@ -201,7 +201,7 @@ class _UserListPageState extends State<UserListPage> {
               Text(
                 data[i][Mobile],
                 style: const TextStyle(
-                    fontFamily: 'RobotoFlex',
+                    fontFamily: RobotoFlex,
                     fontSize: 25
                 ),
               ),
@@ -210,7 +210,7 @@ class _UserListPageState extends State<UserListPage> {
               Text(
                 data[i][City].toString(),
                 style: const TextStyle(
-                    fontFamily: 'RobotoFlex',
+                    fontFamily: RobotoFlex,
                     fontSize: 25
                 ),
               ),
@@ -219,7 +219,7 @@ class _UserListPageState extends State<UserListPage> {
               Text(
                 data[i][Email],
                 style: const TextStyle(
-                    fontFamily: 'RobotoFlex',
+                    fontFamily: RobotoFlex,
                     fontSize: 27
                 ),
               ),
@@ -263,7 +263,7 @@ class _UserListPageState extends State<UserListPage> {
               IconButton(
                 icon: const Icon(
                   Icons.edit,
-                  color: Colors.blueGrey,
+                  color: Color.fromARGB(255, 75, 190, 255),
                 ),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
@@ -304,19 +304,30 @@ class _UserListPageState extends State<UserListPage> {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
+
+
           title: Text(isAll == null
               ? "Unfavourite"
               : isAllFavourite
                   ? "Unfavourite"
-                  : "Favourite"),
+                  : "Favourite",
+          style: const TextStyle(
+              fontFamily: RobotoFlex
+          ),),
+
+
           content: Text(isAll == null
               ? "Are you sure want to remove ${_user.getById(i)[Name]} from favourite?"
               : isAllFavourite
                   ? "Are you sure want to remove all from Favourite?"
-                  : "Are you sure want to add all to Favourite?"),
+                  : "Are you sure want to add all to Favourite?",
+            style: const TextStyle(
+              fontFamily: RobotoFlex
+            ),
+          ),
           actions: [
             TextButton(
-              child: const Text("Yes"),
+              child: const Text("Yes",style: TextStyle(fontFamily: RobotoFlex),),
               onPressed: () {
                 isAll == null
                     ? _user.changeFavourite(i)
@@ -329,7 +340,7 @@ class _UserListPageState extends State<UserListPage> {
               },
             ),
             TextButton(
-              child: const Text("No"),
+              child: const Text("No" , style: TextStyle(fontFamily: RobotoFlex),),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -345,13 +356,15 @@ class _UserListPageState extends State<UserListPage> {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: const Text('DELETE '),
+          title: const Text('DELETE ',style: TextStyle(fontFamily: RobotoFlex),),
           content: Text(isAll == null
               ? 'Are you sure want to delete ${_user.getById(i)[Name]}? '
-              : "Are you sure want to delete all users?"),
+              : "Are you sure want to delete all users?",
+            style: const TextStyle(fontFamily: RobotoFlex),
+          ),
           actions: [
             TextButton(
-              child: const Text('yes'),
+              child: const Text('Yes',style: TextStyle(fontFamily: RobotoFlex),),
               onPressed: () {
                 isAll == null ? _user.deleteUser(i) : _user.deleteAllUsers();
 
@@ -363,7 +376,7 @@ class _UserListPageState extends State<UserListPage> {
               },
             ),
             TextButton(
-              child: const Text('No'),
+              child: const Text('No',style: TextStyle(fontFamily: RobotoFlex),),
               onPressed: () {
                 Navigator.pop(context);
               },

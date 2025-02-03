@@ -174,7 +174,7 @@ class _UserFormState extends State<UserForm> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(width: 150, child: Text('Hobbies : ',style: TextStyle(fontSize: 15),)),
+                    const SizedBox(width: 150, child: Text('Hobbies : ',style: TextStyle(fontFamily: RobotoFlex , fontSize: 15),)),
                     const SizedBox(
                       width: 8,
                     ),
@@ -192,7 +192,7 @@ class _UserFormState extends State<UserForm> {
                                   value: hobbies[i],
                                   onChanged: (value) => changeHobbies(i, value),
                                 ),
-                                Text(i)
+                                Text(i,style: const TextStyle(fontFamily: RobotoFlex),)
                               ],
                             ),
                           )
@@ -209,36 +209,29 @@ class _UserFormState extends State<UserForm> {
                 // region Gender
                 Row(
                   children: [
-                    const SizedBox(width: 150, child: Text('Gender : ',style: TextStyle(fontSize: 15),)),
+                    const SizedBox(width: 150, child: Text('Gender : ',style: TextStyle(fontFamily: RobotoFlex,fontSize: 15),)),
                     const SizedBox(
                       width: 8,
                     ),
                     InkWell(
-                      onTap: () {
-                        setState(() {
-                          gender = 'Male';
-                        });
-                      },
+                      onTap: () { setState(() { gender = 'Male'; }); },
                       child: Row(
                         children: [
                           Radio(
                             value: 'Male',
                             groupValue: gender,
                             onChanged: (String? value) {
-                              setState(() {
-                                gender = value!;
-                              });
+                              setState(() { gender = value!; });
                             },
                           ),
-                          const Text('Male'),
+                          const Text('Male',style: TextStyle(fontFamily: RobotoFlex),),
                         ],
                       ),
                     ),
+
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          gender = 'Female';
-                        });
+                        setState(() { gender = 'Female'; });
                       },
                       child: Row(
                         children: [
@@ -251,7 +244,7 @@ class _UserFormState extends State<UserForm> {
                               });
                             },
                           ),
-                          const Text('Female'),
+                          const Text('Female',style: TextStyle(fontFamily: RobotoFlex),),
                         ],
                       ),
                     ),
@@ -266,7 +259,7 @@ class _UserFormState extends State<UserForm> {
                 // region DOB
                 Row(
                   children: [
-                    const SizedBox(width: 150, child: Text('DOB : ',style: TextStyle(fontSize: 15),)),
+                    const SizedBox(width: 150, child: Text('DOB : ',style: TextStyle(fontFamily: RobotoFlex,fontSize: 15),)),
                     const SizedBox(
                       width: 8,
                     ),
@@ -282,9 +275,9 @@ class _UserFormState extends State<UserForm> {
                             pikedDate = await showDatePicker(
                               context: context,
                               initialEntryMode: DatePickerEntryMode.calendar,
-                              initialDate: DateTime(date.year - 20),
-                              firstDate: DateTime(date.year - 80),
-                              lastDate: DateTime(date.year - 18),
+                              initialDate: DateTime(date.year - 20,1,1),
+                              firstDate: DateTime(date.year - 80,1,1),
+                              lastDate: DateTime(date.year - 18,1,1),
                               helpText: "Date of Birth",
                             ) ?? DateTime(date.year - 20,1,1);
 
@@ -293,7 +286,7 @@ class _UserFormState extends State<UserForm> {
                           },
                           child: Text(
                             dob,
-                            style: const TextStyle(color: Colors.black),
+                            style: const TextStyle(fontFamily: RobotoFlex,color: Colors.black),
                           )),
                     )
                   ],
@@ -307,10 +300,17 @@ class _UserFormState extends State<UserForm> {
                 // region City
                 Row(
                   children: [
-                    const SizedBox(width: 150, child: Text('City : ',style: TextStyle(fontSize: 15),)),
                     const SizedBox(
-                      width: 8,
+                        width: 150,
+                        child: Text(
+                          'City : ',
+                          style: TextStyle(
+                              fontFamily: RobotoFlex,
+                              fontSize: 15
+                          ),
+                        )
                     ),
+                    const SizedBox( width: 8, ),
                     DropdownButton(
                       menuWidth: 200,
                       icon: const Icon(Icons.location_city),
@@ -318,19 +318,13 @@ class _UserFormState extends State<UserForm> {
                         items: cities.map((city) {
                           return DropdownMenuItem(
                             value: city,
-                            child: Text(city.toString()),
+                            child: Text(city.toString(),style: const TextStyle(fontFamily: RobotoFlex),),
                           );
                         }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectCity = value!;
-                          });
-                        })
+                        onChanged: (value) { setState(() { selectCity = value!; }); })
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox( height: 20, ),
                 // endregion City
 
                 // Password
@@ -445,7 +439,7 @@ class _UserFormState extends State<UserForm> {
             width: 150,
             child:  Text(
                 "$txt : ",
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontFamily: RobotoFlex ,fontSize: 15),
             )
         ),
         const SizedBox( width: 8, ),
@@ -457,17 +451,18 @@ class _UserFormState extends State<UserForm> {
             controller: controller,
             keyboardType: keyboard,
             inputFormatters: formatters,
+            style: const TextStyle( fontFamily: RobotoFlex ),
             decoration: InputDecoration(
                 border: const OutlineInputBorder(
                     borderRadius: BorderRadius.horizontal(
                         right: Radius.circular(10), left: Radius.circular(10))),
                 labelText: 'Enter your $txt',
                 hintText: 'Enter your $txt',
-              suffixIcon: isObs != null ?
+                suffixIcon: isObs != null ?
                   IconButton(
                       onPressed: onToggle,
                       icon: Icon(isPasswordVisible! ? Icons.visibility : Icons.visibility_off )) : suffix ),
-        ),
+          ),
         )
       ],
     );

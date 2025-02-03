@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'design/dashboard/dashboard.dart';
-
+import 'package:matrimony_application/design/splash_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Dashboard(),
+      home: const SplashScreen(),
     );
   }
 }
