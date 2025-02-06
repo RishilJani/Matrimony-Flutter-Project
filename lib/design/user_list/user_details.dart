@@ -17,7 +17,6 @@ class UserDetailsPage extends StatefulWidget {
 }
 
 class _UserDetailsPageState extends State<UserDetailsPage> {
-
   final User _user = User();
   int ind = 0;
   int age = 0;
@@ -31,68 +30,68 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: appBarGredient([
-          const Color.fromARGB(255, 240, 47, 194),
-          const Color.fromARGB(255, 96, 148, 234),
-        ]),
-        centerTitle: true,
-        title: const Text(
-            'User details',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'GreatVibes'
-          ),
-        ),
-
-        actions: [
-          // Favourite
-          IconButton(
-              icon: Icon(widget.userDetail[isFavourite] ? Icons.favorite : Icons.favorite_border,color: Colors.pink,),
-              onPressed: (){
-                ind = findIndex(widget.userDetail);
-                if(!widget.userDetail[isFavourite]){
-                  _user.changeFavourite(ind);
-                  setState(() { widget.userDetail = _user.getById(ind); });
-                }else{
-                  unFavourite(ind);
-                }
-              }
-          ),
-
-          // delete
-          IconButton(
-              icon: const Icon(Icons.delete,color: Colors.red,),
-              onPressed: (){
-                ind = findIndex(widget.userDetail);
-                deleteDialog(ind);
-              }
-          ),
-
-          // Edit
-          IconButton(
-            icon: const Icon(Icons.edit,color: Colors.blueGrey,),
-            onPressed: (){
-              Navigator.push(context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      ind = findIndex(widget.userDetail);
-                      return UserForm(userDetail: widget.userDetail,ind : ind);
-                    },
-                  )
-              ).then((value)=> setState(() {
-                if(value != null){
-                  widget.userDetail = value;
-                }
-              }));
-            },
-          ),
-
-          const SizedBox(width: 8,)
-        ],
-      ),
-
+      // appBar: AppBar(
+      //   flexibleSpace: appBarGredient([
+      //     const Color.fromARGB(255, 240, 47, 194),
+      //     const Color.fromARGB(255, 96, 148, 234),
+      //   ]),
+      //   centerTitle: true,
+      //   title: const Text(
+      //       'User details',
+      //       style: TextStyle(
+      //         fontSize: 40,
+      //         fontWeight: FontWeight.bold,
+      //         fontFamily: 'GreatVibes'
+      //     ),
+      //   ),
+      //
+      //   actions: [
+      //     // Favourite
+      //     IconButton(
+      //         icon: Icon(widget.userDetail[isFavourite] ? Icons.favorite : Icons.favorite_border,color: Colors.pink,),
+      //         onPressed: (){
+      //           ind = findIndex(widget.userDetail);
+      //           if(!widget.userDetail[isFavourite]){
+      //             _user.changeFavourite(ind);
+      //             setState(() { widget.userDetail = _user.getById(ind); });
+      //           }else{
+      //             unFavourite(ind);
+      //           }
+      //         }
+      //     ),
+      //
+      //     // delete
+      //     IconButton(
+      //         icon: const Icon(Icons.delete,color: Colors.red,),
+      //         onPressed: (){
+      //           ind = findIndex(widget.userDetail);
+      //           deleteDialog(ind);
+      //         }
+      //     ),
+      //
+      //     // Edit
+      //     IconButton(
+      //       icon: const Icon(Icons.edit,color: Colors.blueGrey,),
+      //       onPressed: (){
+      //         Navigator.push(context,
+      //             MaterialPageRoute(
+      //               builder: (context) {
+      //                 ind = findIndex(widget.userDetail);
+      //                 return UserForm(userDetail: widget.userDetail,ind : ind);
+      //               },
+      //             )
+      //         ).then((value)=> setState(() {
+      //           if(value != null){
+      //             widget.userDetail = value;
+      //           }
+      //         }));
+      //       },
+      //     ),
+      //
+      //     const SizedBox(width: 8,)
+      //   ],
+      // ),
+      //
 
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -184,7 +183,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
-                fontFamily: "RobotoFlex"
+                fontFamily: RobotoFlex
               ),
             )
         ),

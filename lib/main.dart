@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/splash_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }

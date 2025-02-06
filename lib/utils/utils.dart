@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:matrimony_application/utils/string_constants.dart';
 
 
   Widget appBarGredient(List<Color> listofColors){
@@ -13,6 +14,14 @@ import 'package:flutter/cupertino.dart';
     );
   }
 
+  TextStyle myTextStyle(){
+    return const TextStyle(
+        fontFamily: RobotoFlex,
+        fontSize: 33,
+        fontWeight: FontWeight.w600,
+        color: Color.fromRGBO(0, 0, 0,0.7),
+    );
+  }
 /*
 
  */

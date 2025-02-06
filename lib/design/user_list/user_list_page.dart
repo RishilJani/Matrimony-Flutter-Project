@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:matrimony_application/design/temp_design.dart';
 import 'package:matrimony_application/design/user_list/user_details.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 
@@ -124,8 +125,8 @@ class _UserListPageState extends State<UserListPage> {
               height: 15,
             ),
 
-            data.isEmpty
-                ? const Center(
+            if (data.isEmpty)
+              const Center(
                     child: Text(
                       "No user found",
                       style: TextStyle(
@@ -134,7 +135,7 @@ class _UserListPageState extends State<UserListPage> {
                           fontFamily: 'GreatVibes'),
                     ),
                   )
-                : Expanded(
+            else Expanded(
                     child: ListView.builder(
                     itemCount: data.length,
                     itemBuilder: (context, index) {
@@ -146,9 +147,6 @@ class _UserListPageState extends State<UserListPage> {
       ),
     );
   }
-/*
-*
-* */
 
   Widget getListItem(i) {
     int ind = 0;
@@ -157,7 +155,6 @@ class _UserListPageState extends State<UserListPage> {
       // color: const Color.fromARGB(255, 73, 3, 3),
       elevation: 10,
       child: Container(
-
         // list tile  gradient
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -171,12 +168,12 @@ class _UserListPageState extends State<UserListPage> {
         ),
 
         child: ListTile(
-
           onTap: () {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) {
                 ind = findIndex(data[i]);
-                return UserDetailsPage(userDetail: _user.getById(ind));
+                // print("---- userDetail = ${_user.getById(ind)}");
+                return SwipeUpBottomSheet(userDetail: _user.getById(ind));
               },
             )).then((value) {
               setState(() {
