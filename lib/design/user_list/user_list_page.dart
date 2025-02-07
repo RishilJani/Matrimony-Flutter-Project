@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/temp_design.dart';
-import 'package:matrimony_application/design/user_list/user_details.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 
 import '../../backend/user.dart';

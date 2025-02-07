@@ -4,8 +4,7 @@ import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 
 import '../../backend/user.dart';
-import '../../utils/utils.dart';
-import '../add_user/add_edit_user.dart';
+
 
 // ignore: must_be_immutable
 class UserDetailsPage extends StatefulWidget {
