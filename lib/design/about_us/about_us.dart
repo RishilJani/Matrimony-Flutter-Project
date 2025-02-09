@@ -10,7 +10,7 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: appBarGredient([
+        flexibleSpace: appBarGradient([
           const Color.fromARGB(255, 240, 47, 194),
           const Color.fromARGB(255, 96, 148, 234),
         ]),
@@ -193,7 +193,7 @@ class AboutUs extends StatelessWidget {
                     getInfo(CupertinoIcons.star, 'Rate Us'),
                     getInfo(Icons.thumb_up, 'Like us on Facebook'),
                     getInfo(CupertinoIcons.arrow_2_circlepath,
-                        'Like us on Facebook'),
+                        'Check for updates'),
                   ],
                 ),
               ),
@@ -201,8 +201,10 @@ class AboutUs extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+
               const Column(
                 children: [
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -213,7 +215,9 @@ class AboutUs extends StatelessWidget {
                       Text("2025 Darshan University"),
                     ],
                   ),
+
                   Text("All Rights Reserved - Privacy Policy"),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -261,7 +265,7 @@ class AboutUs extends StatelessWidget {
               color: Colors.purple,
             )),
         child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
           child: item,
         ),
       )

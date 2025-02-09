@@ -8,16 +8,15 @@ import '../../utils/utils.dart';
 
 // ignore: must_be_immutable
 class UserForm extends StatefulWidget {
-  UserForm({super.key, this.userDetail, this.ind});
-  int? ind = -1;
+  UserForm({super.key, this.userDetail});
   Map<String, dynamic>? userDetail = {};
   @override
   State<UserForm> createState() => _UserFormState();
 }
 
 class _UserFormState extends State<UserForm> {
-
   // region variables
+  int ind = -1;
   final GlobalKey<FormState> _formKey = GlobalKey();
   final User _user = User();
 
@@ -27,7 +26,7 @@ class _UserFormState extends State<UserForm> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-  List<String> cities = ['Jamnagar', 'Rajkot', 'Ahmedabad', 'Baroda','Dwarka'];
+  List<String> cities = ['Jamnagar', 'Rajkot', 'Ahmedabad', 'Baroda', 'Dwarka'];
   String selectCity = '';
   bool isEdit = false;
 
@@ -41,8 +40,7 @@ class _UserFormState extends State<UserForm> {
   bool isCPassword = false;
 
   String gender = 'Female';
- // endregion variables
-
+  // endregion variables
 
   @override
   void initState() {
@@ -58,11 +56,14 @@ class _UserFormState extends State<UserForm> {
       gender = widget.userDetail![Gender];
       selectCity = widget.userDetail![City];
       dob = widget.userDetail![DOB];
+      pikedDate = _user.strToDateTime(widget.userDetail![DOB]);
+
+      ind = _user.getAll().indexOf(widget.userDetail!);
     } else {
       selectCity = cities[0];
       hobbies = {"Reading": false, "Music": false, "Dance": false};
       dob = DateFormat("dd/MM/yyyy").format(DateTime(date.year - 20));
-      pikedDate = DateTime(date.year - 20);
+      pikedDate = DateTime(date.year - 20, 1, 1);
     }
   }
 
@@ -70,7 +71,7 @@ class _UserFormState extends State<UserForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: appBarGredient([
+        flexibleSpace: appBarGradient([
           const Color.fromARGB(255, 240, 47, 194),
           const Color.fromARGB(255, 96, 148, 234),
         ]),
@@ -79,8 +80,7 @@ class _UserFormState extends State<UserForm> {
           style: const TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
-              fontFamily: 'StyleScript'
-          ),
+              fontFamily: 'StyleScript'),
         ),
         centerTitle: true,
       ),
@@ -111,14 +111,15 @@ class _UserFormState extends State<UserForm> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
                 // endregion Name
 
                 // For email
                 // region Email
                 getInput(emailController, 'Email Address',
-                    keyboard: TextInputType.emailAddress, 
-                    validator: (value) {
+                    keyboard: TextInputType.emailAddress, validator: (value) {
                   if (value!.isEmpty) {
                     return 'Enter your Email Address';
                   }
@@ -131,9 +132,7 @@ class _UserFormState extends State<UserForm> {
                     return 'Enter Unique email';
                   }
                   return null;
-                },
-                    suffix: const Icon(Icons.email)
-                ),
+                }, suffix: const Icon(Icons.email)),
                 const SizedBox(
                   height: 20,
                 ),
@@ -146,8 +145,7 @@ class _UserFormState extends State<UserForm> {
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       LengthLimitingTextInputFormatter(10)
                     ],
-                    keyboard: TextInputType.phone, 
-                    validator: (value) {
+                    keyboard: TextInputType.phone, validator: (value) {
                   if (value!.isEmpty) {
                     return "Enter your mobile number";
                   }
@@ -161,9 +159,7 @@ class _UserFormState extends State<UserForm> {
                     return 'Enter Unique Phone number';
                   }
                   return null;
-                },
-                    suffix: const Icon(Icons.phone)
-                ),
+                }, suffix: const Icon(Icons.phone)),
                 const SizedBox(
                   height: 20,
                 ),
@@ -174,11 +170,7 @@ class _UserFormState extends State<UserForm> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(width: 150, child: Text('Hobbies : ',style: TextStyle(fontFamily: RobotoFlex , fontSize: 15),)),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Column(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         for (var i in hobbies.keys)
@@ -192,7 +184,11 @@ class _UserFormState extends State<UserForm> {
                                   value: hobbies[i],
                                   onChanged: (value) => changeHobbies(i, value),
                                 ),
-                                Text(i,style: const TextStyle(fontFamily: RobotoFlex),)
+                                Text(
+                                  i,
+                                  style:
+                                      const TextStyle(fontFamily: RobotoFlex),
+                                )
                               ],
                             ),
                           )
@@ -209,29 +205,35 @@ class _UserFormState extends State<UserForm> {
                 // region Gender
                 Row(
                   children: [
-                    const SizedBox(width: 150, child: Text('Gender : ',style: TextStyle(fontFamily: RobotoFlex,fontSize: 15),)),
-                    const SizedBox(
-                      width: 8,
-                    ),
                     InkWell(
-                      onTap: () { setState(() { gender = 'Male'; }); },
+                      onTap: () {
+                        setState(() {
+                          gender = 'Male';
+                        });
+                      },
                       child: Row(
                         children: [
                           Radio(
                             value: 'Male',
                             groupValue: gender,
                             onChanged: (String? value) {
-                              setState(() { gender = value!; });
+                              setState(() {
+                                gender = value!;
+                              });
                             },
                           ),
-                          const Text('Male',style: TextStyle(fontFamily: RobotoFlex),),
+                          const Text(
+                            'Male',
+                            style: TextStyle(fontFamily: RobotoFlex),
+                          ),
                         ],
                       ),
                     ),
-
                     InkWell(
                       onTap: () {
-                        setState(() { gender = 'Female'; });
+                        setState(() {
+                          gender = 'Female';
+                        });
                       },
                       child: Row(
                         children: [
@@ -244,7 +246,10 @@ class _UserFormState extends State<UserForm> {
                               });
                             },
                           ),
-                          const Text('Female',style: TextStyle(fontFamily: RobotoFlex),),
+                          const Text(
+                            'Female',
+                            style: TextStyle(fontFamily: RobotoFlex),
+                          ),
                         ],
                       ),
                     ),
@@ -259,7 +264,13 @@ class _UserFormState extends State<UserForm> {
                 // region DOB
                 Row(
                   children: [
-                    const SizedBox(width: 150, child: Text('DOB : ',style: TextStyle(fontFamily: RobotoFlex,fontSize: 15),)),
+                    const SizedBox(
+                        width: 150,
+                        child: Text(
+                          'DOB : ',
+                          style:
+                              TextStyle(fontFamily: RobotoFlex, fontSize: 15),
+                        )),
                     const SizedBox(
                       width: 8,
                     ),
@@ -273,20 +284,23 @@ class _UserFormState extends State<UserForm> {
                       child: TextButton(
                           onPressed: () async {
                             pikedDate = await showDatePicker(
-                              context: context,
-                              initialEntryMode: DatePickerEntryMode.calendar,
-                              initialDate: DateTime(date.year - 20,1,1),
-                              firstDate: DateTime(date.year - 80,1,1),
-                              lastDate: DateTime(date.year - 18,1,1),
-                              helpText: "Date of Birth",
-                            ) ?? DateTime(date.year - 20,1,1);
+                                  context: context,
+                                  initialEntryMode:
+                                      DatePickerEntryMode.calendar,
+                                  initialDate: pikedDate,
+                                  firstDate: DateTime(date.year - 80, 1, 1),
+                                  lastDate: DateTime(date.year - 18, 1, 1),
+                                  helpText: "Date of Birth",
+                                ) ??
+                                DateTime(date.year - 20, 1, 1);
 
                             dob = DateFormat("dd/MM/yyyy").format(pikedDate!);
                             setState(() {});
                           },
                           child: Text(
                             dob,
-                            style: const TextStyle(fontFamily: RobotoFlex,color: Colors.black),
+                            style: const TextStyle(
+                                fontFamily: RobotoFlex, color: Colors.black),
                           )),
                     )
                   ],
@@ -304,27 +318,35 @@ class _UserFormState extends State<UserForm> {
                         width: 150,
                         child: Text(
                           'City : ',
-                          style: TextStyle(
-                              fontFamily: RobotoFlex,
-                              fontSize: 15
-                          ),
-                        )
+                          style:
+                              TextStyle(fontFamily: RobotoFlex, fontSize: 15),
+                        )),
+                    const SizedBox(
+                      width: 8,
                     ),
-                    const SizedBox( width: 8, ),
                     DropdownButton(
-                      menuWidth: 200,
-                      icon: const Icon(Icons.location_city),
+                        menuWidth: 200,
+                        icon: const Icon(Icons.location_city),
                         value: selectCity,
                         items: cities.map((city) {
                           return DropdownMenuItem(
                             value: city,
-                            child: Text(city.toString(),style: const TextStyle(fontFamily: RobotoFlex),),
+                            child: Text(
+                              city.toString(),
+                              style: const TextStyle(fontFamily: RobotoFlex),
+                            ),
                           );
                         }).toList(),
-                        onChanged: (value) { setState(() { selectCity = value!; }); })
+                        onChanged: (value) {
+                          setState(() {
+                            selectCity = value!;
+                          });
+                        })
                   ],
                 ),
-                const SizedBox( height: 20, ),
+                const SizedBox(
+                  height: 20,
+                ),
                 // endregion City
 
                 // Password
@@ -332,36 +354,39 @@ class _UserFormState extends State<UserForm> {
                 getInput(passwordController, 'Password',
                     isObs: true,
                     validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return "Enter your password";
-                  }
-                  if(value.length < 8) {
-                    return 'Too short : Password must \ncontain at least 8 letters';
-                  }
-                  if(value.length > 16) {
-                    return 'Too long : Password must \ncontain at most 16 letters';
-                  }
-                  if(!RegExp(r'(?=.*[a-z])').hasMatch(value)) {
-                    return "Password must contain \nat least one lower case letter";
-                  }
-                  if(!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
-                    return "Password must contain \nat least one Upper case letter";
-                  }
-                  if(!RegExp(r'(?=.*\d)').hasMatch(value)){
-                    return "Password must contain \nat least one digit";
-                  }
-                  if(!RegExp(r'(?=.*[@#$%^&+=*!])').hasMatch(value)){
-                    return "Password must contain \nat least one special character\n(@#\$%^&+=*!)";
-                  }
+                      if (value!.isEmpty) {
+                        return "Enter your password";
+                      }
+                      if (value.length < 8) {
+                        return 'Too short : Password must \ncontain at least 8 letters';
+                      }
+                      if (value.length > 16) {
+                        return 'Too long : Password must \ncontain at most 16 letters';
+                      }
+                      if (!RegExp(r'(?=.*[a-z])').hasMatch(value)) {
+                        return "Password must contain \nat least one lower case letter";
+                      }
+                      if (!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
+                        return "Password must contain \nat least one Upper case letter";
+                      }
+                      if (!RegExp(r'(?=.*\d)').hasMatch(value)) {
+                        return "Password must contain \nat least one digit";
+                      }
+                      if (!RegExp(r'(?=.*[@#$%^&+=*!])').hasMatch(value)) {
+                        return "Password must contain \nat least one special character\n(@#\$%^&+=*!)";
+                      }
 
-                  // if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=*!])(?=.{8,16}$).*$').hasMatch(value)){
-                  //   return "Password must contain at least one lower case letter";
-                  // }
-                  return null;
-                },
-                  isPasswordVisible: isPassword,
-                  onToggle:  (){ setState(() { isPassword = !isPassword; });}
-                ),
+                      // if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=*!])(?=.{8,16}$).*$').hasMatch(value)){
+                      //   return "Password must contain at least one lower case letter";
+                      // }
+                      return null;
+                    },
+                    isPasswordVisible: isPassword,
+                    onToggle: () {
+                      setState(() {
+                        isPassword = !isPassword;
+                      });
+                    }),
                 const SizedBox(
                   height: 20,
                 ),
@@ -370,18 +395,20 @@ class _UserFormState extends State<UserForm> {
                 //Confirm Password
                 // region CPassword
                 getInput(confirmPasswordController, 'Confirm Password',
-                    isObs: true, validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Enter your password to confirm";
-                  }
-                  if (passwordController.text != value) {
-                    return "confirm password doesn't match";
-                  }
-                  return null;
-                },
-                  isPasswordVisible: isCPassword,
-                  onToggle: ()=> setState(() { isCPassword = !isCPassword; })
-                ),
+                    isObs: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Enter your password to confirm";
+                      }
+                      if (passwordController.text != value) {
+                        return "confirm password doesn't match";
+                      }
+                      return null;
+                    },
+                    isPasswordVisible: isCPassword,
+                    onToggle: () => setState(() {
+                          isCPassword = !isCPassword;
+                        })),
                 const SizedBox(
                   height: 20,
                 ),
@@ -406,7 +433,7 @@ class _UserFormState extends State<UserForm> {
                               : widget.userDetail![isFavourite]
                         };
                         if (isEdit) {
-                          _user.updateUser(widget.ind!, mp);
+                          _user.updateUser(ind, mp);
                           isEdit = false;
                         } else {
                           _user.addUser(mp);
@@ -427,22 +454,21 @@ class _UserFormState extends State<UserForm> {
   Widget getInput(TextEditingController controller, String txt,
       {List<TextInputFormatter>? formatters,
       validator,
-        suffix,
+      suffix,
       TextInputType? keyboard,
       bool? isObs,
       bool? isPasswordVisible,
-        onToggle
-      }) {
+      onToggle}) {
     return Row(
       children: [
-        SizedBox(
-            width: 150,
-            child:  Text(
-                "$txt : ",
-                style: const TextStyle(fontFamily: RobotoFlex ,fontSize: 15),
-            )
-        ),
-        const SizedBox( width: 8, ),
+        // SizedBox(
+        //     width: 150,
+        //     child:  Text(
+        //         "$txt : ",
+        //         style: const TextStyle(fontFamily: RobotoFlex ,fontSize: 15),
+        //     )
+        // ),
+        // const SizedBox( width: 8, ),
         Expanded(
           child: TextFormField(
             obscureText: (isObs ?? false) && (isPasswordVisible == false),
@@ -451,17 +477,20 @@ class _UserFormState extends State<UserForm> {
             controller: controller,
             keyboardType: keyboard,
             inputFormatters: formatters,
-            style: const TextStyle( fontFamily: RobotoFlex ),
+            style: const TextStyle(fontFamily: RobotoFlex),
             decoration: InputDecoration(
                 border: const OutlineInputBorder(
                     borderRadius: BorderRadius.horizontal(
                         right: Radius.circular(10), left: Radius.circular(10))),
                 labelText: 'Enter your $txt',
                 hintText: 'Enter your $txt',
-                suffixIcon: isObs != null ?
-                  IconButton(
-                      onPressed: onToggle,
-                      icon: Icon(isPasswordVisible! ? Icons.visibility : Icons.visibility_off )) : suffix ),
+                suffixIcon: isObs != null
+                    ? IconButton(
+                        onPressed: onToggle,
+                        icon: Icon(isPasswordVisible!
+                            ? Icons.visibility
+                            : Icons.visibility_off))
+                    : suffix),
           ),
         )
       ],

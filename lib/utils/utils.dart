@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 
 
-  Widget appBarGredient(List<Color> listofColors){
+  Widget appBarGradient(List<Color> listofColors){
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(

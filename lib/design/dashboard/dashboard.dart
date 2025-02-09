@@ -14,7 +14,7 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        flexibleSpace: appBarGredient([
+        flexibleSpace: appBarGradient([
           const Color.fromARGB(255, 240, 47, 194),
           const Color.fromARGB(255, 96, 148, 234),
         ]),

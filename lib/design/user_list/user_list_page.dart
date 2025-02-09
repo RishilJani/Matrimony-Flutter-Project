@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:matrimony_application/design/temp_design.dart';
+import 'package:matrimony_application/design/user_list/swipe_user_details.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 
 import '../../backend/user.dart';
 import '../../utils/utils.dart';
-import '../add_user/add_edit_user.dart';
 
 //ignore: must_be_immutable
 class UserListPage extends StatefulWidget {
@@ -34,7 +33,7 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: appBarGredient([
+        flexibleSpace: appBarGradient([
           const Color.fromARGB(255, 240, 47, 194),
           const Color.fromARGB(255, 96, 148, 234),
         ]),
@@ -108,12 +107,10 @@ class _UserListPageState extends State<UserListPage> {
                         left: Radius.circular(10),
                       )),
                       labelText: 'Search user',
-                      labelStyle: TextStyle(
-                          fontSize: 30,
-                          fontFamily: 'GreatVibes'),
-                      hintStyle: TextStyle(
-                          fontSize: 30,
-                          fontFamily: 'GreatVibes'),
+                      labelStyle:
+                          TextStyle(fontSize: 30, fontFamily: 'GreatVibes'),
+                      hintStyle:
+                          TextStyle(fontSize: 30, fontFamily: 'GreatVibes'),
                     ),
                   ),
                 )
@@ -126,21 +123,22 @@ class _UserListPageState extends State<UserListPage> {
 
             if (data.isEmpty)
               const Center(
-                    child: Text(
-                      "No user found",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontFamily: 'GreatVibes'),
-                    ),
-                  )
-            else Expanded(
-                    child: ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      return getListItem(index);
-                    },
-                  ))
+                child: Text(
+                  "No user found",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontFamily: 'GreatVibes'),
+                ),
+              )
+            else
+              Expanded(
+                  child: ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return getListItem(index);
+                },
+              ))
           ],
         ),
       ),
@@ -151,28 +149,25 @@ class _UserListPageState extends State<UserListPage> {
     int ind = 0;
     return Card(
       margin: const EdgeInsets.all(10),
-      // color: const Color.fromARGB(255, 73, 3, 3),
       elevation: 10,
       child: Container(
         // list tile  gradient
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-                Color.fromARGB(255, 72, 219, 232),
-                Color.fromARGB(255, 54, 97, 204),
-              ],
-          )
-        ),
+            gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            Color.fromARGB(255, 72, 219, 232),
+            Color.fromARGB(255, 54, 97, 204),
+          ],
+        )),
 
         child: ListTile(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) {
-                ind = findIndex(data[i]);
-                // print("---- userDetail = ${_user.getById(ind)}");
-                return SwipeUpBottomSheet(userDetail: _user.getById(ind));
+                ind = _user.getAll().indexOf(data[i]);
+                return SwipeUserDetails(userDetail: _user.getById(ind));
               },
             )).then((value) {
               setState(() {
@@ -180,7 +175,6 @@ class _UserListPageState extends State<UserListPage> {
               });
             });
           },
-
           title: Wrap(
             direction: Axis.vertical,
             children: [
@@ -188,88 +182,69 @@ class _UserListPageState extends State<UserListPage> {
               Text(
                 data[i][Name],
                 style: const TextStyle(
-                    fontFamily: RobotoFlex,
-                    color: Colors.white,
-                    fontSize: 30),
+                    fontFamily: RobotoFlex, color: Colors.white, fontSize: 30),
               ),
 
               // Mobile
               Text(
                 data[i][Mobile],
-                style: const TextStyle(
-                    fontFamily: RobotoFlex,
-                    fontSize: 25
-                ),
+                style: const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
               ),
 
               // City
               Text(
                 data[i][City].toString(),
-                style: const TextStyle(
-                    fontFamily: RobotoFlex,
-                    fontSize: 25
-                ),
-              ),
-
-              // Email
-              Text(
-                data[i][Email],
-                style: const TextStyle(
-                    fontFamily: RobotoFlex,
-                    fontSize: 27
-                ),
+                style: const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
               ),
             ],
           ),
-
           trailing: Wrap(
             direction: Axis.vertical,
             children: [
+              // region favourite
               IconButton(
-                  icon: Icon(
-                    data[i][isFavourite] ? Icons.favorite : Icons.favorite_border,
-                    color: Colors.pink,
-                  ),
-                  onPressed: () {
-                    ind = findIndex(data[i]);
-                    if (!data[i][isFavourite]) {
-                      _user.changeFavourite(ind);
-                      setState(() {
-                        isAllFavourite = changeAllFavourite();
-                        getData();
-                      });
-                    } else {
-                      // ind = findIndex(data[i]);
-                      unFavourite(ind);
-                    }
-                  }),
+                icon: Icon(
+                  data[i][isFavourite] ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.pink,
+                ),
+                onPressed: () {
+                  ind = _user.getAll().indexOf(data[i]);
+                  if (!data[i][isFavourite]) {
+                    _user.changeFavourite(ind);
+                    setState(() {
+                      isAllFavourite = changeAllFavourite();
+                      getData();
+                    });
+                  } else {
+                    unFavourite(ind);
+                  }
+                },
+              ),
+              // endregion favourite
 
-              // delete
+              // region delete
               IconButton(
                   icon: const Icon(
                     Icons.delete,
                     color: Colors.red,
                   ),
                   onPressed: () {
-                    ind = findIndex(data[i]);
+                    ind = _user.getAll().indexOf(data[i]);
                     deleteDialog(ind);
                   }),
+              // endregion delete
 
-              // Edit
-              IconButton(
-                icon: const Icon(
-                  Icons.edit,
-                  color: Color.fromARGB(255, 75, 190, 255),
-                ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      ind = findIndex(data[i]);
-                      return UserForm(userDetail: _user.getById(ind), ind: ind);
-                    },
-                  )).then((value) => setState(() {}));
-                },
-              ),
+              // region edit
+              // IconButton(
+              //   icon: const Icon(
+              //     Icons.edit,
+              //     color: Color.fromARGB(255, 75, 190, 255),
+              //   ),
+              //   onPressed: () {
+              //
+              //   },
+              // ),
+              // endregion edit
             ],
           ),
         ),
@@ -300,30 +275,28 @@ class _UserListPageState extends State<UserListPage> {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-
-
-          title: Text(isAll == null
-              ? "Unfavourite"
-              : isAllFavourite
-                  ? "Unfavourite"
-                  : "Favourite",
-          style: const TextStyle(
-              fontFamily: RobotoFlex
-          ),),
-
-
-          content: Text(isAll == null
-              ? "Are you sure want to remove ${_user.getById(i)[Name]} from favourite?"
-              : isAllFavourite
-                  ? "Are you sure want to remove all from Favourite?"
-                  : "Are you sure want to add all to Favourite?",
-            style: const TextStyle(
-              fontFamily: RobotoFlex
-            ),
+          title: Text(
+            isAll == null
+                ? "Unfavourite"
+                : isAllFavourite
+                    ? "Unfavourite"
+                    : "Favourite",
+            style: const TextStyle(fontFamily: RobotoFlex),
+          ),
+          content: Text(
+            isAll == null
+                ? "Are you sure want to remove ${_user.getById(i)[Name]} from favourite?"
+                : isAllFavourite
+                    ? "Are you sure want to remove all from Favourite?"
+                    : "Are you sure want to add all to Favourite?",
+            style: const TextStyle(fontFamily: RobotoFlex),
           ),
           actions: [
             TextButton(
-              child: const Text("Yes",style: TextStyle(fontFamily: RobotoFlex),),
+              child: const Text(
+                "Yes",
+                style: TextStyle(fontFamily: RobotoFlex),
+              ),
               onPressed: () {
                 isAll == null
                     ? _user.changeFavourite(i)
@@ -336,7 +309,10 @@ class _UserListPageState extends State<UserListPage> {
               },
             ),
             TextButton(
-              child: const Text("No" , style: TextStyle(fontFamily: RobotoFlex),),
+              child: const Text(
+                "No",
+                style: TextStyle(fontFamily: RobotoFlex),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -352,15 +328,22 @@ class _UserListPageState extends State<UserListPage> {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: const Text('DELETE ',style: TextStyle(fontFamily: RobotoFlex),),
-          content: Text(isAll == null
-              ? 'Are you sure want to delete ${_user.getById(i)[Name]}? '
-              : "Are you sure want to delete all users?",
+          title: const Text(
+            'DELETE ',
+            style: TextStyle(fontFamily: RobotoFlex),
+          ),
+          content: Text(
+            isAll == null
+                ? 'Are you sure want to delete ${_user.getById(i)[Name]}? '
+                : "Are you sure want to delete all users?",
             style: const TextStyle(fontFamily: RobotoFlex),
           ),
           actions: [
             TextButton(
-              child: const Text('Yes',style: TextStyle(fontFamily: RobotoFlex),),
+              child: const Text(
+                'Yes',
+                style: TextStyle(fontFamily: RobotoFlex),
+              ),
               onPressed: () {
                 isAll == null ? _user.deleteUser(i) : _user.deleteAllUsers();
 
@@ -372,7 +355,10 @@ class _UserListPageState extends State<UserListPage> {
               },
             ),
             TextButton(
-              child: const Text('No',style: TextStyle(fontFamily: RobotoFlex),),
+              child: const Text(
+                'No',
+                style: TextStyle(fontFamily: RobotoFlex),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -383,18 +369,18 @@ class _UserListPageState extends State<UserListPage> {
     );
   }
 
-  int findIndex(Map<String, dynamic> item) {
-    List<Map<String, dynamic>> tempData = _user.getAll();
-    int ans = 0;
-    for (int i = 0; i < tempData.length; i++) {
-      if (tempData[i][Name] == item[Name] &&
-          tempData[i][Email] == item[Email]) {
-        ans = i;
-        break;
-      }
-    }
-    return ans;
-  }
+  // int findIndex(Map<String, dynamic> item) {
+  //   List<Map<String, dynamic>> tempData = _user.getAll();
+  //   int ans = 0;
+  //   for (int i = 0; i < tempData.length; i++) {
+  //     if (tempData[i][Name] == item[Name] &&
+  //         tempData[i][Email] == item[Email]) {
+  //       ans = i;
+  //       break;
+  //     }
+  //   }
+  //   return ans;
+  // }
 
   bool changeAllFavourite() {
     for (var ele in data) {
