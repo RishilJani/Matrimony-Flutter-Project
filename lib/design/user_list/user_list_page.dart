@@ -25,8 +25,9 @@ class _UserListPageState extends State<UserListPage> {
   @override
   void initState() {
     super.initState();
-    getData();
-    isAllFavourite = changeAllFavourite();
+    setState(() {
+      getData();
+    });
   }
 
   @override
@@ -51,14 +52,12 @@ class _UserListPageState extends State<UserListPage> {
             tooltip: isAllFavourite
                 ? "Remove all from favourite"
                 : "Add All to favourite",
-            onPressed: data.isEmpty
-                ? null
-                : () {
-                    unFavourite(0, isAllFavourite);
-                  },
+            onPressed: data.isEmpty ? null  : () { unFavourite(0, isAllFavourite); },
             icon: Icon(
                 isAllFavourite ? Icons.favorite : Icons.favorite_border_rounded,
-                color: Colors.pink),
+                color: (data.isEmpty || !isAllFavourite )
+                    ? Colors.grey
+                    :  Colors.pink),
           ),
           // endregion AllFavourite
 
@@ -69,9 +68,9 @@ class _UserListPageState extends State<UserListPage> {
                 : () {
                     deleteDialog(0, true);
                   },
-            icon: const Icon(
+            icon: Icon(
               Icons.delete,
-              color: Colors.red,
+              color: data.isEmpty ? Colors.grey : Colors.red,
             ),
           )
           // endregion DeleteALl
@@ -138,7 +137,8 @@ class _UserListPageState extends State<UserListPage> {
                 itemBuilder: (context, index) {
                   return getListItem(index);
                 },
-              ))
+              )
+              )
           ],
         ),
       ),
@@ -146,6 +146,10 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   Widget getListItem(i) {
+    Map<String,dynamic> tempUser = {};
+    _user.getByIdDatabase(data[i][UserId]).then((value) {
+       tempUser = value;
+    },);
     int ind = 0;
     return Card(
       margin: const EdgeInsets.all(10),
@@ -166,8 +170,7 @@ class _UserListPageState extends State<UserListPage> {
           onTap: () {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) {
-                ind = _user.getAll().indexOf(data[i]);
-                return SwipeUserDetails(userDetail: _user.getById(ind));
+                return SwipeUserDetails(userDetail: tempUser);
               },
             )).then((value) {
               setState(() {
@@ -198,22 +201,24 @@ class _UserListPageState extends State<UserListPage> {
               ),
             ],
           ),
+
           trailing: Wrap(
             direction: Axis.vertical,
             children: [
               // region favourite
               IconButton(
                 icon: Icon(
-                  data[i][isFavourite] ? Icons.favorite : Icons.favorite_border,
+                  data[i][isFavourite] == 1 ? Icons.favorite : Icons.favorite_border,
                   color: Colors.pink,
                 ),
                 onPressed: () {
-                  ind = _user.getAll().indexOf(data[i]);
-                  if (!data[i][isFavourite]) {
-                    _user.changeFavourite(ind);
+                  ind = data[i][UserId];
+                  if (data[i][isFavourite] == 0) {
+                    _user.changeFavouriteDatabase(data[i][UserId], 1);
                     setState(() {
-                      isAllFavourite = changeAllFavourite();
                       getData();
+                      isAllFavourite = changeAllFavourite();
+                      print("IsAllFavourite = $isAllFavourite");
                     });
                   } else {
                     unFavourite(ind);
@@ -229,22 +234,11 @@ class _UserListPageState extends State<UserListPage> {
                     color: Colors.red,
                   ),
                   onPressed: () {
-                    ind = _user.getAll().indexOf(data[i]);
+                    ind = data[i][UserId];
                     deleteDialog(ind);
                   }),
               // endregion delete
 
-              // region edit
-              // IconButton(
-              //   icon: const Icon(
-              //     Icons.edit,
-              //     color: Color.fromARGB(255, 75, 190, 255),
-              //   ),
-              //   onPressed: () {
-              //
-              //   },
-              // ),
-              // endregion edit
             ],
           ),
         ),
@@ -252,25 +246,31 @@ class _UserListPageState extends State<UserListPage> {
     );
   }
 
-  void getData([String? txt]) {
+  void getData([String? txt]) async {
     if (searchController.text == '') {
       if (widget.isFav) {
-        data = _user.getFavourite();
-      } else {
-        data = _user.getAll();
+        data = await _user.getFavouriteDatabase();
       }
-      // changeAllFavourite();
-    } else {
+      else {
+        data = await _user.getAllDatabase();
+      }
+      isAllFavourite = changeAllFavourite();
+      print("IsAllFavourite init = $isAllFavourite");
+    }
+    else {
       if (widget.isFav) {
         data = _user.searchFavouriteUser(searchController.text);
       } else {
         data = _user.searchUser(searchController.text);
       }
     }
-    data = data.reversed.toList();
+    setState(() {
+      data = data.reversed.toList();
+    });
   }
 
-  void unFavourite(int i, [bool? isAll]) {
+  void unFavourite(int i, [bool? isAll]) async {
+    Map<String,dynamic> tempUser = await _user.getByIdDatabase(i);
     showDialog(
       context: context,
       builder: (context) {
@@ -285,7 +285,7 @@ class _UserListPageState extends State<UserListPage> {
           ),
           content: Text(
             isAll == null
-                ? "Are you sure want to remove ${_user.getById(i)[Name]} from favourite?"
+                ? "Are you sure want to remove ${tempUser[Name]} favourite?"
                 : isAllFavourite
                     ? "Are you sure want to remove all from Favourite?"
                     : "Are you sure want to add all to Favourite?",
@@ -293,20 +293,20 @@ class _UserListPageState extends State<UserListPage> {
           ),
           actions: [
             TextButton(
+              onPressed: isAllFavourite ? () {
+                isAll == null
+                    ? _user.changeFavouriteDatabase(i, 0)
+                    : _user.removeAllFavouriteDatabase();
+                setState(() {
+                  isAllFavourite = false;
+                  getData();
+                });
+                Navigator.pop(context);
+              } : null ,
               child: const Text(
                 "Yes",
                 style: TextStyle(fontFamily: RobotoFlex),
               ),
-              onPressed: () {
-                isAll == null
-                    ? _user.changeFavourite(i)
-                    : _user.removeAllFavourite(!isAllFavourite);
-                setState(() {
-                  isAllFavourite = changeAllFavourite();
-                  getData();
-                });
-                Navigator.pop(context);
-              },
             ),
             TextButton(
               child: const Text(
@@ -320,10 +320,12 @@ class _UserListPageState extends State<UserListPage> {
           ],
         );
       },
+
     );
   }
 
-  void deleteDialog(int i, [bool? isAll]) {
+  void deleteDialog(int i, [bool? isAll]) async {
+    Map<String,dynamic> tempUser = await _user.getByIdDatabase(i);
     showDialog(
       context: context,
       builder: (context) {
@@ -334,7 +336,7 @@ class _UserListPageState extends State<UserListPage> {
           ),
           content: Text(
             isAll == null
-                ? 'Are you sure want to delete ${_user.getById(i)[Name]}? '
+                ? 'Are you sure want to delete ${tempUser[Name]}? '
                 : "Are you sure want to delete all users?",
             style: const TextStyle(fontFamily: RobotoFlex),
           ),
@@ -345,7 +347,7 @@ class _UserListPageState extends State<UserListPage> {
                 style: TextStyle(fontFamily: RobotoFlex),
               ),
               onPressed: () {
-                isAll == null ? _user.deleteUser(i) : _user.deleteAllUsers();
+                isAll == null ? _user.deleteUserDatabase(tempUser[UserId]) : _user.deleteAllUsersDatabase();
 
                 Navigator.pop(context);
                 setState(() {
@@ -369,26 +371,12 @@ class _UserListPageState extends State<UserListPage> {
     );
   }
 
-  // int findIndex(Map<String, dynamic> item) {
-  //   List<Map<String, dynamic>> tempData = _user.getAll();
-  //   int ans = 0;
-  //   for (int i = 0; i < tempData.length; i++) {
-  //     if (tempData[i][Name] == item[Name] &&
-  //         tempData[i][Email] == item[Email]) {
-  //       ans = i;
-  //       break;
-  //     }
-  //   }
-  //   return ans;
-  // }
-
   bool changeAllFavourite() {
     for (var ele in data) {
-      if (!ele[isFavourite]) {
-        return false;
+      if (ele[isFavourite] == 1) {
+        return true;
       }
     }
-
-    return true;
+    return false;
   }
 }

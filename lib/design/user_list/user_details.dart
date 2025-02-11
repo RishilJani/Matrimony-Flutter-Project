@@ -22,8 +22,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   @override
   void initState() {
     age = _user.ageCalculate(widget.userDetail);
-    widget.userDetail[Age] = age;
-    ind = _user.getAll().indexOf(widget.userDetail);
+    ind = widget.userDetail[UserId];
     super.initState();
   }
 
@@ -106,9 +105,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             ))
                       ],
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
+                    const SizedBox( height: 8,),
 
                     const Text(
                       "Contact",
@@ -158,7 +155,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         Expanded(
             flex: 3,
             child: Text(
-              widget.userDetail[txt].toString(),
+              txt == Age ? "$age" :widget.userDetail[txt].toString(),
               style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
@@ -177,22 +174,26 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                if (!widget.userDetail[isFavourite]) {
-                  _user.changeFavourite(ind);
+                if (widget.userDetail[isFavourite] == 0) {
+                  _user.changeFavouriteDatabase(widget.userDetail[UserId], 1);
                   setState(() {
-                    widget.userDetail = _user.getById(ind);
+                    
+                     _user.getByIdDatabase(ind).then((value) {
+                       setState(() { widget.userDetail = value; });
+                     },);
                   });
                 } else {
                   unFavourite(ind);
                 }
               },
               icon: Icon(
-                widget.userDetail[isFavourite]
+                widget.userDetail[isFavourite] == 1
                     ? CupertinoIcons.heart_solid
                     : CupertinoIcons.heart,
                 color: Colors.pink,
                 size: 30,
-              )),
+              )
+          ),
         ),
         // endregion favorite
 
@@ -220,9 +221,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                   builder: (context) {
                     return UserForm(userDetail: widget.userDetail);
                   },
-                )).then((value) => setState(() {
-                      widget.userDetail = _user.getById(ind);
-                    }));
+                )).then((value) => _user.getByIdDatabase(ind).then((value) {
+                        setState(() {
+                          widget.userDetail = value;
+                          age = User().ageCalculate(widget.userDetail);
+                        });
+                      },)
+                );
               },
               icon: const Icon(
                 Icons.edit,
@@ -235,22 +240,23 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
-  void unFavourite(int i) {
+  void unFavourite(int i) async {
     showDialog(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
           title: const Text("Unfavourite"),
           content: Text(
-              "Are you sure want to remove ${_user.getById(i)[Name]} from favourite?"),
+              "Are you sure want to remove ${widget.userDetail[Name]} from favourite?"),
           actions: [
             TextButton(
               child: const Text("Yes"),
               onPressed: () {
-                _user.changeFavourite(i);
-                setState(() {
-                  widget.userDetail = _user.getById(ind);
-                });
+                _user.changeFavouriteDatabase(widget.userDetail[UserId], 0);
+
+                _user.getByIdDatabase(ind).then((value) {
+                    setState(() { widget.userDetail = value; });
+                  },);
                 Navigator.pop(context);
               },
             ),
@@ -266,19 +272,19 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
-  void deleteDialog(int i) {
+  void deleteDialog(int i) async {
     showDialog(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
           title: const Text('DELETE '),
           content:
-              Text('Are you sure want to delete ${_user.getById(i)[Name]}? '),
+              Text('Are you sure want to delete ${widget.userDetail[Name]}? '),
           actions: [
             TextButton(
               child: const Text('yes'),
               onPressed: () {
-                _user.deleteUser(i);
+                _user.deleteUserDatabase(widget.userDetail[UserId]);
                 Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) {
                     return UserListPage(isFav: false);
@@ -297,18 +303,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       },
     );
   }
-
-  // int findIndex(item) {
-  //   List<Map<String, dynamic>> tempData = _user.getAll();
-  //   int ans = 0;
-  //   for (int i = 0; i < tempData.length; i++) {
-  //     if (tempData[i][Name] == item[Name] && tempData[i][Email] == item[Email]) {
-  //       ans = i;
-  //       break;
-  //     }
-  //   }
-  //   return ans;
-  // }
 
   String getHobbies() {
     String hobbies = "";

@@ -58,7 +58,7 @@ class _UserFormState extends State<UserForm> {
       dob = widget.userDetail![DOB];
       pikedDate = _user.strToDateTime(widget.userDetail![DOB]);
 
-      ind = _user.getAll().indexOf(widget.userDetail!);
+      ind = widget.userDetail![UserId];
     } else {
       selectCity = cities[0];
       hobbies = {"Reading": false, "Music": false, "Dance": false};
@@ -301,7 +301,8 @@ class _UserFormState extends State<UserForm> {
                             dob,
                             style: const TextStyle(
                                 fontFamily: RobotoFlex, color: Colors.black),
-                          )),
+                          )
+                      ),
                     )
                   ],
                 ),
@@ -417,8 +418,8 @@ class _UserFormState extends State<UserForm> {
                 // Submit Button
                 // region Button
                 ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
+                    onPressed: () async{
+                      if (_formKey.currentState!.validate()){
                         Map<String, dynamic> mp = {
                           Name: nameController.text,
                           Email: emailController.text,
@@ -429,19 +430,23 @@ class _UserFormState extends State<UserForm> {
                           DOB: dob,
                           Password: passwordController.text,
                           isFavourite: widget.userDetail == null
-                              ? false
+                              ? 0
                               : widget.userDetail![isFavourite]
                         };
+
                         if (isEdit) {
-                          _user.updateUser(ind, mp);
+                          _user.updateUserDatabase(ind, mp);
                           isEdit = false;
                         } else {
-                          _user.addUser(mp);
+                          // _user.addUser(mp);
+                          await _user.addUserDatabase(mp);
                         }
+
                         Navigator.pop(context, mp);
                       }
                     },
-                    child: Text(isEdit ? 'Edit User' : 'Submit'))
+                    child: Text(isEdit ? 'Edit User' : 'Submit')
+                )
                 // endregion Button
               ],
             ),

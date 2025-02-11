@@ -18,11 +18,13 @@ class SwipeUserDetails extends StatefulWidget {
 class _SwipeUserDetailsState extends State<SwipeUserDetails> {
   final User _user = User();
   int ind = -1;
+  int age = 0;
   @override
   void initState() {
     super.initState();
-    widget.userDetail[Age] = User().ageCalculate(widget.userDetail);
-    ind = _user.getAll().indexOf(widget.userDetail);
+    // widget.userDetail[Age] = User().ageCalculate(widget.userDetail);
+    age = User().ageCalculate(widget.userDetail);
+    ind = widget.userDetail[UserId];
   }
 
   @override
@@ -65,9 +67,9 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
                       if (details.delta.dy < -10) {
                         // Detect upward swipe
                         _showBottomSheet(context);
-                        setState(() {
-                          widget.userDetail = _user.getById(ind);
-                        });
+                        _user.getByIdDatabase(ind).then((value) {
+                          setState(() { widget.userDetail = value; });
+                        },);
                       }
                     },
                     child: Container(
@@ -142,7 +144,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
                 width: 8,
               ),
               Text(
-                "${widget.userDetail[Age]}",
+                "$age",
                 style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 25,
@@ -176,13 +178,15 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           ),
           // endregion City
 
+          Expanded(child: Container()),
+
           getButtons(),
         ],
       ),
     );
   }
 
-  // buttons favourite, delete, info
+  // buttons favourite, delete, edit, info
   Widget getButtons() {
     return Row(
       children: [
@@ -191,17 +195,20 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                if (!widget.userDetail[isFavourite]) {
-                  _user.changeFavourite(ind);
+                if (widget.userDetail[isFavourite] == 0) {
+                  _user.changeFavouriteDatabase(widget.userDetail[UserId], 1);
                   setState(() {
-                    widget.userDetail = _user.getById(ind);
+
+                    _user.getByIdDatabase(ind).then((value) {
+                      setState(() { widget.userDetail = value; });
+                    },);
                   });
                 } else {
                   unFavourite(ind);
                 }
               },
               icon: Icon(
-                widget.userDetail[isFavourite]
+                widget.userDetail[isFavourite] == 1
                     ? CupertinoIcons.heart_solid
                     : CupertinoIcons.heart,
                 color: Colors.pink,
@@ -234,11 +241,13 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
                   builder: (context) {
                     return UserForm(userDetail: widget.userDetail);
                   },
-                )).then((value) {
+                )).then((value) => _user.getByIdDatabase(ind).then((value) {
                   setState(() {
-                    widget.userDetail = _user.getById(ind);
+                    widget.userDetail = value;
+                    age = User().ageCalculate(widget.userDetail);
                   });
-                });
+                },)
+                );
               },
               icon: const Icon(
                 Icons.edit,
@@ -273,15 +282,16 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
         return CupertinoAlertDialog(
           title: const Text("Unfavourite"),
           content: Text(
-              "Are you sure want to remove ${_user.getById(i)[Name]} from favourite?"),
+              "Are you sure want to remove ${widget.userDetail[Name]} from favourite?"),
           actions: [
             TextButton(
               child: const Text("Yes"),
               onPressed: () {
-                _user.changeFavourite(i);
-                setState(() {
-                  widget.userDetail = _user.getById(ind);
-                });
+                // _user.changeFavourite(i);
+                _user.changeFavouriteDatabase(widget.userDetail[UserId], 0);
+                _user.getByIdDatabase(ind).then((value) {
+                  setState(() { widget.userDetail = value; });
+                },);
                 Navigator.pop(context);
               },
             ),
@@ -304,12 +314,12 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
         return CupertinoAlertDialog(
           title: const Text('DELETE '),
           content:
-              Text('Are you sure want to delete ${_user.getById(i)[Name]}? '),
+              Text('Are you sure want to delete ${widget.userDetail[Name]}? '),
           actions: [
             TextButton(
               child: const Text('yes'),
               onPressed: () {
-                _user.deleteUser(i);
+                _user.deleteUserDatabase(widget.userDetail[UserId]);
                 Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) {
                     return UserListPage(isFav: false);

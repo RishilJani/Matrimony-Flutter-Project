@@ -4,12 +4,11 @@ import 'package:sqflite/sqflite.dart';
 
 class MyDatabase {
   Future<Database> initDatabase() async {
-    print("Opening database");
     Database db = await openDatabase(
             join(await getDatabasesPath(), 'myDatabase.db'),
             onCreate: (db, version)  async {
              await db.execute('''
-                CREATE TABLE IF NOT EXISTS $TABLE ( 
+                CREATE TABLE IF NOT EXISTS $Table_User ( 
                   $UserId INTEGER PRIMARY KEY AUTOINCREMENT,
                   $Name TEXT NOT NULL,
                   $Email TEXT NOT NULL,
@@ -24,7 +23,6 @@ class MyDatabase {
              },
             version: DB_Vesion
         );
-    print("Returning database");
     return db;
   }
 
