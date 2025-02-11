@@ -107,7 +107,9 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: UserDetailsPage(userDetail: widget.userDetail),
         );
       },
-    );
+    ).then((value) {
+      _user.getByIdDatabase(ind).then(( value) => setState(() { widget.userDetail = value; }) );
+    },);
   }
 
   // to get user details for this page
@@ -120,6 +122,8 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           // region Name
           Text(
             widget.userDetail[Name],
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 33,
@@ -145,6 +149,8 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
               ),
               Text(
                 "$age",
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 25,
@@ -168,6 +174,8 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
               ),
               Text(
                 "${widget.userDetail[City]}",
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 25,

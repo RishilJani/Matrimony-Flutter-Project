@@ -97,13 +97,17 @@ class _UserFormState extends State<UserForm> {
                 getInput(
                   nameController,
                   'Name',
+                  formatters: [
+                    FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
+                  ],
+                  keyboard: TextInputType.text,
                   suffix: const Icon(Icons.person),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Enter your name';
                     }
                     if (value.length < 3 || value.length > 50) {
-                      return 'Enter valid full name';
+                      return 'Enter valid name within length between 3 and 50';
                     }
                     if (!RegExp(r"[a-zA-Z\s']{3,50}").hasMatch(value)) {
                       return 'Enter valid name';
@@ -466,14 +470,6 @@ class _UserFormState extends State<UserForm> {
       onToggle}) {
     return Row(
       children: [
-        // SizedBox(
-        //     width: 150,
-        //     child:  Text(
-        //         "$txt : ",
-        //         style: const TextStyle(fontFamily: RobotoFlex ,fontSize: 15),
-        //     )
-        // ),
-        // const SizedBox( width: 8, ),
         Expanded(
           child: TextFormField(
             obscureText: (isObs ?? false) && (isPasswordVisible == false),

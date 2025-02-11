@@ -40,12 +40,16 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          widget.userDetail[Name].toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 40,
-                              fontFamily: "RobotoFlex"),
+                        Expanded(
+                          child: Text(
+                            widget.userDetail[Name].toString(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 40,
+                                fontFamily: "RobotoFlex"),
+                          ),
                         )
                       ],
                     ),
@@ -145,7 +149,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       children: [
         Expanded(
           flex: 1,
-          child: Text("$txt "),
+          child: Text(
+            "$txt ",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
         ),
         const Expanded(
             flex: 1,
@@ -160,6 +168,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
                   fontFamily: RobotoFlex),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             )),
       ],
     );

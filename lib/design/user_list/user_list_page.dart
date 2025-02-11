@@ -120,24 +120,18 @@ class _UserListPageState extends State<UserListPage> {
               height: 15,
             ),
 
-            if (data.isEmpty)
-              const Center(
-                child: Text(
-                  "No user found",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                      fontFamily: 'GreatVibes'),
-                ),
-              )
-            else
+            if (data.isNotEmpty)
               Expanded(
                   child: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return getListItem(index);
-                },
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return getListItem(index);
+                    },
+                  )
               )
+            else
+              const Center(
+                child: CircularProgressIndicator()
               )
           ],
         ),
@@ -148,98 +142,143 @@ class _UserListPageState extends State<UserListPage> {
   Widget getListItem(i) {
     Map<String,dynamic> tempUser = {};
     _user.getByIdDatabase(data[i][UserId]).then((value) {
-       tempUser = value;
+      tempUser = value;
     },);
-    int ind = 0;
-    return Card(
-      margin: const EdgeInsets.all(10),
-      elevation: 10,
-      child: Container(
-        // list tile  gradient
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            Color.fromARGB(255, 72, 219, 232),
-            Color.fromARGB(255, 54, 97, 204),
-          ],
-        )),
+    int ind = data[i][UserId];
+    return ListTile(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+            builder:(context) {
+              return SwipeUserDetails(userDetail: tempUser);
+            },
+        )).then((value) {
+          setState(() { getData(); });
+        },);
+      },
 
-        child: ListTile(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return SwipeUserDetails(userDetail: tempUser);
-              },
-            )).then((value) {
-              setState(() {
-                getData();
-              });
-            });
-          },
-          title: Wrap(
-            direction: Axis.vertical,
-            children: [
-              // Name
-              Text(
-                data[i][Name],
-                style: const TextStyle(
-                    fontFamily: RobotoFlex, color: Colors.white, fontSize: 30),
-              ),
-
-              // Mobile
-              Text(
-                data[i][Mobile],
-                style: const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
-              ),
-
-              // City
-              Text(
-                data[i][City].toString(),
-                style: const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
-              ),
-            ],
-          ),
-
-          trailing: Wrap(
-            direction: Axis.vertical,
-            children: [
-              // region favourite
-              IconButton(
-                icon: Icon(
-                  data[i][isFavourite] == 1 ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.pink,
-                ),
-                onPressed: () {
-                  ind = data[i][UserId];
-                  if (data[i][isFavourite] == 0) {
-                    _user.changeFavouriteDatabase(data[i][UserId], 1);
-                    setState(() {
-                      getData();
-                      isAllFavourite = changeAllFavourite();
-                      print("IsAllFavourite = $isAllFavourite");
-                    });
-                  } else {
-                    unFavourite(ind);
-                  }
-                },
-              ),
-              // endregion favourite
-
-              // region delete
-              IconButton(
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
+      contentPadding: EdgeInsets.zero,
+      title: Card(
+        elevation: 15,
+        child: Container(
+          height: 150,
+          // list tile  gradient
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Color.fromARGB(255, 72, 219, 232),
+                  Color.fromARGB(255, 54, 97, 204),
+                ],
+              )),
+          padding: const EdgeInsets.only(right: 15),
+          child: Row(
+              children: [
+                // region Image
+                Container(
+                  margin: const EdgeInsets.only(right: 4),
+                  width: 90,
+                  height: 150,
+                  child: Image.asset(
+                    "assets/images/Holding_Hands.jpg",
+                    fit: BoxFit.cover,
                   ),
-                  onPressed: () {
-                    ind = data[i][UserId];
-                    deleteDialog(ind);
-                  }),
-              // endregion delete
-
-            ],
+                ),
+                // endregion Image
+      
+                // region Details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Name
+                      Text(
+                        data[i][Name],
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                            fontFamily: RobotoFlex,
+                            color: Colors.white,
+                            fontSize: 30,
+                        ),
+                  
+                      ),
+                  
+                      // Mobile
+                      Text(
+                        data[i][Mobile],
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
+                      ),
+                  
+                      // City
+                      Text(
+                        data[i][City].toString(),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
+                      ),
+                  
+                    ],
+                  ),
+                ),
+                // endregion Details
+      
+                // region Buttons
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Wrap(
+                    direction: Axis.vertical,
+                    children: [
+                      // region favourite
+                      IconButton(
+                        icon: Icon(
+                          data[i][isFavourite] == 1 ? Icons.favorite : Icons.favorite_border,
+                          color: Colors.pink,
+                        ),
+                        onPressed: () {
+                          if (data[i][isFavourite] == 0) {
+                            _user.changeFavouriteDatabase(data[i][UserId], 1);
+                            setState(() {
+                              getData();
+                              isAllFavourite = changeAllFavourite();
+                            });
+                          } else {
+                            unFavourite(ind);
+                          }
+                        },
+                      ),
+                      // endregion favourite
+      
+                      // region delete
+                      IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {
+                            deleteDialog(ind);
+                          }),
+                      // endregion delete
+      
+                      // region edit
+                      IconButton(
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Color.fromARGB(255, 75, 190, 255),
+                        ),
+                        onPressed: () {
+      
+                        },
+                      ),
+                      // endregion edit
+                    ],
+                  ),
+                )
+                // endregion Buttons
+              ]
           ),
         ),
       ),
@@ -255,7 +294,6 @@ class _UserListPageState extends State<UserListPage> {
         data = await _user.getAllDatabase();
       }
       isAllFavourite = changeAllFavourite();
-      print("IsAllFavourite init = $isAllFavourite");
     }
     else {
       if (widget.isFav) {
