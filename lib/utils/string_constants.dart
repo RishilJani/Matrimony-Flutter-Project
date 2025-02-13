@@ -1,5 +1,5 @@
-final String Table_User = 'User';
-int DB_Vesion = 1;
+const String Table_User = 'User';
+int DB_Version = 1;
 
 const String UserId = "UserID";
 const String Name = 'Name';
@@ -17,3 +17,7 @@ const String Age = 'Age';
 const String RobotoFlex = "RobotoFlex";
 const String StyleScript = "StyleScript";
 const String GreatVibes = "GreatVibes";
+
+const String userName = 'UserName';
+const String userPassword = 'UserPassword';
+const String remember = 'isRemember';

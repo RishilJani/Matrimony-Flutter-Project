@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/dashboard/dashboard.dart';
+import 'package:matrimony_application/design/dashboard/login_signup_page.dart';
+import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,13 +25,34 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> navigateToDashboard() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
     if(mounted){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Dashboard(),
-          ));
+      print("mounted");
+       Widget newPage = FutureBuilder(
+          future: SharedPreferences.getInstance(),
+          builder:(context, snapshot) {
+                print("Future ::: builder");
+            if(snapshot.hasData && snapshot.data != null){
+                print("Snapshot ::: hasData");
+              if(!(snapshot.data!.getBool(remember) ?? false)){
+                return const LoginSignupPage();
+              }else{
+                return const Dashboard();
+              }
+            }
+            else{
+              return CircularProgressIndicator();
+            }
+          },
+      );
+
+       Navigator.pushReplacement(context,
+           MaterialPageRoute(
+               builder: (context) {
+                 return newPage;
+               },
+           )
+       );
     }
   }
 
@@ -40,11 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-              // begin: Alignment.topLeft,
-              // end: Alignment.bottomRight,
-              colors: bgColors
-          )
+          gradient: LinearGradient( colors: bgColors )
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

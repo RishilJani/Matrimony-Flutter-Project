@@ -21,7 +21,7 @@ class MyDatabase {
                   $isFavourite INTEGER NOT NULL);
                   ''');
              },
-            version: DB_Vesion
+            version: DB_Version
         );
     return db;
   }

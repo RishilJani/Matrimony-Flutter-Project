@@ -6,15 +6,6 @@ import 'package:sqflite/sqflite.dart';
 class User {
   static List<Map<String, dynamic>> userList = [];
 
-  // void addUser(Map<String, dynamic> mp) {
-  //   mp[Age] = ageCalculate(mp);
-  //   userList.add(mp);
-  // }
-  //
-  // List<Map<String, dynamic>> getAll() {
-  //   return userList;
-  // }
-
   int ageCalculate(Map<String, dynamic> user) {
     DateTime current = DateTime.now();
 

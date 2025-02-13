@@ -381,9 +381,6 @@ class _UserFormState extends State<UserForm> {
                         return "Password must contain \nat least one special character\n(@#\$%^&+=*!)";
                       }
 
-                      // if(!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=*!])(?=.{8,16}$).*$').hasMatch(value)){
-                      //   return "Password must contain at least one lower case letter";
-                      // }
                       return null;
                     },
                     isPasswordVisible: isPassword,
@@ -446,7 +443,9 @@ class _UserFormState extends State<UserForm> {
                           await _user.addUserDatabase(mp);
                         }
 
-                        Navigator.pop(context, mp);
+                        if(context.mounted){
+                          Navigator.pop(context, mp);
+                        }
                       }
                     },
                     child: Text(isEdit ? 'Edit User' : 'Submit')

@@ -364,9 +364,10 @@ class _UserListPageState extends State<UserListPage> {
 
   void deleteDialog(int i, [bool? isAll]) async {
     Map<String,dynamic> tempUser = await _user.getByIdDatabase(i);
-    showDialog(
-      context: context,
-      builder: (context) {
+    if(mounted){
+      showDialog(
+        context: context,
+        builder: (context) {
         return CupertinoAlertDialog(
           title: const Text(
             'DELETE ',
@@ -406,7 +407,9 @@ class _UserListPageState extends State<UserListPage> {
           ],
         );
       },
-    );
+      );
+    }
+
   }
 
   bool changeAllFavourite() {
