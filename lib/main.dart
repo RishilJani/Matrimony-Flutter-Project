@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:matrimony_application/design/dashboard/login_signup_page.dart';
 import 'package:matrimony_application/design/dashboard/splash_screen.dart';
 
 void main() {

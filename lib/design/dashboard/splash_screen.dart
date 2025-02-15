@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/dashboard/dashboard.dart';
 import 'package:matrimony_application/design/dashboard/login_signup_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
-import 'package:matrimony_application/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -56,9 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: appBarGradient(bgColors),
-      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient( colors: bgColors )

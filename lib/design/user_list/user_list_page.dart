@@ -124,7 +124,7 @@ class _UserListPageState extends State<UserListPage> {
                         tooltip: isAllFavourite
                             ? "Remove all from favourite"
                             : "Add All to favourite",
-                        onPressed: data.isEmpty
+                        onPressed: data.isEmpty || !isAllFavourite
                             ? null
                             : () {
                                 unFavourite(0, isAllFavourite);
@@ -157,7 +157,8 @@ class _UserListPageState extends State<UserListPage> {
                     )
                     // endregion DeleteALl
                   ],
-                ))
+                )
+                )
               ],
             ),
 
@@ -174,7 +175,7 @@ class _UserListPageState extends State<UserListPage> {
                 },
               ))
             else
-              const Center(child: CircularProgressIndicator())
+              const Center(child: Text("User not found",style: TextStyle(fontSize: 20),))
           ],
         ),
       ),
@@ -182,19 +183,14 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   Widget getListItem(i) {
-    Map<String, dynamic> tempUser = {};
-    _user.getByIdDatabase(data[i][UserId]).then(
-      (value) {
-        tempUser = value;
-      },
-    );
     int ind = data[i][UserId];
     int age = _user.ageCalculate(data[i]);
+
     return ListTile(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
-            return SwipeUserDetails(userDetail: tempUser);
+            return SwipeUserDetails(data: data,currentIndex: i,);
           },
         )).then(
           (value) {
@@ -224,8 +220,8 @@ class _UserListPageState extends State<UserListPage> {
             // region Image
             Container(
               margin: const EdgeInsets.only(right: 4),
-              width: 90,
-              height: 150,
+              width: 100,
+              height: 151,
               child: Image.asset(
                 "assets/images/Holding_Hands.jpg",
                 fit: BoxFit.cover,
@@ -247,7 +243,7 @@ class _UserListPageState extends State<UserListPage> {
                       overflow: TextOverflow.ellipsis,
                       fontFamily: RobotoFlex,
                       color: Colors.white,
-                      fontSize: 30,
+                      fontSize: 28,
                     ),
                   ),
                   // endregion Name
@@ -257,7 +253,7 @@ class _UserListPageState extends State<UserListPage> {
                     'age : ${age.toString()}',
                     maxLines: 1,
                     style:
-                        const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
+                        const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
                   ),
                   // endregion Age
 
@@ -267,7 +263,7 @@ class _UserListPageState extends State<UserListPage> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style:
-                        const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
+                        const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
                   ),
                   // endregion Mobile
 
@@ -277,7 +273,7 @@ class _UserListPageState extends State<UserListPage> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style:
-                        const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
+                        const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
                   ),
                   // endregion City
                 ],
@@ -288,8 +284,9 @@ class _UserListPageState extends State<UserListPage> {
             // region Buttons
             Align(
               alignment: Alignment.topRight,
-              child: Wrap(
+              child: Flex(
                 direction: Axis.vertical,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // region favourite
                   IconButton(

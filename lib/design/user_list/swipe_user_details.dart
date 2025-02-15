@@ -5,26 +5,27 @@ import 'package:matrimony_application/design/add_user/add_edit_user.dart';
 import 'package:matrimony_application/design/user_list/user_details.dart';
 import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
-import 'package:matrimony_application/utils/utils.dart';
 
 // ignore: must_be_immutable
 class SwipeUserDetails extends StatefulWidget {
-  Map<String, dynamic> userDetail = {};
-  SwipeUserDetails({super.key, required this.userDetail});
+  SwipeUserDetails({super.key,required this.data,required this.currentIndex});
+  int currentIndex = 0;
+  List<Map<String,dynamic>> data = [];
   @override
   State<SwipeUserDetails> createState() => _SwipeUserDetailsState();
 }
 
 class _SwipeUserDetailsState extends State<SwipeUserDetails> {
   final User _user = User();
-  int ind = -1;
+
   int age = 0;
+
+  late PageController _pageController;
   @override
   void initState() {
     super.initState();
-    // widget.userDetail[Age] = User().ageCalculate(widget.userDetail);
-    age = User().ageCalculate(widget.userDetail);
-    ind = widget.userDetail[UserId];
+    age = User().ageCalculate(widget.data[widget.currentIndex]);
+    _pageController = PageController(initialPage: widget.currentIndex);
   }
 
   @override
@@ -32,69 +33,68 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
 
-      appBar: AppBar(
-        flexibleSpace: appBarGradient([
-          const Color.fromARGB(255, 240, 47, 194),
-          const Color.fromARGB(255, 96, 148, 234),
-        ]),
-        centerTitle: true,
-        title: Text(
-          "${widget.userDetail[Name]}",
-          style: const TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              fontFamily: StyleScript),
-        ),
-      ),
+      appBar: AppBar(),
 
-      body: widget.userDetail.isEmpty
+      body: widget.data.isEmpty
           ? const Text("Some Error Occurred")
-          : Stack(
-              children: [
-                // Main Content
-                Image.asset(
-                  "assets/images/Holding_Hands.jpg",
-                  height: 900,
-                  fit: BoxFit.cover,
-                  width: 400,
-                ),
+          : PageView.builder(
+              controller: _pageController,
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemCount: widget.data.length,
+              itemBuilder: (context, index) {
+                  return displayUser(index);
+              },
+      ),
+    );
+  }
 
-                // Gesture Detector for Swipe Up
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: GestureDetector(
-                    onVerticalDragUpdate: (details) {
-                      if (details.delta.dy < -10) {
-                        // Detect upward swipe
-                        _showBottomSheet(context);
-                        _user.getByIdDatabase(ind).then((value) {
-                          setState(() { widget.userDetail = value; });
-                        },);
-                      }
-                    },
-                    child: Container(
-                      alignment: Alignment.bottomLeft, // Swipe Area alignment
-                      height: 250, // Swipe Area Height
-                      color: Colors.transparent,
-                      child: Container(
-                        width: 700,
-                        height: 700,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(50, 100, 100, 94),
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        child: getDetails(),
-                      ),
-                    ),
-                  ),
+  Widget displayUser(int i){
+    return  Stack(
+      children: [
+        // Main Content
+        Image.asset(
+          "assets/images/Holding_Hands.jpg",
+          height: 900,
+          fit: BoxFit.cover,
+          width: 400,
+        ),
+        
+        // Gesture Detector for Swipe Up
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: GestureDetector(
+            onVerticalDragUpdate: (details) {
+              if (details.delta.dy < -10) {
+                // Detect upward swipe
+                _showBottomSheet(context,i);
+                _user.getByIdDatabase(widget.data[i][UserId]).then((value) {
+                  setState(() { widget.data[i] = value; });
+                },);
+              }
+            },
+            child: Container(
+              alignment: Alignment.bottomLeft, // Swipe Area alignment
+              height: 250, // Swipe Area Height
+              color: Colors.transparent,
+              child: Container(
+                width: 700,
+                height: 700,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(50, 100, 100, 94),
+                  borderRadius: BorderRadius.circular(3),
                 ),
-              ],
+                child: getDetails(i),
+              ),
             ),
+          ),
+        ),
+      ],
     );
   }
 
   // Function to show the bottom sheet
-  void _showBottomSheet(BuildContext context) {
+  void _showBottomSheet(BuildContext context,int i) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -104,16 +104,16 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
         return Container(
           height: 700,
           padding: const EdgeInsets.all(16),
-          child: UserDetailsPage(userDetail: widget.userDetail),
+          child: UserDetailsPage(userDetail: widget.data[i]),
         );
       },
     ).then((value) {
-      _user.getByIdDatabase(ind).then(( value) => setState(() { widget.userDetail = value; }) );
+      _user.getByIdDatabase(widget.data[i][UserId]).then(( value) => setState(() { widget.data[i] = value; }) );
     },);
   }
 
   // to get user details for this page
-  Widget getDetails() {
+  Widget getDetails(int i) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
@@ -121,7 +121,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
         children: [
           // region Name
           Text(
-            widget.userDetail[Name],
+            widget.data[i][Name],
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: const TextStyle(
@@ -173,7 +173,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
                 width: 8,
               ),
               Text(
-                "${widget.userDetail[City]}",
+                "${widget.data[i][City]}",
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: const TextStyle(
@@ -188,14 +188,14 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
 
           Expanded(child: Container()),
 
-          getButtons(),
+          getButtons(i),
         ],
       ),
     );
   }
 
   // buttons favourite, delete, edit, info
-  Widget getButtons() {
+  Widget getButtons(int i) {
     return Row(
       children: [
         // region favorite
@@ -203,20 +203,19 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                if (widget.userDetail[isFavourite] == 0) {
-                  _user.changeFavouriteDatabase(widget.userDetail[UserId], 1);
+                if (widget.data[i][isFavourite] == 0) {
+                  _user.changeFavouriteDatabase(widget.data[i][UserId], 1);
                   setState(() {
-
-                    _user.getByIdDatabase(ind).then((value) {
-                      setState(() { widget.userDetail = value; });
+                    _user.getByIdDatabase(widget.data[i][UserId]).then((value) {
+                      setState(() { widget.data[i]= value; });
                     },);
                   });
                 } else {
-                  unFavourite(ind);
+                  unFavourite(i);
                 }
               },
               icon: Icon(
-                widget.userDetail[isFavourite] == 1
+                widget.data[i][isFavourite] == 1
                     ? CupertinoIcons.heart_solid
                     : CupertinoIcons.heart,
                 color: Colors.pink,
@@ -230,13 +229,14 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                deleteDialog(ind);
+                deleteDialog(i);
               },
               icon: const Icon(
                 Icons.delete,
                 color: Colors.red,
                 size: 30,
-              )),
+              )
+          ),
         ),
         // endregion Delete
 
@@ -247,12 +247,12 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return UserForm(userDetail: widget.userDetail);
+                    return UserForm(userDetail: widget.data[i]);
                   },
-                )).then((value) => _user.getByIdDatabase(ind).then((value) {
+                )).then((value) => _user.getByIdDatabase(widget.data[i][UserId]).then((value) {
                   setState(() {
-                    widget.userDetail = value;
-                    age = User().ageCalculate(widget.userDetail);
+                    widget.data[i] = value;
+                    age = User().ageCalculate(widget.data[i]);
                   });
                 },)
                 );
@@ -270,7 +270,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                _showBottomSheet(context);
+                _showBottomSheet(context,i);
               },
               icon: const Icon(
                 CupertinoIcons.info,
@@ -283,22 +283,22 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     );
   }
 
-  void unFavourite(int i) {
+  void unFavourite(int index) {
     showDialog(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
           title: const Text("Unfavourite"),
           content: Text(
-              "Are you sure want to remove ${widget.userDetail[Name]} from favourite?"),
+              "Are you sure want to remove ${widget.data[index][Name]} from favourite?"),
           actions: [
             TextButton(
               child: const Text("Yes"),
               onPressed: () {
                 // _user.changeFavourite(i);
-                _user.changeFavouriteDatabase(widget.userDetail[UserId], 0);
-                _user.getByIdDatabase(ind).then((value) {
-                  setState(() { widget.userDetail = value; });
+                _user.changeFavouriteDatabase(widget.data[index][UserId], 0);
+                _user.getByIdDatabase(widget.data[index][UserId]).then((value) {
+                  setState(() { widget.data[index] = value; });
                 },);
                 Navigator.pop(context);
               },
@@ -322,12 +322,12 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
         return CupertinoAlertDialog(
           title: const Text('DELETE '),
           content:
-              Text('Are you sure want to delete ${widget.userDetail[Name]}? '),
+              Text('Are you sure want to delete ${widget.data[i][Name]}? '),
           actions: [
             TextButton(
               child: const Text('yes'),
               onPressed: () {
-                _user.deleteUserDatabase(widget.userDetail[UserId]);
+                _user.deleteUserDatabase(widget.data[i][UserId]);
                 Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) {
                     return UserListPage(isFav: false);

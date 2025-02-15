@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
+import 'package:matrimony_application/utils/utils.dart';
 
 import '../../backend/user.dart';
 import '../add_user/add_edit_user.dart';
@@ -109,7 +110,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             ))
                       ],
                     ),
-                    const SizedBox( height: 8,),
+                    const SizedBox(
+                      height: 8,
+                    ),
 
                     const Text(
                       "Contact",
@@ -163,7 +166,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         Expanded(
             flex: 3,
             child: Text(
-              txt == Age ? "$age" :widget.userDetail[txt].toString(),
+              txt == Age ? "$age" : widget.userDetail[txt].toString(),
               style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
@@ -183,18 +186,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         Expanded(
           child: IconButton(
               padding: const EdgeInsets.all(5),
-              onPressed: () {
+              onPressed: () async {
                 if (widget.userDetail[isFavourite] == 0) {
-                  _user.changeFavouriteDatabase(widget.userDetail[UserId], 1);
-                  setState(() {
-                    
-                     _user.getByIdDatabase(ind).then((value) {
-                       setState(() { widget.userDetail = value; });
-                     },);
-                  });
+                  await _user.changeFavouriteDatabase(widget.userDetail[UserId], 1);
                 } else {
-                  unFavourite(ind);
+                  await unFavouriteDialog(context, data: widget.userDetail);
                 }
+                _user.getByIdDatabase(widget.userDetail[UserId]).then((value) { setState(() { widget.userDetail = value; }); }, );
               },
               icon: Icon(
                 widget.userDetail[isFavourite] == 1
@@ -202,8 +200,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     : CupertinoIcons.heart,
                 color: Colors.pink,
                 size: 30,
-              )
-          ),
+              )),
         ),
         // endregion favorite
 
@@ -212,7 +209,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                deleteDialog(ind);
+                deleteDialog();
               },
               icon: const Icon(
                 Icons.delete,
@@ -231,13 +228,15 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                   builder: (context) {
                     return UserForm(userDetail: widget.userDetail);
                   },
-                )).then((value) => _user.getByIdDatabase(ind).then((value) {
+                )).then((value) =>
+                    _user.getByIdDatabase(widget.userDetail[UserId]).then(
+                      (value) {
                         setState(() {
                           widget.userDetail = value;
                           age = User().ageCalculate(widget.userDetail);
                         });
-                      },)
-                );
+                      },
+                    ));
               },
               icon: const Icon(
                 Icons.edit,
@@ -250,39 +249,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
-  void unFavourite(int i) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: const Text("Unfavourite"),
-          content: Text(
-              "Are you sure want to remove ${widget.userDetail[Name]} from favourite?"),
-          actions: [
-            TextButton(
-              child: const Text("Yes"),
-              onPressed: () {
-                _user.changeFavouriteDatabase(widget.userDetail[UserId], 0);
-
-                _user.getByIdDatabase(ind).then((value) {
-                    setState(() { widget.userDetail = value; });
-                  },);
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: const Text("No"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  void deleteDialog(int i) async {
+  void deleteDialog() async {
     showDialog(
       context: context,
       builder: (context) {

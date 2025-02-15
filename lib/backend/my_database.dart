@@ -18,13 +18,15 @@ class MyDatabase {
                   $Gender TEXT NOT NULL,
                   $Password TEXT NOT NULL,
                   $Hobbies TEXT,
-                  $isFavourite INTEGER NOT NULL);
+                  $isFavourite INTEGER NOT NULL
+                  );
                   ''');
              },
+        onUpgrade: (db, oldVersion, newVersion) {
+
+        },
             version: DB_Version
         );
     return db;
   }
-
-
 }

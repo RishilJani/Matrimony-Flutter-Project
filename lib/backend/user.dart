@@ -86,8 +86,6 @@ class User {
   }
 
 
-
-
   Future<void> addUserDatabase(Map<String, dynamic> mp) async {
     userList.add(mp);
     mp[Hobbies] = jsonEncode(mp[Hobbies]);
