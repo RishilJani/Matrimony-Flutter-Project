@@ -46,35 +46,35 @@ class _UserListPageState extends State<UserListPage> {
               fontFamily: 'StyleScript'),
         ),
         centerTitle: true,
-        actions: [
-          // region AllFavourite
-          IconButton(
-            tooltip: isAllFavourite
-                ? "Remove all from favourite"
-                : "Add All to favourite",
-            onPressed: data.isEmpty ? null  : () { unFavourite(0, isAllFavourite); },
-            icon: Icon(
-                isAllFavourite ? Icons.favorite : Icons.favorite_border_rounded,
-                color: (data.isEmpty || !isAllFavourite )
-                    ? Colors.grey
-                    :  Colors.pink),
-          ),
-          // endregion AllFavourite
-
-          // region DeleteAll
-          IconButton(
-            onPressed: data.isEmpty
-                ? null
-                : () {
-                    deleteDialog(0, true);
-                  },
-            icon: Icon(
-              Icons.delete,
-              color: data.isEmpty ? Colors.grey : Colors.red,
-            ),
-          )
-          // endregion DeleteALl
-        ],
+        // actions: [
+        //   // // region AllFavourite
+        //   // IconButton(
+        //   //   tooltip: isAllFavourite
+        //   //       ? "Remove all from favourite"
+        //   //       : "Add All to favourite",
+        //   //   onPressed: data.isEmpty ? null  : () { unFavourite(0, isAllFavourite); },
+        //   //   icon: Icon(
+        //   //       isAllFavourite ? Icons.favorite : Icons.favorite_border_rounded,
+        //   //       color: (data.isEmpty || !isAllFavourite )
+        //   //           ? Colors.grey
+        //   //           :  Colors.pink),
+        //   // ),
+        //   // // endregion AllFavourite
+        //   //
+        //   // // region DeleteAll
+        //   // IconButton(
+        //   //   onPressed: data.isEmpty
+        //   //       ? null
+        //   //       : () {
+        //   //           deleteDialog(0, true);
+        //   //         },
+        //   //   icon: Icon(
+        //   //     Icons.delete,
+        //   //     color: data.isEmpty ? Colors.grey : Colors.red,
+        //   //   ),
+        //   // )
+        //   // // endregion DeleteALl
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -85,6 +85,7 @@ class _UserListPageState extends State<UserListPage> {
             Row(
               children: [
                 Expanded(
+                  flex: 3,
                   child: TextFormField(
                     onChanged: (value) {
                       if (value == '') {
@@ -112,7 +113,51 @@ class _UserListPageState extends State<UserListPage> {
                           TextStyle(fontSize: 30, fontFamily: 'GreatVibes'),
                     ),
                   ),
-                )
+                ),
+                Expanded(
+                    child: Row(
+                  children: [
+                    // region AllFavourite
+                    Expanded(
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        tooltip: isAllFavourite
+                            ? "Remove all from favourite"
+                            : "Add All to favourite",
+                        onPressed: data.isEmpty
+                            ? null
+                            : () {
+                                unFavourite(0, isAllFavourite);
+                              },
+                        icon: Icon(
+                            isAllFavourite
+                                ? Icons.favorite
+                                : Icons.favorite_border_rounded,
+                            color: (data.isEmpty || !isAllFavourite)
+                                ? Colors.grey
+                                : Colors.pink),
+                      ),
+                    ),
+                    // endregion AllFavourite
+
+                    // region DeleteAll
+                    Expanded(
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: data.isEmpty
+                            ? null
+                            : () {
+                                deleteDialog(0, true);
+                              },
+                        icon: Icon(
+                          Icons.delete,
+                          color: data.isEmpty ? Colors.grey : Colors.red,
+                        ),
+                      ),
+                    )
+                    // endregion DeleteALl
+                  ],
+                ))
               ],
             ),
 
@@ -123,16 +168,13 @@ class _UserListPageState extends State<UserListPage> {
             if (data.isNotEmpty)
               Expanded(
                   child: ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      return getListItem(index);
-                    },
-                  )
-              )
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return getListItem(index);
+                },
+              ))
             else
-              const Center(
-                child: CircularProgressIndicator()
-              )
+              const Center(child: CircularProgressIndicator())
           ],
         ),
       ),
@@ -140,22 +182,28 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   Widget getListItem(i) {
-    Map<String,dynamic> tempUser = {};
-    _user.getByIdDatabase(data[i][UserId]).then((value) {
-      tempUser = value;
-    },);
+    Map<String, dynamic> tempUser = {};
+    _user.getByIdDatabase(data[i][UserId]).then(
+      (value) {
+        tempUser = value;
+      },
+    );
     int ind = data[i][UserId];
+    int age = _user.ageCalculate(data[i]);
     return ListTile(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
-            builder:(context) {
-              return SwipeUserDetails(userDetail: tempUser);
-            },
-        )).then((value) {
-          setState(() { getData(); });
-        },);
+          builder: (context) {
+            return SwipeUserDetails(userDetail: tempUser);
+          },
+        )).then(
+          (value) {
+            setState(() {
+              getData();
+            });
+          },
+        );
       },
-
       contentPadding: EdgeInsets.zero,
       title: Card(
         elevation: 15,
@@ -164,122 +212,132 @@ class _UserListPageState extends State<UserListPage> {
           // list tile  gradient
           decoration: const BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [
-                  Color.fromARGB(255, 72, 219, 232),
-                  Color.fromARGB(255, 54, 97, 204),
-                ],
-              )),
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color.fromARGB(255, 72, 219, 232),
+              Color.fromARGB(255, 54, 97, 204),
+            ],
+          )),
           padding: const EdgeInsets.only(right: 15),
-          child: Row(
-              children: [
-                // region Image
-                Container(
-                  margin: const EdgeInsets.only(right: 4),
-                  width: 90,
-                  height: 150,
-                  child: Image.asset(
-                    "assets/images/Holding_Hands.jpg",
-                    fit: BoxFit.cover,
+          child: Row(children: [
+            // region Image
+            Container(
+              margin: const EdgeInsets.only(right: 4),
+              width: 90,
+              height: 150,
+              child: Image.asset(
+                "assets/images/Holding_Hands.jpg",
+                fit: BoxFit.cover,
+              ),
+            ),
+            // endregion Image
+
+            // region Details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // region Name
+                  Text(
+                    data[i][Name],
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      fontFamily: RobotoFlex,
+                      color: Colors.white,
+                      fontSize: 30,
+                    ),
                   ),
-                ),
-                // endregion Image
-      
-                // region Details
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Name
-                      Text(
-                        data[i][Name],
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                            fontFamily: RobotoFlex,
-                            color: Colors.white,
-                            fontSize: 30,
-                        ),
-                  
-                      ),
-                  
-                      // Mobile
-                      Text(
-                        data[i][Mobile],
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
-                      ),
-                  
-                      // City
-                      Text(
-                        data[i][City].toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
-                      ),
-                  
-                    ],
+                  // endregion Name
+
+                  // region Age
+                  Text(
+                    'age : ${age.toString()}',
+                    maxLines: 1,
+                    style:
+                        const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
                   ),
-                ),
-                // endregion Details
-      
-                // region Buttons
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Wrap(
-                    direction: Axis.vertical,
-                    children: [
-                      // region favourite
-                      IconButton(
-                        icon: Icon(
-                          data[i][isFavourite] == 1 ? Icons.favorite : Icons.favorite_border,
-                          color: Colors.pink,
-                        ),
-                        onPressed: () {
-                          if (data[i][isFavourite] == 0) {
-                            _user.changeFavouriteDatabase(data[i][UserId], 1);
-                            setState(() {
-                              getData();
-                              isAllFavourite = changeAllFavourite();
-                            });
-                          } else {
-                            unFavourite(ind);
-                          }
-                        },
-                      ),
-                      // endregion favourite
-      
-                      // region delete
-                      IconButton(
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                          onPressed: () {
-                            deleteDialog(ind);
-                          }),
-                      // endregion delete
-      
-                      // region edit
-                      IconButton(
-                        icon: const Icon(
-                          Icons.edit,
-                          color: Color.fromARGB(255, 75, 190, 255),
-                        ),
-                        onPressed: () {
-      
-                        },
-                      ),
-                      // endregion edit
-                    ],
+                  // endregion Age
+
+                  // region Mobile
+                  Text(
+                    data[i][Mobile],
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style:
+                        const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
                   ),
-                )
-                // endregion Buttons
-              ]
-          ),
+                  // endregion Mobile
+
+                  // region City
+                  Text(
+                    data[i][City].toString(),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style:
+                        const TextStyle(fontFamily: RobotoFlex, fontSize: 25),
+                  ),
+                  // endregion City
+                ],
+              ),
+            ),
+            // endregion Details
+
+            // region Buttons
+            Align(
+              alignment: Alignment.topRight,
+              child: Wrap(
+                direction: Axis.vertical,
+                children: [
+                  // region favourite
+                  IconButton(
+                    icon: Icon(
+                      data[i][isFavourite] == 1
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: Colors.pink,
+                    ),
+                    onPressed: () {
+                      if (data[i][isFavourite] == 0) {
+                        _user.changeFavouriteDatabase(data[i][UserId], 1);
+                        setState(() {
+                          getData();
+                          isAllFavourite = changeAllFavourite();
+                        });
+                      } else {
+                        unFavourite(ind);
+                      }
+                    },
+                  ),
+                  // endregion favourite
+
+                  // region delete
+                  IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {
+                        deleteDialog(ind);
+                      }),
+                  // endregion delete
+
+                  // region edit
+                  IconButton(
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Color.fromARGB(255, 75, 190, 255),
+                    ),
+                    onPressed: () {},
+                  ),
+                  // endregion edit
+                ],
+              ),
+            )
+            // endregion Buttons
+          ]),
         ),
       ),
     );
@@ -289,13 +347,11 @@ class _UserListPageState extends State<UserListPage> {
     if (searchController.text == '') {
       if (widget.isFav) {
         data = await _user.getFavouriteDatabase();
-      }
-      else {
+      } else {
         data = await _user.getAllDatabase();
       }
       isAllFavourite = changeAllFavourite();
-    }
-    else {
+    } else {
       if (widget.isFav) {
         data = _user.searchFavouriteUser(searchController.text);
       } else {
@@ -308,108 +364,112 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   void unFavourite(int i, [bool? isAll]) async {
-    Map<String,dynamic> tempUser = await _user.getByIdDatabase(i);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(
-            isAll == null
-                ? "Unfavourite"
-                : isAllFavourite
-                    ? "Unfavourite"
-                    : "Favourite",
-            style: const TextStyle(fontFamily: RobotoFlex),
-          ),
-          content: Text(
-            isAll == null
-                ? "Are you sure want to remove ${tempUser[Name]} favourite?"
-                : isAllFavourite
-                    ? "Are you sure want to remove all from Favourite?"
-                    : "Are you sure want to add all to Favourite?",
-            style: const TextStyle(fontFamily: RobotoFlex),
-          ),
-          actions: [
-            TextButton(
-              onPressed: isAllFavourite ? () {
-                isAll == null
-                    ? _user.changeFavouriteDatabase(i, 0)
-                    : _user.removeAllFavouriteDatabase();
-                setState(() {
-                  isAllFavourite = false;
-                  getData();
-                });
-                Navigator.pop(context);
-              } : null ,
-              child: const Text(
-                "Yes",
-                style: TextStyle(fontFamily: RobotoFlex),
-              ),
-            ),
-            TextButton(
-              child: const Text(
-                "No",
-                style: TextStyle(fontFamily: RobotoFlex),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-
-    );
-  }
-
-  void deleteDialog(int i, [bool? isAll]) async {
-    Map<String,dynamic> tempUser = await _user.getByIdDatabase(i);
-    if(mounted){
+    Map<String, dynamic> tempUser = await _user.getByIdDatabase(i);
+    if (mounted) {
       showDialog(
         context: context,
         builder: (context) {
-        return CupertinoAlertDialog(
-          title: const Text(
-            'DELETE ',
-            style: TextStyle(fontFamily: RobotoFlex),
-          ),
-          content: Text(
-            isAll == null
-                ? 'Are you sure want to delete ${tempUser[Name]}? '
-                : "Are you sure want to delete all users?",
-            style: const TextStyle(fontFamily: RobotoFlex),
-          ),
-          actions: [
-            TextButton(
-              child: const Text(
-                'Yes',
-                style: TextStyle(fontFamily: RobotoFlex),
-              ),
-              onPressed: () {
-                isAll == null ? _user.deleteUserDatabase(tempUser[UserId]) : _user.deleteAllUsersDatabase();
-
-                Navigator.pop(context);
-                setState(() {
-                  searchController.clear();
-                  getData();
-                });
-              },
+          return CupertinoAlertDialog(
+            title: Text(
+              isAll == null
+                  ? "Unfavourite"
+                  : isAllFavourite
+                      ? "Unfavourite"
+                      : "Favourite",
+              style: const TextStyle(fontFamily: RobotoFlex),
             ),
-            TextButton(
-              child: const Text(
-                'No',
-                style: TextStyle(fontFamily: RobotoFlex),
+            content: Text(
+              isAll == null
+                  ? "Are you sure want to remove ${tempUser[Name]} favourite?"
+                  : isAllFavourite
+                      ? "Are you sure want to remove all from Favourite?"
+                      : "Are you sure want to add all to Favourite?",
+              style: const TextStyle(fontFamily: RobotoFlex),
+            ),
+            actions: [
+              TextButton(
+                onPressed: isAllFavourite
+                    ? () {
+                        isAll == null
+                            ? _user.changeFavouriteDatabase(i, 0)
+                            : _user.removeAllFavouriteDatabase();
+                        setState(() {
+                          isAllFavourite = false;
+                          getData();
+                        });
+                        Navigator.pop(context);
+                      }
+                    : null,
+                child: const Text(
+                  "Yes",
+                  style: TextStyle(fontFamily: RobotoFlex),
+                ),
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
+              TextButton(
+                child: const Text(
+                  "No",
+                  style: TextStyle(fontFamily: RobotoFlex),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        },
       );
     }
+  }
 
+  void deleteDialog(int i, [bool? isAll]) async {
+    Map<String, dynamic> tempUser = await _user.getByIdDatabase(i);
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: const Text(
+              'DELETE ',
+              style: TextStyle(fontFamily: RobotoFlex),
+            ),
+            content: Text(
+              isAll == null
+                  ? 'Are you sure want to delete ${tempUser[Name]}? '
+                  : "Are you sure want to delete all users?",
+              style: const TextStyle(fontFamily: RobotoFlex),
+            ),
+            actions: [
+              TextButton(
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(fontFamily: RobotoFlex),
+                ),
+                onPressed: () {
+                  isAll == null
+                      ? _user.deleteUserDatabase(tempUser[UserId])
+                      : _user.deleteAllUsersDatabase();
+
+                  Navigator.pop(context);
+                  setState(() {
+                    searchController.clear();
+                    getData();
+                  });
+                },
+              ),
+              TextButton(
+                child: const Text(
+                  'No',
+                  style: TextStyle(fontFamily: RobotoFlex),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        },
+      );
+    }
   }
 
   bool changeAllFavourite() {

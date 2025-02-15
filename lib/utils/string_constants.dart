@@ -20,4 +20,4 @@ const String GreatVibes = "GreatVibes";
 
 const String userName = 'UserName';
 const String userPassword = 'UserPassword';
-const String remember = 'isRemember';
+const String rememberMe = 'isRemember';

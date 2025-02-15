@@ -39,14 +39,30 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  isLogin ? 'Log in' : 'Sign Up',
-                  style: const TextStyle(
-                    fontFamily: RobotoFlex,
-                    fontSize: 30,
-                    fontWeight: FontWeight.w500,
+                ClipOval(
+                  child: Image.asset(
+                    "assets/images/two_rings.jpg",
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
                   ),
                 ),
+                const SizedBox(height: 10,),
+                // region LoginSignup
+                Row(
+                  children: [
+                    Text(
+                      isLogin ? 'Log in' : 'Sign Up',
+                      style: const TextStyle(
+                        fontFamily: RobotoFlex,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                // endregion LoginSignup
+
                 const SizedBox(
                   height: 20,
                 ),
@@ -115,7 +131,12 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("Remember me ?"),
+                      const Text(
+                        "Remember me ?",
+                        style: TextStyle(
+                          fontFamily: RobotoFlex,
+                          fontSize: 16
+                        ),),
                       Checkbox(
                         value: isRemember,
                         onChanged: (value) {
@@ -139,16 +160,24 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
+                          style: ButtonStyle(
+                              padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
+                              backgroundColor: WidgetStateProperty.all(Colors.orange)
+                          ),
+
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               pref.setString(userName, nameController.text.toString());
                               pref.setString(userPassword, passwordController.text.toString());
-                              pref.setBool(remember, isRemember);
+                              pref.setBool(rememberMe, isRemember);
+
                               var snack = SnackBar(
                                   content: Text(isLogin
                                       ? "Login Successfully"
                                       : "Sign up Successfully"));
+
                               ScaffoldMessenger.of(context).showSnackBar(snack);
+
                               Navigator.pushReplacement(context,
                                   MaterialPageRoute(
                                 builder: (context) {
@@ -157,8 +186,14 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                               ));
                             }
                           },
+
                           child: Text(
                             isLogin ? 'Log in' : 'Sign Up',
+                            style: const TextStyle(
+                              fontFamily: RobotoFlex,
+                              fontSize: 18,
+                              color: Colors.white
+                            ),
                           )),
                     )
                   ],
@@ -195,9 +230,17 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           )),
     );
   }
+  
+  bool loginValidation(){
+    String? name = pref.getString(userName);
+    String? pass = pref.getString(userPassword);
 
+    if(isLogin && name == nameController.text && pass == passwordController.text){
+      return true;
+    }
+    return false;
+  }
   String? passwordValidation(String? value) {
-    String? str = pref.getString(userPassword);
     if (value!.isEmpty) {
       return "Enter your password";
     }
@@ -219,9 +262,10 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     if (!RegExp(r'(?=.*[@#$%^&+=*!])').hasMatch(value)) {
       return "Password must contain \nat least one special character\n(@#\$%^&+=*!)";
     }
-    if(isLogin && str == null){ return 'User not registered , Signup first'; }
-    if(isLogin  && str != null && str != value){
-      return 'password is wrong';
+    if(isLogin){
+      if(!loginValidation()){
+        return "username and password doesn't match";
+      }
     }
     return null;
   }

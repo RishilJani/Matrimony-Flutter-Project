@@ -27,21 +27,18 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> navigateToDashboard() async {
     await Future.delayed(const Duration(seconds: 2));
     if(mounted){
-      print("mounted");
        Widget newPage = FutureBuilder(
           future: SharedPreferences.getInstance(),
           builder:(context, snapshot) {
-                print("Future ::: builder");
             if(snapshot.hasData && snapshot.data != null){
-                print("Snapshot ::: hasData");
-              if(!(snapshot.data!.getBool(remember) ?? false)){
+              if(!(snapshot.data!.getBool(rememberMe) ?? false)){
                 return const LoginSignupPage();
               }else{
                 return const Dashboard();
               }
             }
             else{
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
           },
       );

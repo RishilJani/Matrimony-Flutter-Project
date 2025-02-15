@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/about_us/about_us.dart';
 import 'package:matrimony_application/design/add_user/add_edit_user.dart';
+import 'package:matrimony_application/design/dashboard/splash_screen.dart';
 import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -27,6 +29,13 @@ class Dashboard extends StatelessWidget {
               fontFamily: StyleScript
           ),
         ),
+
+        actions: [
+          IconButton(onPressed: (){
+            logout(context);
+          }, icon: const Icon(Icons.logout)
+          )
+        ],
       ),
 
       body: Padding(
@@ -105,14 +114,38 @@ class Dashboard extends StatelessWidget {
     );
   }
 
+  void logout(context){
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title:  const Text(
+              'Log out ',
+              style: TextStyle(fontFamily: RobotoFlex),
+            ),
+            content: const Text("Are you sure want to log out ?"),
+            actions: [
+              TextButton(
+                  onPressed: () async{
+                    SharedPreferences pref = await SharedPreferences.getInstance();
+                    pref.setBool(rememberMe, false);
+
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return const SplashScreen();
+                          },));
+                  },
+                  child: const Text("Yes"),
+              ),
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("No"),
+              )
+            ],
+          );
+        },
+    );
+  }
+
 }
-
-
-// region Redial
-// RadialGradient(
-// colors: [Colors.pinkAccent,Colors.blueAccent,Colors.blueGrey],
-// focalRadius: 1,
-// center: Alignment.center,
-// radius: 0.5
-// )
-// endregion Redial
