@@ -10,10 +10,7 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: appBarGradient([
-          const Color.fromARGB(255, 240, 47, 194),
-          const Color.fromARGB(255, 96, 148, 234),
-        ]),
+        flexibleSpace: appBarGradient(),
         centerTitle: true,
         title: const Text(
           'About Us',
@@ -22,6 +19,12 @@ class AboutUs extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontFamily: 'StyleScript'),
         ),
+        actions: [
+          IconButton(onPressed: (){
+            logout(context);
+          }, icon: const Icon(Icons.logout)
+          ),
+        ],
       ),
 
       body: SingleChildScrollView(
@@ -53,7 +56,7 @@ class AboutUs extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Typing Tutor",
+                    "LoveSync",
                     style: TextStyle(fontSize: 20),
                   ),
                 ],

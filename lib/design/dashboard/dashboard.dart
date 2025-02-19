@@ -15,16 +15,14 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 10,
         backgroundColor: Colors.transparent,
-        flexibleSpace: appBarGradient([
-          const Color.fromARGB(255, 240, 47, 194),
-          const Color.fromARGB(255, 96, 148, 234),
-        ]),
+        flexibleSpace: appBarGradient(),
         centerTitle: true,
         title: const Text(
-          'Matrimony',
+          'LoveSync',
           style: TextStyle(
-              fontSize: 40,
+              fontSize: 45,
               fontWeight: FontWeight.bold,
               fontFamily: StyleScript
           ),
@@ -42,17 +40,32 @@ class Dashboard extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Welcome to LoveSync",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontFamily: RobotoFlex,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox( height: 20, ),
             Row(
               children: [
-                myItem('Add User', Icons.add, context: context,myPage:  UserForm(),fontColor: Colors.black),
-                myItem('User List', Icons.list_rounded, context:  context, myPage:  UserListPage(isFav: false,),fontColor: Colors.black),
+                myItem('Add User', Icons.add, context: context,myPage:  UserForm()),
+                myItem('User List', Icons.list_rounded, context:  context, myPage:  UserListPage(isFav: false,)),
               ],
             ),
             const SizedBox( height: 20, ),
             Row(
               children: [
-                myItem('Favourite', CupertinoIcons.heart_fill, context:  context,myPage:  UserListPage( isFav: true,),fontColor: Colors.black),
-                myItem('About Us', Icons.person, context:  context, myPage:  const AboutUs(),fontColor: Colors.black),
+                myItem('Favourite', CupertinoIcons.heart_fill, context:  context,myPage:  UserListPage( isFav: true,)),
+                myItem('About Us', Icons.person, context:  context, myPage:  const AboutUs()),
               ],
             ),
           ],
@@ -61,9 +74,12 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget myItem(String txt, IconData icon,{context, myPage,Color? fontColor}) {
+  Widget myItem(String txt, IconData icon,{context, myPage}) {
+    double borderRadius = 75;
+    Color? fontColor;
     return Expanded(
       child: InkWell(
+        borderRadius: BorderRadius.circular(borderRadius),
         onTap: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
@@ -71,80 +87,51 @@ class Dashboard extends StatelessWidget {
             },
           ));
         },
-        child: SizedBox(
-          height: 200,
-          child: Card(
-              shadowColor: fontColor,
-              margin: const EdgeInsets.all(20),
-              elevation: 30,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                      colors: [
-                        Color.fromARGB(255,23 , 234, 247),
-                        Color.fromARGB(255, 96, 120, 234),
-                      ],
+        child: ShaderMask(
+          shaderCallback: (bounds) {
+            return const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromARGB(255, 105, 241, 250),
+                Color.fromARGB(255, 128, 146, 255),
+              ],
+            ).createShader(bounds);
+          },
+          child: Container(
+            width: 200,
+            height: 150,
+            margin: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.white,
+                width: 5
+              ),
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 35,
+                  color: fontColor,
+                ),
+
+                Text(
+                  txt,
+                  style: TextStyle(
+                      color: fontColor,
+                      fontFamily: RobotoFlex,
+                      fontSize: 20
                   ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                        icon,
-                        size: 35,
-                        color: fontColor,
-                      ),
-
-                    Text(
-                      txt,
-                      style: TextStyle(
-                          color: fontColor,
-                          fontFamily: RobotoFlex,
-                          fontSize: 20
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+              ],
+            ),
+          ),
         ),
       ),
-    );
-  }
-
-  void logout(context){
-    showDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title:  const Text(
-              'Log out ',
-              style: TextStyle(fontFamily: RobotoFlex),
-            ),
-            content: const Text("Are you sure want to log out ?"),
-            actions: [
-              TextButton(
-                  onPressed: () async{
-                    SharedPreferences pref = await SharedPreferences.getInstance();
-                    pref.setBool(rememberMe, false);
-
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return const SplashScreen();
-                          },));
-                  },
-                  child: const Text("Yes"),
-              ),
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("No"),
-              )
-            ],
-          );
-        },
     );
   }
 

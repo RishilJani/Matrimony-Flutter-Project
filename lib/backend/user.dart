@@ -85,7 +85,6 @@ class User {
         .contains(value.toString().toLowerCase());
   }
 
-
   Future<void> addUserDatabase(Map<String, dynamic> mp) async {
     userList.add(mp);
     mp[Hobbies] = jsonEncode(mp[Hobbies]);
@@ -122,6 +121,7 @@ class User {
     List<Map<String, dynamic>> temp = [];
     temp.addAll(
         await db.query(Table_User, where: '$isFavourite = ?', whereArgs: [1]));
+    
     temp = _getHobbies(temp);
     return temp;
   }
@@ -140,6 +140,12 @@ class User {
     Database db = await MyDatabase().initDatabase();
     userList.clear();
     await db.delete(Table_User);
+  }
+
+  Future<void> deleteSomeUsersDatabase(Set<int> ids) async{
+    for(int i in ids){
+      await deleteUserDatabase(i);
+    }
   }
 
   // to favourite unfavourite users

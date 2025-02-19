@@ -5,6 +5,7 @@ import 'package:matrimony_application/design/add_user/add_edit_user.dart';
 import 'package:matrimony_application/design/user_list/user_details.dart';
 import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
+import 'package:matrimony_application/utils/utils.dart';
 
 // ignore: must_be_immutable
 class SwipeUserDetails extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
   @override
   void initState() {
     super.initState();
-    age = User().ageCalculate(widget.data[widget.currentIndex]);
+    age = _user.ageCalculate(widget.data[widget.currentIndex]);
     _pageController = PageController(initialPage: widget.currentIndex);
   }
 
@@ -33,7 +34,12 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
 
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [IconButton(onPressed: (){
+          logout(context);
+        }, icon: const Icon(Icons.logout)
+        )],
+      ),
 
       body: widget.data.isEmpty
           ? const Text("Some Error Occurred")
@@ -50,6 +56,8 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
   }
 
   Widget displayUser(int i){
+    age = _user.ageCalculate(widget.data[widget.currentIndex]);
+    print("Age = $age");
     return  Stack(
       children: [
         // Main Content
@@ -211,7 +219,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
                     },);
                   });
                 } else {
-                  unFavourite(i);
+                  unFavouriteDialog(context: context, id: widget.data[i][UserId]);
                 }
               },
               icon: Icon(
@@ -283,37 +291,6 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     );
   }
 
-  void unFavourite(int index) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: const Text("Unfavourite"),
-          content: Text(
-              "Are you sure want to remove ${widget.data[index][Name]} from favourite?"),
-          actions: [
-            TextButton(
-              child: const Text("Yes"),
-              onPressed: () {
-                // _user.changeFavourite(i);
-                _user.changeFavouriteDatabase(widget.data[index][UserId], 0);
-                _user.getByIdDatabase(widget.data[index][UserId]).then((value) {
-                  setState(() { widget.data[index] = value; });
-                },);
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: const Text("No"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
 
   void deleteDialog(int i) {
     showDialog(

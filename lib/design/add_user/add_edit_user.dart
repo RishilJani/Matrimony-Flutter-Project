@@ -71,10 +71,7 @@ class _UserFormState extends State<UserForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: appBarGradient([
-          const Color.fromARGB(255, 240, 47, 194),
-          const Color.fromARGB(255, 96, 148, 234),
-        ]),
+        flexibleSpace: appBarGradient(),
         title: Text(
           isEdit ? 'Edit Details' : "Register User",
           style: const TextStyle(
@@ -100,7 +97,7 @@ class _UserFormState extends State<UserForm> {
                   formatters: [
                     FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
                   ],
-                  keyboard: TextInputType.text,
+                  keyboard: TextInputType.name,
                   suffix: const Icon(Icons.person),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -471,6 +468,7 @@ class _UserFormState extends State<UserForm> {
       children: [
         Expanded(
           child: TextFormField(
+            textCapitalization: ( controller == nameController)? TextCapitalization.words : TextCapitalization.none ,
             obscureText: (isObs ?? false) && (isPasswordVisible == false),
             autovalidateMode: AutovalidateMode.onUnfocus,
             validator: validator,

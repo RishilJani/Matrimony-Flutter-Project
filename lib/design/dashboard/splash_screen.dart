@@ -13,8 +13,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   List<Color> bgColors = [
-    const Color.fromARGB(255, 255, 105, 180),
-    const Color.fromARGB(255, 64, 224, 208)
+    const Color.fromARGB(255, 255, 106, 0),
+    const Color.fromARGB(255, 255, 217, 79)
   ];
 
   @override
@@ -57,20 +57,33 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient( colors: bgColors )
+          gradient: LinearGradient(
+              colors: bgColors,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+          )
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Image.asset(
-                "assets/images/Two_Hearts_Transparent.png",
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/ring_transparent.png",
                 width: 150,
                 fit: BoxFit.cover,
               ),
-            ),
-            const SizedBox(height: 50,),
-          ],
+              const SizedBox(height: 50,),
+              const Text(
+                'LoveSync',
+                style: TextStyle(
+                    color: Color.fromARGB(255, 255, 24, 236),
+                    fontSize: 65,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: StyleScript
+                ),
+              ),
+            ],
+          ),
         ),
       )
       ,

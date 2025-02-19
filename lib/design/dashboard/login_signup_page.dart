@@ -171,13 +171,6 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                               pref.setString(userPassword, passwordController.text.toString());
                               pref.setBool(rememberMe, isRemember);
 
-                              var snack = SnackBar(
-                                  content: Text(isLogin
-                                      ? "Login Successfully"
-                                      : "Sign up Successfully"));
-
-                              ScaffoldMessenger.of(context).showSnackBar(snack);
-
                               Navigator.pushReplacement(context,
                                   MaterialPageRoute(
                                 builder: (context) {
@@ -217,10 +210,16 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                           nameController.clear();
                           passwordController.clear();
                           isLogin = !isLogin;
-                          isRemember = false;
+            const               isRemember = false;
                         });
                       },
-                      child: Text(isLogin ? "Register here" : 'Log in'),
+                      child: Text(
+                          isLogin ? "Register here" : 'Log in',
+                          style: const TextStyle(
+                            fontFamily: RobotoFlex,
+                            color: Colors.blue
+                          ),
+                      ),
                     )
                   ],
                 ),

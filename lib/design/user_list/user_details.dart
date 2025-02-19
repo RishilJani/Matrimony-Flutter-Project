@@ -18,12 +18,10 @@ class UserDetailsPage extends StatefulWidget {
 
 class _UserDetailsPageState extends State<UserDetailsPage> {
   final User _user = User();
-  int ind = 0;
   int age = 0;
   @override
   void initState() {
     age = _user.ageCalculate(widget.userDetail);
-    ind = widget.userDetail[UserId];
     super.initState();
   }
 
@@ -148,6 +146,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   Widget userItem(String txt) {
+    age = _user.ageCalculate(widget.userDetail);
     return Row(
       children: [
         Expanded(
@@ -190,7 +189,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 if (widget.userDetail[isFavourite] == 0) {
                   await _user.changeFavouriteDatabase(widget.userDetail[UserId], 1);
                 } else {
-                  await unFavouriteDialog(context, data: widget.userDetail);
+                  await unFavouriteDialog(context : context, id: widget.userDetail[UserId]);
                 }
                 _user.getByIdDatabase(widget.userDetail[UserId]).then((value) { setState(() { widget.userDetail = value; }); }, );
               },
