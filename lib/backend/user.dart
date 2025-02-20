@@ -188,6 +188,82 @@ class User {
     return ans;
   }
 
+
+  void tempInsert() async{
+    // Database db = await MyDatabase().initDatabase();
+    List<Map<String,dynamic>> ul = [
+      {
+      Name: "User1",
+      Email: "abc@gmail.com",
+      Mobile: "1234567890",
+      Hobbies: {"Reading": false, "Music": true, "Dance": false},
+      City: "Jamnagar",
+      Gender: 'Male',
+      DOB: '23/01/2007',
+      Password: "secret",
+      isFavourite: 0,
+    },
+      {
+        Name: "User2",
+        Email: "hello@gmail.com",
+        Mobile: "9876543211",
+        Hobbies: {"Reading": true, "Music": true, "Dance": false},
+        City: "Rajkot",
+        Gender: 'Female',
+        DOB: '23/07/2005',
+        Password: "Super@Secret9",
+        isFavourite: 1,
+      },
+      {
+        Name: "User3",
+        Email: "myemail@gmail.com",
+        Mobile: "9824201302",
+        Hobbies: {"Reading": true, "Music": true, "Dance": true},
+        City: "Baroda",
+        Gender: 'Male',
+        DOB: '23/07/2006',
+        Password: "Super@Secret9",
+        isFavourite: 1,
+      },
+      {
+        Name: "User4",
+        Email: "myemail@gmail.com",
+        Mobile: "9824201303",
+        Hobbies: {"Reading": true, "Music": true, "Dance": true},
+        City: "Baroda",
+        Gender: 'Male',
+        DOB: '23/07/2006',
+        Password: "Super@Secret9",
+        isFavourite:0,
+      },
+      {
+        Name: "mno",
+        Email: "myemail@gmail.com",
+        Mobile: "9824201307",
+        Hobbies: {"Reading": true, "Music": true, "Dance": true},
+        City: "Baroda",
+        Gender: 'Male',
+        DOB: '23/07/2004',
+        Password: "Super@Secret9",
+        isFavourite: 0,
+      },
+      {
+        Name: "pqr",
+        Email: "myemail@gmail.com",
+        Mobile: "9824201308",
+        Hobbies: {"Reading": true, "Music": true, "Dance": true},
+        City: "Baroda",
+        Gender: 'Male',
+        DOB: '23/07/1980',
+        Password: "Super@Secret9",
+        isFavourite: 0,
+      }
+      ];
+
+    for(var ele in ul){
+      addUserDatabase(ele);
+    }
+  }
 }
 
 /*

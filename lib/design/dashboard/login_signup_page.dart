@@ -32,6 +32,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Form(
           key: _formKey,
           child: Padding(
@@ -39,6 +40,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
+                // region Image
                 ClipOval(
                   child: Image.asset(
                     "assets/images/two_rings.jpg",
@@ -47,7 +50,22 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                     fit: BoxFit.cover,
                   ),
                 ),
+                // endregion Image
+
+                const SizedBox(height: 15,),
+
+                const Text(
+                  'LoveSync',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 24, 236),
+                      fontSize: 65,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: StyleScript
+                  ),
+                ),
+
                 const SizedBox(height: 10,),
+
                 // region LoginSignup
                 Row(
                   children: [
@@ -56,7 +74,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                       style: const TextStyle(
                         fontFamily: RobotoFlex,
                         fontSize: 30,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],
@@ -70,10 +88,20 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                 // region UserName
                 TextFormField(
                   controller: nameController,
+                  autovalidateMode: AutovalidateMode.onUnfocus,
                   style: const TextStyle(fontFamily: RobotoFlex),
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:const BorderSide(color:  Colors.blue, width: 2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder:  UnderlineInputBorder(
+                        borderSide:const BorderSide(color: Colors.amber,width: 2),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                        borderSide:const BorderSide(color:  Colors.red, width: 2),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       labelText: 'Enter your user name',
                       prefixIcon: const Icon(Icons.person_outline)),
@@ -102,9 +130,19 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                   autovalidateMode: AutovalidateMode.onUnfocus,
                   style: const TextStyle(fontFamily: RobotoFlex),
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide:const BorderSide(color:  Colors.blue, width: 2),
+                          borderRadius: BorderRadius.circular(15),
                       ),
+                      focusedBorder:  UnderlineInputBorder(
+                          borderSide:const BorderSide(color: Colors.amber,width: 2),
+                          borderRadius: BorderRadius.circular(15),
+                      ),
+                      errorBorder: UnderlineInputBorder(
+                        borderSide:const BorderSide(color:  Colors.red, width: 2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+
                       labelText: 'Enter your password',
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
@@ -206,13 +244,12 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                         : 'Already Have an account?'),
                     TextButton(
                       onPressed: () {
-                        setState(() {
+                        setState( () {
                           nameController.clear();
                           passwordController.clear();
                           isLogin = !isLogin;
-            const               isRemember = false;
-                        });
-                      },
+                        } );
+                        },
                       child: Text(
                           isLogin ? "Register here" : 'Log in',
                           style: const TextStyle(
@@ -226,7 +263,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                 // endregion LoginSignup
               ],
             ),
-          )),
+          )
+      ),
     );
   }
   
@@ -239,6 +277,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     }
     return false;
   }
+
   String? passwordValidation(String? value) {
     if (value!.isEmpty) {
       return "Enter your password";

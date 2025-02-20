@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:matrimony_application/backend/user.dart';
 import 'package:matrimony_application/design/add_user/add_edit_user.dart';
 import 'package:matrimony_application/design/user_list/user_details.dart';
-import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
 
 // ignore: must_be_immutable
 class SwipeUserDetails extends StatefulWidget {
-  SwipeUserDetails({super.key,required this.data,required this.currentIndex});
+  SwipeUserDetails({super.key, required this.data, required this.currentIndex});
   int currentIndex = 0;
-  List<Map<String,dynamic>> data = [];
+  List<Map<String, dynamic>> data = [];
   @override
   State<SwipeUserDetails> createState() => _SwipeUserDetailsState();
 }
@@ -33,14 +32,15 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
-
       appBar: AppBar(
-        actions: [IconButton(onPressed: (){
-          logout(context);
-        }, icon: const Icon(Icons.logout)
-        )],
+        actions: [
+          IconButton(
+              onPressed: () {
+                logout(context);
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
-
       body: widget.data.isEmpty
           ? const Text("Some Error Occurred")
           : PageView.builder(
@@ -49,16 +49,15 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
               physics: const BouncingScrollPhysics(),
               itemCount: widget.data.length,
               itemBuilder: (context, index) {
-                  return displayUser(index);
+                return displayUser(index);
               },
-      ),
+            ),
     );
   }
 
-  Widget displayUser(int i){
+  Widget displayUser(int i) {
     age = _user.ageCalculate(widget.data[widget.currentIndex]);
-    print("Age = $age");
-    return  Stack(
+    return Stack(
       children: [
         // Main Content
         Image.asset(
@@ -67,7 +66,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           fit: BoxFit.cover,
           width: 400,
         ),
-        
+
         // Gesture Detector for Swipe Up
         Align(
           alignment: Alignment.bottomLeft,
@@ -75,10 +74,14 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
             onVerticalDragUpdate: (details) {
               if (details.delta.dy < -10) {
                 // Detect upward swipe
-                _showBottomSheet(context,i);
-                _user.getByIdDatabase(widget.data[i][UserId]).then((value) {
-                  setState(() { widget.data[i] = value; });
-                },);
+                _showBottomSheet(context, i);
+                _user.getByIdDatabase(widget.data[i][UserId]).then(
+                  (value) {
+                    setState(() {
+                      widget.data[i] = value;
+                    });
+                  },
+                );
               }
             },
             child: Container(
@@ -102,7 +105,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
   }
 
   // Function to show the bottom sheet
-  void _showBottomSheet(BuildContext context,int i) {
+  void _showBottomSheet(BuildContext context, int i) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -115,9 +118,15 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: UserDetailsPage(userDetail: widget.data[i]),
         );
       },
-    ).then((value) {
-      _user.getByIdDatabase(widget.data[i][UserId]).then(( value) => setState(() { widget.data[i] = value; }) );
-    },);
+    ).then(
+      (value) {
+        _user
+            .getByIdDatabase(widget.data[i][UserId])
+            .then((value) => setState(() {
+                  widget.data[i] = value;
+                }));
+      },
+    );
   }
 
   // to get user details for this page
@@ -214,12 +223,17 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
                 if (widget.data[i][isFavourite] == 0) {
                   _user.changeFavouriteDatabase(widget.data[i][UserId], 1);
                   setState(() {
-                    _user.getByIdDatabase(widget.data[i][UserId]).then((value) {
-                      setState(() { widget.data[i]= value; });
-                    },);
+                    _user.getByIdDatabase(widget.data[i][UserId]).then(
+                      (value) {
+                        setState(() {
+                          widget.data[i] = value;
+                        });
+                      },
+                    );
                   });
                 } else {
-                  unFavouriteDialog(context: context, id: widget.data[i][UserId]);
+                  unFavouriteDialog(
+                      context: context, id: widget.data[i][UserId]);
                 }
               },
               icon: Icon(
@@ -237,7 +251,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                deleteDialog(i);
+                deleteDialog(i: widget.data[i][UserId], context: context);
               },
               icon: const Icon(
                 Icons.delete,
@@ -257,13 +271,15 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
                   builder: (context) {
                     return UserForm(userDetail: widget.data[i]);
                   },
-                )).then((value) => _user.getByIdDatabase(widget.data[i][UserId]).then((value) {
-                  setState(() {
-                    widget.data[i] = value;
-                    age = User().ageCalculate(widget.data[i]);
-                  });
-                },)
-                );
+                )).then((value) =>
+                    _user.getByIdDatabase(widget.data[i][UserId]).then(
+                      (value) {
+                        setState(() {
+                          widget.data[i] = value;
+                          age = User().ageCalculate(widget.data[i]);
+                        });
+                      },
+                    ));
               },
               icon: const Icon(
                 Icons.edit,
@@ -278,7 +294,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                _showBottomSheet(context,i);
+                _showBottomSheet(context, i);
               },
               icon: const Icon(
                 CupertinoIcons.info,
@@ -291,36 +307,4 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     );
   }
 
-
-  void deleteDialog(int i) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: const Text('DELETE '),
-          content:
-              Text('Are you sure want to delete ${widget.data[i][Name]}? '),
-          actions: [
-            TextButton(
-              child: const Text('yes'),
-              onPressed: () {
-                _user.deleteUserDatabase(widget.data[i][UserId]);
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) {
-                    return UserListPage(isFav: false);
-                  },
-                ));
-              },
-            ),
-            TextButton(
-              child: const Text('No'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
 }

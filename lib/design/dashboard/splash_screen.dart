@@ -68,19 +68,9 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                "assets/images/ring_transparent.png",
-                width: 150,
+                "assets/images/two_rings_transparent.png",
+                width: 250,
                 fit: BoxFit.cover,
-              ),
-              const SizedBox(height: 50,),
-              const Text(
-                'LoveSync',
-                style: TextStyle(
-                    color: Color.fromARGB(255, 255, 24, 236),
-                    fontSize: 65,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: StyleScript
-                ),
               ),
             ],
           ),

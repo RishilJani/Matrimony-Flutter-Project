@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
-
 import '../../backend/user.dart';
 import '../add_user/add_edit_user.dart';
 
@@ -208,7 +206,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                deleteDialog();
+                // deleteDialog();
+                deleteDialog(i: widget.userDetail[UserId], context: context);
               },
               icon: const Icon(
                 Icons.delete,
@@ -248,37 +247,37 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
-  void deleteDialog() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: const Text('DELETE '),
-          content:
-              Text('Are you sure want to delete ${widget.userDetail[Name]}? '),
-          actions: [
-            TextButton(
-              child: const Text('yes'),
-              onPressed: () {
-                _user.deleteUserDatabase(widget.userDetail[UserId]);
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) {
-                    return UserListPage(isFav: false);
-                  },
-                ));
-              },
-            ),
-            TextButton(
-              child: const Text('No'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
+  // void deleteDialog() async {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return CupertinoAlertDialog(
+  //         title: const Text('DELETE '),
+  //         content:
+  //             Text('Are you sure want to delete ${widget.userDetail[Name]}? '),
+  //         actions: [
+  //           TextButton(
+  //             child: const Text('yes'),
+  //             onPressed: () {
+  //               _user.deleteUserDatabase(widget.userDetail[UserId]);
+  //               Navigator.pushReplacement(context, MaterialPageRoute(
+  //                 builder: (context) {
+  //                   return UserListPage(isFav: false);
+  //                 },
+  //               ));
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: const Text('No'),
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //           )
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   String getHobbies() {
     String hobbies = "";

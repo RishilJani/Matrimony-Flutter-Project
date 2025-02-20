@@ -1,4 +1,3 @@
-// Code to add user
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:matrimony_application/backend/user.dart';
@@ -45,6 +44,7 @@ class _UserFormState extends State<UserForm> {
   @override
   void initState() {
     super.initState();
+    _user.tempInsert();
     if (widget.userDetail != null) {
       isEdit = true;
       nameController.text = widget.userDetail![Name].toString();
@@ -464,6 +464,7 @@ class _UserFormState extends State<UserForm> {
       bool? isObs,
       bool? isPasswordVisible,
       onToggle}) {
+    double borderRadius = 10;
     return Row(
       children: [
         Expanded(
@@ -477,11 +478,21 @@ class _UserFormState extends State<UserForm> {
             inputFormatters: formatters,
             style: const TextStyle(fontFamily: RobotoFlex),
             decoration: InputDecoration(
-                border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.horizontal(
-                        right: Radius.circular(10), left: Radius.circular(10))),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide:const BorderSide(color:  Colors.blue, width: 2),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                focusedBorder:  UnderlineInputBorder(
+                  borderSide:const BorderSide(color: Colors.amber,width: 2),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+                errorBorder: UnderlineInputBorder(
+                  borderSide:const BorderSide(color:  Colors.red, width: 2),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+
                 labelText: 'Enter your $txt',
-                hintText: 'Enter your $txt',
+                // hintText: 'Enter your $txt',
                 suffixIcon: isObs != null
                     ? IconButton(
                         onPressed: onToggle,

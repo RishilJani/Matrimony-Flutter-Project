@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:matrimony_application/utils/string_constants.dart';
 
 import '../../utils/utils.dart';
 
@@ -40,12 +41,13 @@ class AboutUs extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 80,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(50)),
+                  ClipOval(
+                    child: Image.asset(
+                      "assets/images/two_rings.jpg",
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ],
               ),
@@ -57,7 +59,11 @@ class AboutUs extends StatelessWidget {
                 children: [
                   Text(
                     "LoveSync",
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontFamily: RobotoFlex,
+                      fontWeight: FontWeight.w600
+                    ),
                   ),
                 ],
               ),

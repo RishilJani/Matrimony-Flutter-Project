@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/about_us/about_us.dart';
 import 'package:matrimony_application/design/add_user/add_edit_user.dart';
-import 'package:matrimony_application/design/dashboard/splash_screen.dart';
 import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});

@@ -27,6 +27,7 @@ class MyDatabase {
         },
             version: DB_Version
         );
+
     return db;
   }
 }
