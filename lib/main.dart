@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/dashboard/splash_screen.dart';
+import 'package:matrimony_application/utils/string_constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,21 +16,45 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
+        brightness: Brightness.light,
+
+        primaryColor: const Color(0xFFB6CFF3), // Ice Blue
+        scaffoldBackgroundColor: const Color(0xFFF9F9F9), // Off-White
+
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
+          headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
+          bodyLarge: TextStyle(fontSize: 18, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
+          bodyMedium: TextStyle(fontSize: 16, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
+          
+        ),
+
+
+        inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFFA0D3EF)), // Sky Mist
+          ),
+
+            enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFFB7D4E6)), // Sky Mist
+          ),
+
+            focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFF93C6E7), width: 2), // Ice Blue
+          ),
+
+            labelStyle: const TextStyle(
+              fontFamily: RobotoFlex,
+              color: Color(0xFF6D6A6A),
+            )
+
+        ),
+
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),

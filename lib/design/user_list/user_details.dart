@@ -26,6 +26,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: widget.userDetail.isNotEmpty
           ? SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -185,11 +186,19 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               padding: const EdgeInsets.all(5),
               onPressed: () async {
                 if (widget.userDetail[isFavourite] == 0) {
-                  await _user.changeFavouriteDatabase(widget.userDetail[UserId], 1);
+                  await _user.changeFavouriteDatabase(
+                      widget.userDetail[UserId], 1);
                 } else {
-                  await unFavouriteDialog(context : context, id: widget.userDetail[UserId]);
+                  await unFavouriteDialog(
+                      context: context, id: widget.userDetail[UserId]);
                 }
-                _user.getByIdDatabase(widget.userDetail[UserId]).then((value) { setState(() { widget.userDetail = value; }); }, );
+                _user.getByIdDatabase(widget.userDetail[UserId]).then(
+                  (value) {
+                    setState(() {
+                      widget.userDetail = value;
+                    });
+                  },
+                );
               },
               icon: Icon(
                 widget.userDetail[isFavourite] == 1

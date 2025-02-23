@@ -6,12 +6,20 @@ import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
 
-
-class Dashboard extends StatelessWidget {
-  const Dashboard({super.key});
+//ignore: must_be_immutable
+class Dashboard extends StatefulWidget {
+  String name = "";
+  Dashboard({super.key,required this.name});
 
   @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  @override
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         elevation: 10,
@@ -39,10 +47,18 @@ class Dashboard extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  "Hii, ${widget.name}",
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontFamily: RobotoFlex,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+                const Text(
                   "Welcome to LoveSync",
                   style: TextStyle(
                     fontSize: 30,
@@ -133,5 +149,4 @@ class Dashboard extends StatelessWidget {
       ),
     );
   }
-
 }

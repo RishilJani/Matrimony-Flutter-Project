@@ -164,6 +164,12 @@ class User {
     await db.execute('UPDATE $Table_User SET $isFavourite = ?', [0]);
   }
 
+  // to change few favourite users
+  Future<void> changeSomeFavouriteDatabase(Set<int> ids) async{
+    for(int i in ids){
+      changeFavouriteDatabase(i, 0);
+    }
+  }
   Future<void> updateUserDatabase(int id, Map<String, dynamic> mp) async {
     Database db = await MyDatabase().initDatabase();
 

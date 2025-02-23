@@ -13,8 +13,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   List<Color> bgColors = [
-    const Color.fromARGB(255, 255, 106, 0),
-    const Color.fromARGB(255, 255, 217, 79)
+    const Color.fromARGB(255, 111, 208, 245),
+    const Color.fromARGB(255, 250, 156, 188)
   ];
 
   @override
@@ -30,10 +30,11 @@ class _SplashScreenState extends State<SplashScreen> {
           future: SharedPreferences.getInstance(),
           builder:(context, snapshot) {
             if(snapshot.hasData && snapshot.data != null){
+              String name = snapshot.data!.getString(userName)!;
               if(!(snapshot.data!.getBool(rememberMe) ?? false)){
                 return const LoginSignupPage();
               }else{
-                return const Dashboard();
+                return Dashboard(name: name);
               }
             }
             else{

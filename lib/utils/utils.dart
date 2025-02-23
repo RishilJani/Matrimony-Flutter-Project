@@ -8,15 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 final User user = User();
 
 Widget appBarGradient() {
+  var bgColours = [
+    const Color.fromARGB(255, 111, 208, 245),
+    const Color.fromARGB(255, 250, 156, 188),
+  ];
   return Container(
-    decoration: const BoxDecoration(
+    decoration: BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-          Color.fromARGB(255, 252, 217, 100),
-          Color.fromARGB(255, 255, 158, 88),
-        ]
+            colors: bgColours
         )
     ),
   );
@@ -44,8 +45,7 @@ Future<void> unFavouriteDialog({required context, required int id}) async {
           TextButton(
             child: const Text("Yes"),
             onPressed: () {
-              user.changeFavouriteDatabase(id, 0)
-                  .then((value) => Navigator.pop(context));
+              user.changeFavouriteDatabase(id, 0);
             },
           ),
           TextButton(
@@ -60,7 +60,7 @@ Future<void> unFavouriteDialog({required context, required int id}) async {
   );
 }
 
-void deleteDialog({required int i, required context}) async {
+Future<void> deleteDialog({required int i, required context}) async {
   Map<String, dynamic> tempUser = await user.getByIdDatabase(i);
 
   await showDialog(

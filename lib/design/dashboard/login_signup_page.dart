@@ -90,21 +90,9 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                   controller: nameController,
                   autovalidateMode: AutovalidateMode.onUnfocus,
                   style: const TextStyle(fontFamily: RobotoFlex),
-                  decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide:const BorderSide(color:  Colors.blue, width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder:  UnderlineInputBorder(
-                        borderSide:const BorderSide(color: Colors.amber,width: 2),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide:const BorderSide(color:  Colors.red, width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                  decoration: const InputDecoration(
                       labelText: 'Enter your user name',
-                      prefixIcon: const Icon(Icons.person_outline)),
+                      prefixIcon: Icon(Icons.person_outline)),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Enter your name';
@@ -130,19 +118,6 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                   autovalidateMode: AutovalidateMode.onUnfocus,
                   style: const TextStyle(fontFamily: RobotoFlex),
                   decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide:const BorderSide(color:  Colors.blue, width: 2),
-                          borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedBorder:  UnderlineInputBorder(
-                          borderSide:const BorderSide(color: Colors.amber,width: 2),
-                          borderRadius: BorderRadius.circular(15),
-                      ),
-                      errorBorder: UnderlineInputBorder(
-                        borderSide:const BorderSide(color:  Colors.red, width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-
                       labelText: 'Enter your password',
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
@@ -212,9 +187,10 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                               Navigator.pushReplacement(context,
                                   MaterialPageRoute(
                                 builder: (context) {
-                                  return const Dashboard();
+                                  return Dashboard(name: nameController.text.toString());
                                 },
-                              ));
+                              )
+                              );
                             }
                           },
 

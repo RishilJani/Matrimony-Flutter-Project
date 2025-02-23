@@ -59,11 +59,12 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     age = _user.ageCalculate(widget.data[widget.currentIndex]);
     return Stack(
       children: [
+
         // Main Content
         Image.asset(
-          "assets/images/Holding_Hands.jpg",
+          "assets/images/two_rings.jpg",
+          fit: BoxFit.fill,
           height: 900,
-          fit: BoxFit.cover,
           width: 400,
         ),
 
@@ -308,3 +309,5 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
   }
 
 }
+
+

@@ -17,7 +17,6 @@ class UserListPage extends StatefulWidget {
 }
 
 class _UserListPageState extends State<UserListPage> {
-
   final User _user = User();
   List<Map<String, dynamic>> data = [];
   TextEditingController searchController = TextEditingController();
@@ -30,14 +29,14 @@ class _UserListPageState extends State<UserListPage> {
   @override
   void initState() {
     super.initState();
-    setState(() { getData(); });
+    setState(() {
+      getData();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
       appBar: AppBar(
         flexibleSpace: appBarGradient(),
         title: Text(
@@ -46,27 +45,40 @@ class _UserListPageState extends State<UserListPage> {
               fontSize: 40,
               fontWeight: FontWeight.bold,
               fontFamily: 'StyleScript'),
-        ) ,
+        ),
         centerTitle: true,
         actions: isSelectionMode
             ? [
-          IconButton(
-            icon: Icon(
-              selectedUsers.length == data.length
-                  ? Icons.check_box
-                  : Icons.check_box_outline_blank_sharp,
-              color: Colors.blueAccent.withOpacity(0.7),
-            ),
-            onPressed: selectAllItems,
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete,color: Colors.red,),
-            onPressed: deleteSelectedItems,
-          ),
-        ]
-            : null ,
+                IconButton(
+                  icon: Icon(
+                    selectedUsers.length == data.length
+                        ? Icons.check_box
+                        : Icons.check_box_outline_blank_sharp,
+                    color: Colors.blueAccent.withOpacity(0.7),
+                  ),
+                  onPressed: selectAllItems,
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  onPressed: deleteSelectedItems,
+                ),
+                widget.isFav == true
+                    ? IconButton(
+                        onPressed: () {
+                          unfavouriteSelectedItems();
+                        },
+                        icon: const Icon(
+                          Icons.favorite,
+                          color: Colors.pink,
+                        ),
+                      )
+                    : Container()
+              ]
+            : null,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -98,39 +110,6 @@ class _UserListPageState extends State<UserListPage> {
                     ),
                   ),
                 ),
-
-                widget.isFav
-                    ? Expanded(
-                    child: Row(
-                  children: [
-
-                    // region AllFavourite
-                    Expanded(
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        tooltip: isAllFavourite
-                            ? "Remove all from favourite"
-                            : "Add All to favourite",
-                        onPressed: data.isEmpty || !isAllFavourite
-                            ? null
-                            : () {
-                                unFavouriteAll();
-                              },
-                        icon: Icon(
-                            isAllFavourite
-                                ? Icons.favorite
-                                : Icons.favorite_border_rounded,
-                            color: (data.isEmpty || !isAllFavourite)
-                                ? Colors.grey
-                                : Colors.pink),
-                      ),
-                    ),
-                    // endregion AllFavourite
-
-                  ],
-                )
-                )
-                    : const SizedBox(),
               ],
             ),
 
@@ -155,25 +134,24 @@ class _UserListPageState extends State<UserListPage> {
           ],
         ),
       ),
-
       floatingActionButton: sortItemsMenu(),
     );
-
   }
 
   Widget getListItem(i) {
     int ind = data[i][UserId];
     int age = _user.ageCalculate(data[i]);
 
-    double borderRad = 40;
+    double borderRad = 23;
     bool isSelect = selectedUsers.contains(ind);
+    Color borderColor = const Color(0xFFC2D8F8);
+
     return ListTile(
-      onLongPress: ()=> enterSelectionMode(ind),
+      onLongPress: () => enterSelectionMode(ind),
       onTap: () {
         if (isSelectionMode) {
           toggleSelection(ind);
-        }
-        else {
+        } else {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
               return SwipeUserDetails(
@@ -182,7 +160,7 @@ class _UserListPageState extends State<UserListPage> {
               );
             },
           )).then(
-                (value) {
+            (value) {
               setState(() {
                 getData();
               });
@@ -190,37 +168,40 @@ class _UserListPageState extends State<UserListPage> {
           );
         }
       },
+
       contentPadding: EdgeInsets.zero,
+      tileColor: isSelect ? Colors.blue.withOpacity(0.3) : null,
       leading: isSelectionMode
           ? Checkbox(
-        value: isSelect,
-        onChanged: (value) => toggleSelection(ind),
-      )
+              value: isSelect,
+              onChanged: (value) => toggleSelection(ind),
+
+            )
           : null,
+
       title: Container(
-        height: 150,
+        height: 120,
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.lightBlueAccent, width: 2),
+          color: borderColor,
+          border: Border.all(color: borderColor, width: 0.5),
           borderRadius: BorderRadius.circular(borderRad),
         ),
-        padding: const EdgeInsets.only(right: 15),
+        padding: const EdgeInsets.only(right: 15, top: 5, bottom: 5),
         child: Row(children: [
           // region Image
-          Container(
-            margin: const EdgeInsets.only(right: 5),
-            width: 100,
-            height: 151,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(borderRad),
-                  bottomLeft: Radius.circular(borderRad)),
-              child: Image.asset(
-                "assets/images/Holding_Hands.jpg",
-                fit: BoxFit.cover,
-              ),
+          ClipOval(
+            child: Image.asset(
+              "assets/images/two_rings.jpg",
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
             ),
           ),
           // endregion Image
+
+          const SizedBox(
+            width: 10,
+          ),
 
           // region Details
           Expanded(
@@ -235,28 +216,10 @@ class _UserListPageState extends State<UserListPage> {
                   style: const TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: RobotoFlex,
-                    // color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 35,
                   ),
                 ),
                 // endregion Name
-
-                // region Age
-                Text(
-                  'age : ${age.toString()}',
-                  maxLines: 1,
-                  style: const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
-                ),
-                // endregion Age
-
-                // region Mobile
-                Text(
-                  data[i][Mobile],
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
-                ),
-                // endregion Mobile
 
                 // region City
                 Text(
@@ -266,6 +229,23 @@ class _UserListPageState extends State<UserListPage> {
                   style: const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
                 ),
                 // endregion City
+
+                // region Age
+                Text(
+                  'age : ${age.toString()}',
+                  maxLines: 1,
+                  style: const TextStyle(fontFamily: RobotoFlex, fontSize: 21),
+                ),
+                // endregion Age
+
+                // region Mobile
+                // Text(
+                //   data[i][Mobile],
+                //   overflow: TextOverflow.ellipsis,
+                //   maxLines: 1,
+                //   style: const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
+                // ),
+                // endregion Mobile
               ],
             ),
           ),
@@ -274,8 +254,7 @@ class _UserListPageState extends State<UserListPage> {
           // region Buttons
           Align(
             alignment: Alignment.topRight,
-            child: Flex(
-              direction: Axis.vertical,
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 // region favourite
@@ -286,6 +265,7 @@ class _UserListPageState extends State<UserListPage> {
                           ? Icons.favorite
                           : Icons.favorite_border,
                       color: Colors.pink,
+                      size: 30,
                     ),
                     onPressed: () {
                       if (data[i][isFavourite] == 0) {
@@ -297,46 +277,37 @@ class _UserListPageState extends State<UserListPage> {
                       } else {
                         unFavouriteDialog(context: context, id: ind)
                             .then((value) => setState(() {
+                                  Navigator.pop(context);
                                   getData();
-                                }));
-                      }
-                    },
+                            }));
+                      }                    },
                   ),
                 ),
                 // endregion favourite
 
                 // region delete
-                IconButton(
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
+                Expanded(
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                      size: 25,
+                    ),
+                    onPressed: () async{
+                      await deleteDialog(i: ind, context: context);
+                      setState(() {
+                        getData();
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    // deleteDialog(ind);
-                    deleteDialog(i: ind, context: context);
-                  },
                 ),
                 // endregion delete
-
-                // region edit
-                IconButton(
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Color.fromARGB(255, 75, 190, 255),
-                  ),
-                  onPressed: () {},
-                ),
-                // endregion edit
               ],
             ),
           )
           // endregion Buttons
         ]),
       ),
-      
-      tileColor: isSelect 
-          ? Colors.blue.withOpacity(0.3) 
-          : null,
     );
   }
 
@@ -419,10 +390,12 @@ class _UserListPageState extends State<UserListPage> {
 
   // region sort
   Widget sortItemsMenu() {
+
     return SpeedDial(
       label: const Text("Sort By"),
       icon: Icons.sort,
       closeManually: false,
+      // backgroundColor: bgColour,
       children: [
         sortItems(text: "$Age reverse", icon: Icons.cake),
         sortItems(text: "$Name reverse", icon: Icons.sort_by_alpha_sharp),
@@ -435,6 +408,7 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   SpeedDialChild sortItems({required String text, required IconData icon}) {
+    Color bgColour = const Color.fromARGB(255, 242, 242, 242);
     return SpeedDialChild(
         onTap: () {
           if (text == "Last Added") {
@@ -451,7 +425,10 @@ class _UserListPageState extends State<UserListPage> {
         },
         label: text,
         labelStyle: const TextStyle(fontFamily: RobotoFlex),
-        child: Icon(icon));
+        labelBackgroundColor: bgColour,
+        backgroundColor: bgColour,
+        child: Icon(icon)
+    );
   }
 
   void sortUserListBy(String text) {
@@ -489,12 +466,12 @@ class _UserListPageState extends State<UserListPage> {
   }
   // endregion sort
 
+
   void toggleSelection(int ind) {
     setState(() {
-      if(selectedUsers.contains(ind)) {
+      if (selectedUsers.contains(ind)) {
         selectedUsers.remove(ind);
-      }
-      else {
+      } else {
         selectedUsers.add(ind);
       }
 
@@ -519,57 +496,103 @@ class _UserListPageState extends State<UserListPage> {
         isSelectionMode = false;
       } else {
         // Otherwise, select all
-        for(var ele in data){
+        for (var ele in data) {
           selectedUsers.add(ele[UserId]);
         }
       }
     });
   }
 
-
-  void deleteSelectedItems() async{
-
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: const Text(
-              'DELETE ',
-              style: TextStyle(fontFamily: RobotoFlex),
-            ),
-            content: const Text(
-              'Are you sure want to delete ? ',
-              style: TextStyle(fontFamily: RobotoFlex),
-            ),
-            actions: [
-              TextButton(
-                child: const Text(
-                  'Yes',
-                  style: TextStyle(fontFamily: RobotoFlex),
-                ),
-                onPressed: () async {
-                  await _user.deleteSomeUsersDatabase(selectedUsers);
-                  Navigator.pop(context);
-                  setState(() {
-                      selectedUsers.clear();
-                      isSelectionMode = false;
-                      getData();
-                    });
-                },
+  void deleteSelectedItems() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text(
+            'DELETE ',
+            style: TextStyle(fontFamily: RobotoFlex),
+          ),
+          content: const Text(
+            'Are you sure want to delete ? ',
+            style: TextStyle(fontFamily: RobotoFlex),
+          ),
+          actions: [
+            TextButton(
+              child: const Text(
+                'Yes',
+                style: TextStyle(fontFamily: RobotoFlex),
               ),
-              TextButton(
-                child: const Text(
-                  'No',
-                  style: TextStyle(fontFamily: RobotoFlex),
-                ),
-                onPressed: () {
+              onPressed: () async {
+                await _user.deleteSomeUsersDatabase(selectedUsers);
+                setState(() {
+                  selectedUsers.clear();
+                  isSelectionMode = false;
+                  getData();
                   Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        },
-      );
+                });
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'No',
+                style: TextStyle(fontFamily: RobotoFlex),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
+  void unfavouriteSelectedItems() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text(
+            'unfavourite',
+            style: TextStyle(fontFamily: RobotoFlex),
+          ),
+          content: const Text(
+            'Are you sure want to Unfavourite this users ? ',
+            style: TextStyle(fontFamily: RobotoFlex),
+          ),
+          actions: [
+            TextButton(
+              child: const Text(
+                'Yes',
+                style: TextStyle(fontFamily: RobotoFlex),
+              ),
+              onPressed: () async {
+                await _user
+                    .changeSomeFavouriteDatabase(selectedUsers)
+                    .then((value) {
+                  setState(
+                    () {
+                      getData();
+                      Navigator.pop(context);
+                      isSelectionMode = false;
+                      selectedUsers.clear();
+                    },
+                  );
+                });
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'No',
+                style: TextStyle(fontFamily: RobotoFlex),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 }
