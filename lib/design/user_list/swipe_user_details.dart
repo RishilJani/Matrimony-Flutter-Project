@@ -32,15 +32,6 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                logout(context);
-              },
-              icon: const Icon(Icons.logout))
-        ],
-      ),
       body: widget.data.isEmpty
           ? const Text("Some Error Occurred")
           : PageView.builder(
@@ -60,12 +51,25 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     return Stack(
       children: [
 
-        // Main Content
+        //region Image
         Image.asset(
           "assets/images/two_rings.jpg",
           fit: BoxFit.fill,
           height: 900,
           width: 400,
+        ),
+        // endregion Image
+
+        Container(
+          padding:const EdgeInsets.only(top: 20,left: 10,right: 10),
+          child: Flex(
+            direction: Axis.horizontal,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(onPressed: (){Navigator.pop(context);}, icon: const Icon(CupertinoIcons.arrow_left)),
+              IconButton(onPressed: (){ logout(context); }, icon: const Icon(Icons.logout)),
+            ],
+          ),
         ),
 
         // Gesture Detector for Swipe Up
@@ -145,7 +149,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
             style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 33,
-                color: Color.fromRGBO(0, 0, 0, 0.75),
+                color: Colors.white,
                 fontFamily: RobotoFlex),
           ),
           // endregion Name

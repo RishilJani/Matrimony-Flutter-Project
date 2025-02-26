@@ -46,6 +46,7 @@ Future<void> unFavouriteDialog({required context, required int id}) async {
             child: const Text("Yes"),
             onPressed: () {
               user.changeFavouriteDatabase(id, 0);
+              Navigator.pop(context);
             },
           ),
           TextButton(
@@ -58,6 +59,7 @@ Future<void> unFavouriteDialog({required context, required int id}) async {
       );
     },
   );
+  return;
 }
 
 Future<void> deleteDialog({required int i, required context}) async {
@@ -114,8 +116,9 @@ void logout(context) {
         actions: [
           TextButton(
             onPressed: () async {
-              SharedPreferences pref = await SharedPreferences.getInstance();
-              pref.setBool(rememberMe, false);
+              SharedPreferences.getInstance().then((value) {
+                  value.setBool(rememberMe, false);
+              },);
               Navigator.pushReplacement(context, MaterialPageRoute(
                 builder: (context) {
                   return const SplashScreen();

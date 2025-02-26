@@ -267,20 +267,20 @@ class _UserListPageState extends State<UserListPage> {
                       color: Colors.pink,
                       size: 30,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (data[i][isFavourite] == 0) {
                         _user.changeFavouriteDatabase(data[i][UserId], 1);
                         setState(() {
                           getData();
                           isAllFavourite = changeAllFavourite();
                         });
-                      } else {
-                        unFavouriteDialog(context: context, id: ind)
-                            .then((value) => setState(() {
-                                  Navigator.pop(context);
-                                  getData();
-                            }));
-                      }                    },
+                      }
+                      else {
+                        await unFavouriteDialog(context: context, id: ind);
+                        getData();
+
+                      }
+                      },
                   ),
                 ),
                 // endregion favourite
