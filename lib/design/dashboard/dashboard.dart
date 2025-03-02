@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/about_us/about_us.dart';
 import 'package:matrimony_application/design/add_user/add_edit_user.dart';
@@ -23,7 +22,6 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         elevation: 10,
-        backgroundColor: Colors.transparent,
         flexibleSpace: appBarGradient(),
         centerTitle: true,
         title: const Text(
@@ -55,15 +53,15 @@ class _DashboardState extends State<Dashboard> {
                   style: const TextStyle(
                     fontSize: 30,
                     fontFamily: RobotoFlex,
-                    fontWeight: FontWeight.w600
+                    fontWeight: FontWeight.bold
                   ),
                 ),
+
                 const Text(
                   "Welcome to LoveSync",
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 24,
                     fontFamily: RobotoFlex,
-                    fontWeight: FontWeight.w600
                   ),
                 ),
               ],
@@ -79,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
             const SizedBox( height: 20, ),
             Row(
               children: [
-                myItem('Favourite', CupertinoIcons.heart_fill, context:  context,myPage:  UserListPage( isFav: true,)),
+                myItem('Favourite', Icons.favorite, context:  context,myPage:  UserListPage( isFav: true,)),
                 myItem('About Us', Icons.person, context:  context, myPage:  const AboutUs()),
               ],
             ),
@@ -91,10 +89,10 @@ class _DashboardState extends State<Dashboard> {
 
   Widget myItem(String txt, IconData icon,{context, myPage}) {
     double borderRadius = 75;
-    Color? fontColor;
     return Expanded(
       child: InkWell(
         borderRadius: BorderRadius.circular(borderRadius),
+
         onTap: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
@@ -102,15 +100,16 @@ class _DashboardState extends State<Dashboard> {
             },
           ));
         },
+
         child: ShaderMask(
           shaderCallback: (bounds) {
             return const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
               colors: [
                 Color.fromARGB(255, 105, 241, 250),
-                Color.fromARGB(255, 128, 146, 255),
+                Color.fromARGB(255, 128,146, 255),
               ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ).createShader(bounds);
           },
           child: Container(
@@ -118,10 +117,7 @@ class _DashboardState extends State<Dashboard> {
             height: 150,
             margin: const EdgeInsets.all(15),
             decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white,
-                width: 5
-              ),
+              border: Border.all( width: 5,color: Colors.white ),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             child: Column(
@@ -130,14 +126,12 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 Icon(
                   icon,
-                  size: 35,
-                  color: fontColor,
+                  size: 32,
                 ),
 
                 Text(
                   txt,
-                  style: TextStyle(
-                      color: fontColor,
+                  style: const TextStyle(
                       fontFamily: RobotoFlex,
                       fontSize: 20
                   ),

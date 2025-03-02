@@ -19,17 +19,14 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
 
         primaryColor: const Color(0xFFB6CFF3), // Ice Blue
-        scaffoldBackgroundColor: const Color(0xFFF9F9F9), // Off-White
 
         textTheme: const TextTheme(
           headlineLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
           headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
           bodyLarge: TextStyle(fontSize: 18, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
           bodyMedium: TextStyle(fontSize: 16, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
-          
+          bodySmall: TextStyle(fontFamily: RobotoFlex)
         ),
-
-
         inputDecorationTheme: InputDecorationTheme(
             filled: true,
             fillColor: Colors.white,

@@ -134,13 +134,14 @@ class _UserListPageState extends State<UserListPage> {
           ],
         ),
       ),
+
       floatingActionButton: sortItemsMenu(),
     );
   }
 
   Widget getListItem(i) {
     int ind = data[i][UserId];
-    int age = _user.ageCalculate(data[i]);
+    // int age = _user.ageCalculate(data[i]);
 
     double borderRad = 23;
     bool isSelect = selectedUsers.contains(ind);
@@ -221,6 +222,18 @@ class _UserListPageState extends State<UserListPage> {
                 ),
                 // endregion Name
 
+                Text(
+                  data[i][AboutMe],
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: const TextStyle(
+                    color: Color.fromARGB(100, 23, 23, 23),
+                    overflow: TextOverflow.ellipsis,
+                    fontFamily:  RobotoFlex
+                  ),
+                )
+                
+                /*
                 // region City
                 Text(
                   data[i][City].toString(),
@@ -238,14 +251,7 @@ class _UserListPageState extends State<UserListPage> {
                 ),
                 // endregion Age
 
-                // region Mobile
-                // Text(
-                //   data[i][Mobile],
-                //   overflow: TextOverflow.ellipsis,
-                //   maxLines: 1,
-                //   style: const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
-                // ),
-                // endregion Mobile
+                */
               ],
             ),
           ),

@@ -1,5 +1,6 @@
+const String MyDatabaseName = "myDatabase.db";
 const String Table_User = 'User';
-int DB_Version = 1;
+int DB_Version = 2;
 
 const String UserId = "UserID";
 const String Name = 'Name';
@@ -11,6 +12,9 @@ const String Gender = 'Gender';
 const String Password = 'Password';
 const String Hobbies = 'Hobbies';
 const String isFavourite = "isFavourite";
+
+const String AboutMe = 'AboutMe';
+const String Profession = 'Profession';
 
 const String Age = 'Age';
 

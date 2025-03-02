@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:matrimony_application/backend/user.dart';
 import 'package:matrimony_application/design/add_user/add_edit_user.dart';
 import 'package:matrimony_application/design/user_list/user_details.dart';
+import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
 
@@ -97,7 +98,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
                 width: 700,
                 height: 700,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(50, 100, 100, 94),
+                  color: const Color.fromARGB(50, 82, 82, 77),
                   borderRadius: BorderRadius.circular(3),
                 ),
                 child: getDetails(i),
@@ -111,14 +112,16 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
 
   // Function to show the bottom sheet
   void _showBottomSheet(BuildContext context, int i) {
+    double borderRad = 30;
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      isScrollControlled:  true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(borderRad)),
       ),
       builder: (context) {
         return Container(
-          height: 700,
+          height: 600,
           padding: const EdgeInsets.all(16),
           child: UserDetailsPage(userDetail: widget.data[i]),
         );
@@ -256,7 +259,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                deleteDialog(i: widget.data[i][UserId], context: context);
+                deleteDialog(i: widget.data[i][UserId], context: context,navigateTo: UserListPage(isFav: false));
               },
               icon: const Icon(
                 Icons.delete,

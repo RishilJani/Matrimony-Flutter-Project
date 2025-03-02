@@ -322,7 +322,7 @@ class User {
       Age: 19
     },
     {
-      Name: "mno",
+      Name: "Mno",
       Email: "myemail@gmail.com",
       Mobile: "9824201307",
       Hobbies: {"Reading": true, "Music": true, "Dance": true},
@@ -334,7 +334,7 @@ class User {
       Age: 21
     },
     {
-      Name: "pqr",
+      Name: "Pqr",
       Email: "myemail@gmail.com",
       Mobile: "9824201308",
       Hobbies: {"Reading": true, "Music": true, "Dance": true},
@@ -346,7 +346,7 @@ class User {
       Age: 4
     },
     {
-      Name: "stu",
+      Name: "Stu",
       Email: "myemail@gmail.com",
       Mobile: "9824201309",
       Hobbies: {"Reading": true, "Music": true, "Dance": true},
@@ -358,7 +358,7 @@ class User {
       Age: 19
     },
     {
-      Name: "vwx",
+      Name: "Vwx",
       Email: "myemail@gmail.com",
       Mobile: "9824201310",
       Hobbies: {"Reading": true, "Music": true, "Dance": true},
@@ -370,7 +370,7 @@ class User {
       Age: 19
     },
     {
-      Name: "yzA",
+      Name: "YzA",
       Email: "myemail@gmail.com",
       Mobile: "9824201311",
       Hobbies: {"Reading": true, "Music": true, "Dance": true},

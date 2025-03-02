@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:matrimony_application/design/user_list/user_list_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:matrimony_application/utils/utils.dart';
 import '../../backend/user.dart';
@@ -35,107 +36,68 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            widget.userDetail[Name].toString(),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 40,
-                                fontFamily: "RobotoFlex"),
-                          ),
-                        )
-                      ],
-                    ),
-                    const Text(
-                      "About",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+
+                    // Name
+                    Center(
+                      child: Text(
+                        widget.userDetail[Name].toString(),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 40,
+                            fontFamily: "RobotoFlex"),
+                      ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
 
-                    userItem(Gender),
-                    const SizedBox(
-                      height: 8,
-                    ),
-
-                    userItem(City),
-                    const SizedBox(
-                      height: 8,
-                    ),
-
-                    const Text(
-                      "Personal Information",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    // About
+                    Center(
+                      child: Text(
+                        widget.userDetail[AboutMe],
+                        maxLines: 3,
+                        style: const TextStyle(
+                            fontFamily: RobotoFlex,
+                            fontSize: 23
+                        ),
+                      ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
 
-                    userItem(DOB),
-                    const SizedBox(
-                      height: 8,
-                    ),
-
-                    userItem(Age),
-                    const SizedBox(
-                      height: 8,
-                    ),
-
-                    //  hobbies
-                    Row(
-                      children: [
-                        const Expanded(flex: 1, child: Text("Hobbies ")),
-                        const Expanded(flex: 1, child: Text(":")),
-                        Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: [
-                                Text(
-                                  getHobbies(),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600),
-                                )
-                              ],
-                            ))
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-
-                    const Text(
-                      "Contact",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                    userItem(Email),
-                    const SizedBox(
-                      height: 8,
-                    ),
-
-                    userItem(Mobile),
-                    const SizedBox(
-                      height: 8,
-                    ),
-
+                    // Buttons
                     Wrap(
                       direction: Axis.horizontal,
                       children: [
                         getButtons(),
                       ],
-                    )
+                    ),
+                    const SizedBox( height: 25, ),
+
+                    getHeading("About"),
+
+                    userItem(Gender),
+
+                    userItem(Profession),
+
+                    userItem(City),
+
+                    getHeading("Personal Information"),
+
+                    userItem(DOB),
+
+                    userItem(Age),
+
+                    userItem(Hobbies),
+
+                    getHeading("Contact Me"),
+
+                    userItem(Email),
+
+                    userItem(Mobile),
                   ],
                 ),
               ),
@@ -144,35 +106,57 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
+  Widget getHeading(String txt){
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: Text(
+          txt,
+          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+    );
+  }
+
   Widget userItem(String txt) {
     age = _user.ageCalculate(widget.userDetail);
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Text(
-            "$txt ",
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Row(
+              children: [
+                Text(
+                  "$txt ",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
           ),
-        ),
-        const Expanded(
-            flex: 1,
-            child: Text(
-              ":",
-            )),
-        Expanded(
-            flex: 3,
-            child: Text(
-              txt == Age ? "$age" : widget.userDetail[txt].toString(),
-              style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                  fontFamily: RobotoFlex),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            )),
-      ],
+          const Expanded(
+              flex: 1,
+              child: Text(
+                ":",
+              )),
+          Expanded(
+              flex: 2,
+              child: Text(
+                txt == Age
+                    ? "$age"
+                    : txt == Hobbies ? getHobbies()
+                    : widget.userDetail[txt].toString(),
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    fontFamily: RobotoFlex),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 4,
+              )
+          ),
+        ],
+      ),
     );
   }
 
@@ -216,7 +200,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               padding: const EdgeInsets.all(5),
               onPressed: () {
                 // deleteDialog();
-                deleteDialog(i: widget.userDetail[UserId], context: context);
+                deleteDialog(i: widget.userDetail[UserId], context: context,navigateTo: UserListPage(isFav: false));
+                
               },
               icon: const Icon(
                 Icons.delete,
@@ -226,6 +211,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         ),
         // endregion Delete
 
+        
         // region Edit
         Expanded(
           child: IconButton(

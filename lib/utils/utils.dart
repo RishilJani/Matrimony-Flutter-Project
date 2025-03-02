@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import
+'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/backend/user.dart';
 import 'package:matrimony_application/design/dashboard/splash_screen.dart';
@@ -13,7 +14,7 @@ Widget appBarGradient() {
     const Color.fromARGB(255, 250, 156, 188),
   ];
   return Container(
-    decoration: BoxDecoration(
+    decoration: BoxDecoration (
         gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -62,7 +63,7 @@ Future<void> unFavouriteDialog({required context, required int id}) async {
   return;
 }
 
-Future<void> deleteDialog({required int i, required context}) async {
+Future<void> deleteDialog({required int i, required context,navigateTo}) async {
   Map<String, dynamic> tempUser = await user.getByIdDatabase(i);
 
   await showDialog(
@@ -85,7 +86,15 @@ Future<void> deleteDialog({required int i, required context}) async {
             ),
             onPressed: () {
               user.deleteUserDatabase(tempUser[UserId]);
-              Navigator.pop(context);
+              if(navigateTo != null){
+
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
+                  return navigateTo;
+                },),(route) => route.isFirst,);
+
+              }else{
+                Navigator.pop(context);
+              }
             },
           ),
           TextButton(

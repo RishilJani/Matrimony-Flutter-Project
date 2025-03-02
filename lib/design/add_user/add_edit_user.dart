@@ -24,9 +24,12 @@ class _UserFormState extends State<UserForm> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController aboutMeController = TextEditingController();
 
   List<String> cities = ['Jamnagar', 'Rajkot', 'Ahmedabad', 'Baroda', 'Dwarka'];
+  List<String> professions = ['Business','Teacher', 'Professor', 'Doctor', 'Engineer', 'CA'];
   String selectCity = '';
+  String selectProfession = '';
   bool isEdit = false;
 
   DateTime date = DateTime.now();
@@ -52,18 +55,22 @@ class _UserFormState extends State<UserForm> {
       mobileController.text = widget.userDetail![Mobile].toString();
       passwordController.text = widget.userDetail![Password].toString();
       confirmPasswordController.text = widget.userDetail![Password].toString();
+      aboutMeController.text = widget.userDetail![AboutMe] ?? "Available";
       hobbies.addAll(widget.userDetail![Hobbies]);
       gender = widget.userDetail![Gender];
       selectCity = widget.userDetail![City];
       dob = widget.userDetail![DOB];
       pikedDate = _user.strToDateTime(widget.userDetail![DOB]);
 
+      selectProfession = widget.userDetail![Profession] ?? professions[0];
       ind = widget.userDetail![UserId];
     } else {
       selectCity = cities[0];
+      selectProfession = professions[0];
       hobbies = {"Reading": false, "Music": false, "Dance": false};
       dob = DateFormat("dd/MM/yyyy").format(DateTime(date.year - 20));
       pikedDate = DateTime(date.year - 20, 1, 1);
+      aboutMeController.text = "Available";
     }
   }
 
@@ -316,7 +323,8 @@ class _UserFormState extends State<UserForm> {
                 // region City
                 Row(
                   children: [
-                    const SizedBox(
+                    const SizedBox
+                      (
                         width: 150,
                         child: Text(
                           'City : ',
@@ -326,30 +334,83 @@ class _UserFormState extends State<UserForm> {
                     const SizedBox(
                       width: 8,
                     ),
-                    DropdownButton(
-                        menuWidth: 200,
-                        icon: const Icon(Icons.location_city),
-                        value: selectCity,
-                        items: cities.map((city) {
-                          return DropdownMenuItem(
-                            value: city,
-                            child: Text(
-                              city.toString(),
-                              style: const TextStyle(fontFamily: RobotoFlex),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectCity = value!;
-                          });
-                        })
+                    Expanded(
+                      child: DropdownButton(
+                          menuWidth: 200,
+                          // icon: const Icon(Icons.location_city),
+                          value: selectCity,
+                          items: cities.map((city) {
+                            return DropdownMenuItem(
+                              value: city,
+                              child: Text(
+                                city.toString(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectCity = value!;
+                            });
+                          }),
+                    )
                   ],
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 // endregion City
+
+                // Profession dropdown
+                // region Profession
+                Row(
+                  children: [
+                    const SizedBox
+                      (
+                        width: 150,
+                        child: Text(
+                          '$Profession : ',
+                          style:
+                          TextStyle(fontFamily: RobotoFlex, fontSize: 15),
+                        )),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      child: DropdownButton(
+                        menuWidth: 200,
+                        value: selectProfession,
+                          onChanged: (value) {
+                            setState(() { selectProfession = value.toString(); });
+                          },
+                          items: professions.map((e) {
+                            return DropdownMenuItem(
+                                value: e,
+                                child: Text(
+                                  e.toString(),
+                                )
+                            );
+                          }).toList()
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                // endregion Profession
+
+                // About Me
+                // region AboutMe
+                getInput(
+                  aboutMeController,
+                  'About',
+                  suffix: const Icon(Icons.info_outline_rounded),
+                  keyboard: TextInputType.multiline
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                // endregion AboutMe
 
                 // Password
                 // region Password
@@ -417,30 +478,9 @@ class _UserFormState extends State<UserForm> {
 
                 // region Button
                 ElevatedButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()){
-                        Map<String, dynamic> mp = {
-                          Name: nameController.text,
-                          Email: emailController.text,
-                          Mobile: mobileController.text,
-                          Hobbies: hobbies,
-                          City: selectCity,
-                          Gender: gender,
-                          DOB: dob,
-                          Password: passwordController.text,
-                          isFavourite: widget.userDetail == null
-                              ? 0
-                              : widget.userDetail![isFavourite]
-                        };
-
-                        if (isEdit) {
-                          _user.updateUserDatabase(ind, mp);
-                          isEdit = false;
-                        } else {
-                          // _user.addUser(mp);
-                          await _user.addUserDatabase(mp);
-                        }
-
+                        Map<String,dynamic> mp = await sendData();
                         if(context.mounted){
                           Navigator.pop(context, mp);
                         }
@@ -458,15 +498,17 @@ class _UserFormState extends State<UserForm> {
     );
   }
 
-  Widget getInput(TextEditingController controller, String txt,
-      {List<TextInputFormatter>? formatters,
-      validator,
-      suffix,
-      TextInputType? keyboard,
-      bool? isObs,
-      bool? isPasswordVisible,
+  Widget getInput(
+      TextEditingController controller,
+      String txt,
+      {
+        List<TextInputFormatter>? formatters,
+        validator,
+        suffix,
+        TextInputType? keyboard,
+        bool? isObs,
+        bool? isPasswordVisible,
       onToggle}) {
-    // double borderRadius = 10;
     return Row(
       children: [
         Expanded(
@@ -478,22 +520,10 @@ class _UserFormState extends State<UserForm> {
             controller: controller,
             keyboardType: keyboard,
             inputFormatters: formatters,
+            maxLines: isObs == true ? 1 : null,
             style: const TextStyle(fontFamily: RobotoFlex),
             decoration: InputDecoration(
-                // enabledBorder: UnderlineInputBorder(
-                //   borderSide:const BorderSide(color:  Colors.blue, width: 2),
-                //   borderRadius: BorderRadius.circular(borderRadius),
-                // ),
-                // focusedBorder:  UnderlineInputBorder(
-                //   borderSide:const BorderSide(color: Colors.amber,width: 2),
-                //   borderRadius: BorderRadius.circular(borderRadius),
-                // ),
-                // errorBorder: UnderlineInputBorder(
-                //   borderSide:const BorderSide(color:  Colors.red, width: 2),
-                //   borderRadius: BorderRadius.circular(borderRadius),
-                // ),
                 labelText: 'Enter your $txt',
-                // hintText: 'Enter your $txt',
                 suffixIcon: isObs != null
                     ? IconButton(
                         onPressed: onToggle,
@@ -505,6 +535,32 @@ class _UserFormState extends State<UserForm> {
         )
       ],
     );
+  }
+
+  Future<Map<String, dynamic>> sendData() async{
+    Map<String, dynamic> mp = {
+      Name: nameController.text.toString().trim(),
+      Email: emailController.text,
+      Mobile: mobileController.text,
+      Hobbies: hobbies,
+      City: selectCity,
+      Profession : selectProfession,
+      Gender: gender,
+      DOB: dob,
+      AboutMe : aboutMeController.text,
+      Password: passwordController.text,
+      isFavourite: widget.userDetail == null
+          ? 0
+          : widget.userDetail![isFavourite]
+    };
+
+    if (isEdit) {
+      await _user.updateUserDatabase(ind, mp);
+      isEdit = false;
+    } else {
+      await _user.addUserDatabase(mp);
+    }
+    return mp;
   }
 
   void changeHobbies(String i, bool? value) {
