@@ -51,7 +51,6 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     age = _user.ageCalculate(widget.data[widget.currentIndex]);
     return Stack(
       children: [
-
         //region Image
         Image.asset(
           "assets/images/two_rings.jpg",
@@ -62,13 +61,21 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
         // endregion Image
 
         Container(
-          padding:const EdgeInsets.only(top: 20,left: 10,right: 10),
+          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
           child: Flex(
             direction: Axis.horizontal,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(onPressed: (){Navigator.pop(context);}, icon: const Icon(CupertinoIcons.arrow_left)),
-              IconButton(onPressed: (){ logout(context); }, icon: const Icon(Icons.logout)),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(CupertinoIcons.arrow_left)),
+              IconButton(
+                  onPressed: () {
+                    logout(context);
+                  },
+                  icon: const Icon(Icons.logout)),
             ],
           ),
         ),
@@ -115,7 +122,7 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
     double borderRad = 30;
     showModalBottomSheet(
       context: context,
-      isScrollControlled:  true,
+      isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(borderRad)),
       ),
@@ -259,14 +266,16 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
           child: IconButton(
               padding: const EdgeInsets.all(5),
               onPressed: () {
-                deleteDialog(i: widget.data[i][UserId], context: context,navigateTo: UserListPage(isFav: false));
+                deleteDialog(
+                    i: widget.data[i][UserId],
+                    context: context,
+                    navigateTo: UserListPage(isFav: false));
               },
               icon: const Icon(
                 Icons.delete,
                 color: Colors.red,
                 size: 30,
-              )
-          ),
+              )),
         ),
         // endregion Delete
 
@@ -314,7 +323,4 @@ class _SwipeUserDetailsState extends State<SwipeUserDetails> {
       ],
     );
   }
-
 }
-
-

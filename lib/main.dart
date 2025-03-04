@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/dashboard/splash_screen.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
+import 'package:matrimony_application/utils/utils.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,47 +13,70 @@ class MyApp extends StatelessWidget {
   // This widget is the root  of your application.
   @override
   Widget build(BuildContext context) {
+    var borderRad = const BorderRadius.only(
+      bottomRight: Radius.circular(8),
+      bottomLeft: Radius.circular(8),
+    );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         brightness: Brightness.light,
 
-        primaryColor: const Color(0xFFB6CFF3), // Ice Blue
+        scaffoldBackgroundColor: bgColor,
+
+        primaryColor: bgColor,
 
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
-          headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
-          bodyLarge: TextStyle(fontSize: 18, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
-          bodyMedium: TextStyle(fontSize: 16, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
-          bodySmall: TextStyle(fontFamily: RobotoFlex)
+          headlineLarge: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF4A4A4A),
+              fontFamily: RobotoFlex),
+          headlineMedium: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF4A4A4A),
+              fontFamily: RobotoFlex),
+          bodyLarge: TextStyle(
+              fontSize: 18, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
+          bodyMedium: TextStyle(
+              fontSize: 16, color: Color(0xFF4A4A4A), fontFamily: RobotoFlex),
+          bodySmall: TextStyle(fontFamily: RobotoFlex),
         ),
+
+        datePickerTheme: DatePickerThemeData(
+          backgroundColor: bgColor,
+        ),
+
         inputDecorationTheme: InputDecorationTheme(
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFA0D3EF)), // Sky Mist
+          filled: true,
+          fillColor: bgColor,
+          border: UnderlineInputBorder(
+              borderSide: const BorderSide(color: Colors.pink, width: 2),
+              borderRadius: borderRad),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: const BorderSide(color: Colors.pink, width: 2),
+              borderRadius: borderRad),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: const BorderSide(color: Colors.pinkAccent, width: 3),
+              borderRadius: borderRad),
+          labelStyle: TextStyle(
+            fontFamily: RobotoFlex,
+            color: Colors.pink.shade300,
           ),
-
-            enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFB7D4E6)), // Sky Mist
-          ),
-
-            focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF93C6E7), width: 2), // Ice Blue
-          ),
-
-            labelStyle: const TextStyle(
-              fontFamily: RobotoFlex,
-              color: Color(0xFF6D6A6A),
-            )
-
         ),
 
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        checkboxTheme: const CheckboxThemeData(
+          checkColor: WidgetStatePropertyAll(Colors.white),
+          splashRadius: 30,
+        ),
+
+        dialogTheme:
+            DialogTheme(backgroundColor: bgColor, shadowColor: bgColor),
+
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+
         useMaterial3: true,
       ),
       home: const SplashScreen(),

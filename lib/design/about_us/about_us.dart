@@ -11,32 +11,31 @@ class AboutUs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: appBarGradient(),
+        flexibleSpace: appBarBG(),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'About Us',
           style: TextStyle(
-              fontSize: 40,
+              fontSize: 50,
+              color: Colors.pink.shade300,
               fontWeight: FontWeight.bold,
               fontFamily: 'StyleScript'),
         ),
         actions: [
-          IconButton(onPressed: (){
-            logout(context);
-          }, icon: const Icon(Icons.logout)
-          ),
+          IconButton(
+              onPressed: () {
+                logout(context);
+              },
+              icon: const Icon(Icons.logout)),
         ],
       ),
-
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
-
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               // region heading
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -62,15 +61,16 @@ class AboutUs extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 30,
                         fontFamily: RobotoFlex,
-                      fontWeight: FontWeight.w600
-                    ),
+                        fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
 
               // endregion heading
 
-              const SizedBox( height: 10, ),
+              const SizedBox(
+                height: 10,
+              ),
 
               // region MeetOurTeam
 
@@ -96,8 +96,7 @@ class AboutUs extends StatelessWidget {
                       getRow('Eulogized by',
                           'Darshan University, Rajkot, Gujarat - INDIA'),
                     ],
-                  )
-              ),
+                  )),
 
               // endregion MeetOurTeam
 
@@ -110,57 +109,51 @@ class AboutUs extends StatelessWidget {
               getContainers(
                   "About ASWDC",
                   Column(
-                children: [
-                  Row(
                     children: [
-                      Expanded(
-                        child: Image.asset(
-                          "assets/images/DU_Logo.jpg",
-                          height: 80,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Image.asset(
+                              "assets/images/DU_Logo.jpg",
+                              height: 80,
+                            ),
+                          ),
+                          Expanded(
+                            child: Image.asset(
+                              "assets/images/ASWDC.jpg",
+                              height: 75,
+                            ),
+                          )
+                        ],
                       ),
-                      Expanded(
-                        child: Image.asset(
-                          "assets/images/ASWDC.jpg",
-                          height: 75,
-                        ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'ASWDC is Application , Software and Website Development Center @ Darshan University run by Students and Staff of School of Computer Science.',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Sole purpose of ASWDC is to bridge gap between university curriculum & industry demands. Students learn cutting edge technologies, develop real world application & experience professional environment @ ASWDC under guidance of industry experts & faculty members.',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ],
                       )
                     ],
-                  ),
-
-                  const SizedBox(
-                    height: 15,
-                  ),
-
-                  const Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'ASWDC is Application , Software and Website Development Center @ Darshan University run by Students and Staff of School of Computer Science.',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(
-                    height: 10,
-                  ),
-
-                  const Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Sole purpose of ASWDC is to bridge gap between university curriculum & industry demands. Students learn cutting edge technologies, develop real world application & experience professional environment @ ASWDC under guidance of industry experts & faculty members.',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              )
-              ),
-
+                  )),
 
               // endregion AboutASWDC
 
@@ -181,7 +174,6 @@ class AboutUs extends StatelessWidget {
                 ),
               ),
 
-
               // endregion ContactUs
 
               const SizedBox(
@@ -201,8 +193,8 @@ class AboutUs extends StatelessWidget {
                     getInfo(CupertinoIcons.circle_grid_3x3_fill, 'More Apps'),
                     getInfo(CupertinoIcons.star, 'Rate Us'),
                     getInfo(Icons.thumb_up, 'Like us on Facebook'),
-                    getInfo(CupertinoIcons.arrow_2_circlepath,
-                        'Check for updates'),
+                    getInfo(
+                        CupertinoIcons.arrow_2_circlepath, 'Check for updates'),
                   ],
                 ),
               ),
@@ -213,7 +205,6 @@ class AboutUs extends StatelessWidget {
 
               const Column(
                 children: [
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -224,9 +215,7 @@ class AboutUs extends StatelessWidget {
                       Text("2025 Darshan University"),
                     ],
                   ),
-
                   Text("All Rights Reserved - Privacy Policy"),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -248,9 +237,7 @@ class AboutUs extends StatelessWidget {
   }
 
   Widget getContainers(String txt, item) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         margin: const EdgeInsets.only(left: 15),
         padding: const EdgeInsets.all(10),
@@ -260,10 +247,7 @@ class AboutUs extends StatelessWidget {
         child: Text(
           txt,
           style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            fontFamily: "RobotoFlex"
-          ),
+              color: Colors.white, fontSize: 20, fontFamily: "RobotoFlex"),
         ),
       ),
       Container(
@@ -274,13 +258,12 @@ class AboutUs extends StatelessWidget {
               color: Colors.purple,
             )),
         child: Padding(
-            padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: item,
         ),
       )
     ]);
   }
-
 
   Widget getRow(String left, String right) {
     return Row(
@@ -290,13 +273,9 @@ class AboutUs extends StatelessWidget {
           child: Text(
             left,
             style: const TextStyle(
-                color: Colors.purple,
-                fontFamily: "RobotoFlex",
-                fontSize: 15
-            ),
+                color: Colors.purple, fontFamily: "RobotoFlex", fontSize: 15),
           ),
         ),
-
         const Expanded(
           flex: 1,
           child: Text(
@@ -308,7 +287,6 @@ class AboutUs extends StatelessWidget {
             ),
           ),
         ),
-
         Expanded(
           flex: 3,
           child: Text(
@@ -330,10 +308,9 @@ class AboutUs extends StatelessWidget {
         color: Colors.purple,
       ),
       title: Text(
-          txt,
+        txt,
         style: const TextStyle(
           fontFamily: "RobotoFlex",
-
         ),
       ),
     );

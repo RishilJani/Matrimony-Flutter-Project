@@ -1,5 +1,4 @@
-import
-'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matrimony_application/backend/user.dart';
 import 'package:matrimony_application/design/dashboard/splash_screen.dart';
@@ -7,6 +6,7 @@ import 'package:matrimony_application/utils/string_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final User user = User();
+Color bgColor = const Color(0xFFFDFAFF);
 
 Widget appBarGradient() {
   var bgColours = [
@@ -14,24 +14,41 @@ Widget appBarGradient() {
     const Color.fromARGB(255, 250, 156, 188),
   ];
   return Container(
-    decoration: BoxDecoration (
+    decoration: BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: bgColours
-        )
-    ),
+            colors: bgColours)),
   );
 }
 
-TextStyle myTextStyle() {
-  return const TextStyle(
-    fontFamily: RobotoFlex,
-    fontSize: 33,
-    fontWeight: FontWeight.w600,
-    color: Color.fromRGBO(0, 0, 0, 0.7),
+Widget appBarBG() {
+  return Container(
+    color: bgColor,
   );
 }
+
+LinearGradient backGroundGradient() {
+  return LinearGradient(
+    colors: [
+      Colors.white,
+      Colors.pink.shade100,
+      Colors.pink.shade100,
+      Colors.pink.shade300,
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+}
+
+// TextStyle myTextStyle() {
+//   return const TextStyle(
+//     fontFamily: RobotoFlex,
+//     fontSize: 33,
+//     fontWeight: FontWeight.w600,
+//     color: Color.fromRGBO(0, 0, 0, 0.7),
+//   );
+// }
 
 Future<void> unFavouriteDialog({required context, required int id}) async {
   Map<String, dynamic> tempUser = await user.getByIdDatabase(id);
@@ -63,7 +80,8 @@ Future<void> unFavouriteDialog({required context, required int id}) async {
   return;
 }
 
-Future<void> deleteDialog({required int i, required context,navigateTo}) async {
+Future<void> deleteDialog(
+    {required int i, required context, navigateTo}) async {
   Map<String, dynamic> tempUser = await user.getByIdDatabase(i);
 
   await showDialog(
@@ -86,13 +104,17 @@ Future<void> deleteDialog({required int i, required context,navigateTo}) async {
             ),
             onPressed: () {
               user.deleteUserDatabase(tempUser[UserId]);
-              if(navigateTo != null){
-
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
-                  return navigateTo;
-                },),(route) => route.isFirst,);
-
-              }else{
+              if (navigateTo != null) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return navigateTo;
+                    },
+                  ),
+                  (route) => route.isFirst,
+                );
+              } else {
                 Navigator.pop(context);
               }
             },
@@ -125,9 +147,11 @@ void logout(context) {
         actions: [
           TextButton(
             onPressed: () async {
-              SharedPreferences.getInstance().then((value) {
+              SharedPreferences.getInstance().then(
+                (value) {
                   value.setBool(rememberMe, false);
-              },);
+                },
+              );
               Navigator.pushReplacement(context, MaterialPageRoute(
                 builder: (context) {
                   return const SplashScreen();

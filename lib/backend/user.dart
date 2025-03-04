@@ -121,7 +121,7 @@ class User {
     List<Map<String, dynamic>> temp = [];
     temp.addAll(
         await db.query(Table_User, where: '$isFavourite = ?', whereArgs: [1]));
-    
+
     temp = _getHobbies(temp);
     return temp;
   }
@@ -142,8 +142,8 @@ class User {
     await db.delete(Table_User);
   }
 
-  Future<void> deleteSomeUsersDatabase(Set<int> ids) async{
-    for(int i in ids){
+  Future<void> deleteSomeUsersDatabase(Set<int> ids) async {
+    for (int i in ids) {
       await deleteUserDatabase(i);
     }
   }
@@ -165,11 +165,12 @@ class User {
   }
 
   // to change few favourite users
-  Future<void> changeSomeFavouriteDatabase(Set<int> ids) async{
-    for(int i in ids){
+  Future<void> changeSomeFavouriteDatabase(Set<int> ids) async {
+    for (int i in ids) {
       changeFavouriteDatabase(i, 0);
     }
   }
+
   Future<void> updateUserDatabase(int id, Map<String, dynamic> mp) async {
     Database db = await MyDatabase().initDatabase();
 
@@ -194,21 +195,19 @@ class User {
     return ans;
   }
 
-
-  void tempInsert() async{
-    // Database db = await MyDatabase().initDatabase();
-    List<Map<String,dynamic>> ul = [
+  void tempInsert() async {
+    List<Map<String, dynamic>> ul = [
       {
-      Name: "User1",
-      Email: "abc@gmail.com",
-      Mobile: "1234567890",
-      Hobbies: {"Reading": false, "Music": true, "Dance": false},
-      City: "Jamnagar",
-      Gender: 'Male',
-      DOB: '23/01/2007',
-      Password: "secret",
-      isFavourite: 0,
-    },
+        Name: "User1",
+        Email: "abc@gmail.com",
+        Mobile: "1234567890",
+        Hobbies: {"Reading": false, "Music": true, "Dance": false},
+        City: "Jamnagar",
+        Gender: 'Male',
+        DOB: '23/01/2007',
+        Password: "secret",
+        isFavourite: 0,
+      },
       {
         Name: "User2",
         Email: "hello@gmail.com",
@@ -240,7 +239,7 @@ class User {
         Gender: 'Male',
         DOB: '23/07/2006',
         Password: "Super@Secret9",
-        isFavourite:0,
+        isFavourite: 0,
       },
       {
         Name: "mno",
@@ -264,9 +263,9 @@ class User {
         Password: "Super@Secret9",
         isFavourite: 0,
       }
-      ];
+    ];
 
-    for(var ele in ul){
+    for (var ele in ul) {
       addUserDatabase(ele);
     }
   }

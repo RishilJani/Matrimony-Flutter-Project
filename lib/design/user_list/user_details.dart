@@ -36,7 +36,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     // Name
                     Center(
                       child: Text(
@@ -59,9 +58,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         widget.userDetail[AboutMe],
                         maxLines: 3,
                         style: const TextStyle(
-                            fontFamily: RobotoFlex,
-                            fontSize: 23
-                        ),
+                            fontFamily: RobotoFlex, fontSize: 23),
                       ),
                     ),
                     const SizedBox(
@@ -75,7 +72,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         getButtons(),
                       ],
                     ),
-                    const SizedBox( height: 25, ),
+                    const SizedBox(
+                      height: 25,
+                    ),
 
                     getHeading("About"),
 
@@ -106,13 +105,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
-  Widget getHeading(String txt){
+  Widget getHeading(String txt) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: Text(
-          txt,
-          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
+        txt,
+        style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+      ),
     );
   }
 
@@ -145,16 +144,16 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               child: Text(
                 txt == Age
                     ? "$age"
-                    : txt == Hobbies ? getHobbies()
-                    : widget.userDetail[txt].toString(),
+                    : txt == Hobbies
+                        ? getHobbies()
+                        : widget.userDetail[txt].toString(),
                 style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 15,
                     fontFamily: RobotoFlex),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 4,
-              )
-          ),
+              )),
         ],
       ),
     );
@@ -200,8 +199,10 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               padding: const EdgeInsets.all(5),
               onPressed: () {
                 // deleteDialog();
-                deleteDialog(i: widget.userDetail[UserId], context: context,navigateTo: UserListPage(isFav: false));
-                
+                deleteDialog(
+                    i: widget.userDetail[UserId],
+                    context: context,
+                    navigateTo: UserListPage(isFav: false));
               },
               icon: const Icon(
                 Icons.delete,
@@ -211,7 +212,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         ),
         // endregion Delete
 
-        
         // region Edit
         Expanded(
           child: IconButton(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:matrimony_application/design/dashboard/dashboard.dart';
 import 'package:matrimony_application/design/dashboard/login_signup_page.dart';
 import 'package:matrimony_application/utils/string_constants.dart';
+import 'package:matrimony_application/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,10 +13,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  List<Color> bgColors = [
-    const Color.fromARGB(255, 111, 208, 245),
-    const Color.fromARGB(255, 250, 156, 188)
-  ];
 
   @override
   void initState() {
@@ -58,11 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: bgColors,
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-          )
+          gradient: backGroundGradient(),
         ),
         child: Center(
           child: Column(
@@ -70,14 +63,13 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               Image.asset(
                 "assets/images/two_rings_transparent.png",
-                width: 250,
-                fit: BoxFit.cover,
+                width: 300,
+                fit: BoxFit.contain,
               ),
             ],
           ),
         ),
       )
-      ,
     );
   }
 }

@@ -38,11 +38,12 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: appBarGradient(),
+        flexibleSpace: appBarBG(),
         title: Text(
           widget.isFav ? "Favourite Users" : "User List",
-          style: const TextStyle(
-              fontSize: 40,
+          style: TextStyle(
+              fontSize: 50,
+              color: Colors.pink.shade300,
               fontWeight: FontWeight.bold,
               fontFamily: 'StyleScript'),
         ),
@@ -54,7 +55,7 @@ class _UserListPageState extends State<UserListPage> {
                     selectedUsers.length == data.length
                         ? Icons.check_box
                         : Icons.check_box_outline_blank_sharp,
-                    color: Colors.blueAccent.withOpacity(0.7),
+                    color: Colors.pink.withOpacity(0.7),
                   ),
                   onPressed: selectAllItems,
                 ),
@@ -134,18 +135,16 @@ class _UserListPageState extends State<UserListPage> {
           ],
         ),
       ),
-
       floatingActionButton: sortItemsMenu(),
     );
   }
 
   Widget getListItem(i) {
     int ind = data[i][UserId];
-    // int age = _user.ageCalculate(data[i]);
 
     double borderRad = 23;
     bool isSelect = selectedUsers.contains(ind);
-    Color borderColor = const Color(0xFFC2D8F8);
+    Color listBgColor = const Color(0xFFDCE6FF);
 
     return ListTile(
       onLongPress: () => enterSelectionMode(ind),
@@ -169,32 +168,29 @@ class _UserListPageState extends State<UserListPage> {
           );
         }
       },
-
       contentPadding: EdgeInsets.zero,
       tileColor: isSelect ? Colors.blue.withOpacity(0.3) : null,
       leading: isSelectionMode
           ? Checkbox(
+              activeColor: Colors.pink,
               value: isSelect,
               onChanged: (value) => toggleSelection(ind),
-
             )
           : null,
-
       title: Container(
-        height: 120,
+        height: 110,
         decoration: BoxDecoration(
-          color: borderColor,
-          border: Border.all(color: borderColor, width: 0.5),
+          color: listBgColor,
           borderRadius: BorderRadius.circular(borderRad),
         ),
-        padding: const EdgeInsets.only(right: 15, top: 5, bottom: 5),
+        padding: const EdgeInsets.only(left: 7, right: 5),
         child: Row(children: [
           // region Image
           ClipOval(
             child: Image.asset(
               "assets/images/two_rings.jpg",
-              height: 100,
-              width: 100,
+              height: 75,
+              width: 75,
               fit: BoxFit.cover,
             ),
           ),
@@ -208,6 +204,7 @@ class _UserListPageState extends State<UserListPage> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // region Name
                 Text(
@@ -217,7 +214,7 @@ class _UserListPageState extends State<UserListPage> {
                   style: const TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: RobotoFlex,
-                    fontSize: 35,
+                    fontSize: 27,
                   ),
                 ),
                 // endregion Name
@@ -227,31 +224,11 @@ class _UserListPageState extends State<UserListPage> {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: const TextStyle(
-                    color: Color.fromARGB(100, 23, 23, 23),
-                    overflow: TextOverflow.ellipsis,
-                    fontFamily:  RobotoFlex
-                  ),
+                      color: Color.fromARGB(100, 23, 23, 23),
+                      overflow: TextOverflow.ellipsis,
+                      fontFamily: RobotoFlex),
                 )
-                
-                /*
-                // region City
-                Text(
-                  data[i][City].toString(),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(fontFamily: RobotoFlex, fontSize: 23),
-                ),
-                // endregion City
 
-                // region Age
-                Text(
-                  'age : ${age.toString()}',
-                  maxLines: 1,
-                  style: const TextStyle(fontFamily: RobotoFlex, fontSize: 21),
-                ),
-                // endregion Age
-
-                */
               ],
             ),
           ),
@@ -280,13 +257,11 @@ class _UserListPageState extends State<UserListPage> {
                           getData();
                           isAllFavourite = changeAllFavourite();
                         });
-                      }
-                      else {
+                      } else {
                         await unFavouriteDialog(context: context, id: ind);
                         getData();
-
                       }
-                      },
+                    },
                   ),
                 ),
                 // endregion favourite
@@ -299,7 +274,7 @@ class _UserListPageState extends State<UserListPage> {
                       color: Colors.red,
                       size: 25,
                     ),
-                    onPressed: () async{
+                    onPressed: () async {
                       await deleteDialog(i: ind, context: context);
                       setState(() {
                         getData();
@@ -396,12 +371,11 @@ class _UserListPageState extends State<UserListPage> {
 
   // region sort
   Widget sortItemsMenu() {
-
     return SpeedDial(
+      backgroundColor: bgColor,
       label: const Text("Sort By"),
       icon: Icons.sort,
       closeManually: false,
-      // backgroundColor: bgColour,
       children: [
         sortItems(text: "$Age reverse", icon: Icons.cake),
         sortItems(text: "$Name reverse", icon: Icons.sort_by_alpha_sharp),
@@ -414,7 +388,6 @@ class _UserListPageState extends State<UserListPage> {
   }
 
   SpeedDialChild sortItems({required String text, required IconData icon}) {
-    Color bgColour = const Color.fromARGB(255, 242, 242, 242);
     return SpeedDialChild(
         onTap: () {
           if (text == "Last Added") {
@@ -431,10 +404,9 @@ class _UserListPageState extends State<UserListPage> {
         },
         label: text,
         labelStyle: const TextStyle(fontFamily: RobotoFlex),
-        labelBackgroundColor: bgColour,
-        backgroundColor: bgColour,
-        child: Icon(icon)
-    );
+        labelBackgroundColor: bgColor,
+        backgroundColor: bgColor,
+        child: Icon(icon));
   }
 
   void sortUserListBy(String text) {
@@ -471,7 +443,6 @@ class _UserListPageState extends State<UserListPage> {
     setState(() {});
   }
   // endregion sort
-
 
   void toggleSelection(int ind) {
     setState(() {
