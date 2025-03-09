@@ -63,8 +63,9 @@ Future<void> unFavouriteDialog({required context, required int id}) async {
           TextButton(
             child: const Text("Yes"),
             onPressed: () {
-              user.changeFavouriteDatabase(id, 0);
-              Navigator.pop(context);
+              user.changeFavouriteDatabase(id, 0).then((value) {
+                Navigator.pop(context);
+              },);
             },
           ),
           TextButton(

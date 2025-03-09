@@ -176,7 +176,8 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                                   fontFamily: RobotoFlex,
                                   fontSize: 20,
                                   color: Colors.white),
-                            )),
+                            )
+                        ),
                       )
                     ],
                   ),

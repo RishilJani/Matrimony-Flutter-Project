@@ -1,10 +1,126 @@
 import 'dart:convert';
-import 'package:matrimony_application/backend/my_database.dart';
+import 'package:matrimony_application/backend/my_api.dart';
+
 import 'package:matrimony_application/utils/string_constants.dart';
-import 'package:sqflite/sqflite.dart';
+import 'dart:math';
 
 class User {
+  MyApi myApi = MyApi();
   static List<Map<String, dynamic>> userList = [];
+
+
+  // to add a new user
+  Future<void> addUserDatabase(Map<String, dynamic> mp) async {
+    userList.add(mp);
+    mp[Hobbies] = jsonEncode(mp[Hobbies]);
+    // Database db = await MyDatabase().initDatabase();
+    // int id = await db.insert(Table_User, mp);
+    // mp[UserId] = id;
+    myApi.insertAPI(mp);
+  }
+
+  // to get all users
+  Future<List<Map<String, dynamic>>> getAllDatabase() async {
+    // Database db = await MyDatabase().initDatabase();
+    // List<Map<String, dynamic>> temp = await db.query(Table_User);
+    List<Map<String, dynamic>> temp = await MyApi().getAll();
+    userList.clear();
+    temp = addHobbies(temp);
+    userList.addAll(temp);
+    // userList = _getHobbies(userList);
+    return userList;
+  }
+
+  // to get a single user
+  Future<Map<String, dynamic>> getByIdDatabase(int id) async {
+    // Database db = await MyDatabase().initDatabase();
+    // List<Map<String, dynamic>> data =
+    //     await db.query(Table_User, where: '$UserId = ?', whereArgs: [id]);
+
+    // data = _getHobbies(data);
+    // if (data.isNotEmpty) {
+    //   return data[0];
+    // } else {
+    //   return {};
+    // }
+    int ind = getAPIid(id);
+
+    Map<String,dynamic>temp = await myApi.getByID(ind);
+    List<Map<String,dynamic>> data = [temp];
+    temp = _getHobbies(data)[0];
+    return temp;
+  }
+
+  // to get favourite users list
+  Future<List<Map<String, dynamic>>> getFavouriteDatabase() async {
+    // Database db = await MyDatabase().initDatabase();
+    //
+    // List<Map<String, dynamic>> temp = [];
+    // temp.addAll(
+    //     await db.query(Table_User, where: '$isFavourite = ?', whereArgs: [1]));
+    // List<Map<String,dynamic>> temp = await getAllDatabase();
+    List<Map<String,dynamic>> temp = await myApi.getAll();
+    temp = temp.where((element) => element[isFavourite] == 1).toList();
+    // temp = _getHobbies(temp);
+    return temp;
+  }
+
+  // to delete a user
+  Future<void> deleteUserDatabase(int id) async {
+    // Database db = await MyDatabase().initDatabase();
+    myApi.deleteAPI(id);
+    userList.removeWhere(
+          (element) {
+        return element[UserId] == id;
+      },
+    );
+    // await db.delete(Table_User, where: '$UserId = ?', whereArgs: [id]);
+  }
+
+  // to delete selected users
+  Future<void> deleteSomeUsersDatabase(Set<int> ids) async {
+    for (int i in ids) {
+      await deleteUserDatabase(i);
+    }
+  }
+
+  // to favourite unfavourite user
+  Future<void> changeFavouriteDatabase(int id, int value) async {
+    // Database db = await MyDatabase().initDatabase();
+    // await db.execute('''
+    //   UPDATE $Table_User
+    //   SET $isFavourite = ?
+    //   WHERE $UserId = ?
+    //   ''', [value, id]);
+    id = getAPIid(id);
+    await myApi.changeFavourite(id, value);
+
+  }
+
+  // to favourite unfavourite selected users
+  Future<void> changeSomeFavouriteDatabase(Set<int> ids) async {
+    for (int i in ids) {
+      changeFavouriteDatabase(i, 0);
+    }
+  }
+
+  // to edit a user
+  Future<void> updateUserDatabase(int id, Map<String, dynamic> mp) async {
+    // Database db = await MyDatabase().initDatabase();
+
+    for (var element in userList) {
+      if (element[UserId] == id) {
+        element = mp;
+      }
+    }
+    mp[Hobbies] = jsonEncode(mp[Hobbies]);
+    int ind = getAPIid(id);
+    // await db.update(Table_User, mp, where: '$UserId = ?', whereArgs: [id]);
+    await myApi.updateAPI(ind, jsonEncode(mp));
+  }
+
+
+
 
   int ageCalculate(Map<String, dynamic> user) {
     DateTime current = DateTime.now();
@@ -85,104 +201,6 @@ class User {
         .contains(value.toString().toLowerCase());
   }
 
-  Future<void> addUserDatabase(Map<String, dynamic> mp) async {
-    userList.add(mp);
-    mp[Hobbies] = jsonEncode(mp[Hobbies]);
-    Database db = await MyDatabase().initDatabase();
-    int id = await db.insert(Table_User, mp);
-    mp[UserId] = id;
-  }
-
-  Future<List<Map<String, dynamic>>> getAllDatabase() async {
-    Database db = await MyDatabase().initDatabase();
-    List<Map<String, dynamic>> temp = await db.query(Table_User);
-    userList.clear();
-    userList.addAll(temp);
-    userList = _getHobbies(userList);
-    return userList;
-  }
-
-  Future<Map<String, dynamic>> getByIdDatabase(int id) async {
-    Database db = await MyDatabase().initDatabase();
-    List<Map<String, dynamic>> data =
-        await db.query(Table_User, where: '$UserId = ?', whereArgs: [id]);
-
-    data = _getHobbies(data);
-    if (data.isNotEmpty) {
-      return data[0];
-    } else {
-      return {};
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getFavouriteDatabase() async {
-    Database db = await MyDatabase().initDatabase();
-
-    List<Map<String, dynamic>> temp = [];
-    temp.addAll(
-        await db.query(Table_User, where: '$isFavourite = ?', whereArgs: [1]));
-
-    temp = _getHobbies(temp);
-    return temp;
-  }
-
-  Future<void> deleteUserDatabase(int id) async {
-    Database db = await MyDatabase().initDatabase();
-    userList.removeWhere(
-      (element) {
-        return element[UserId] == id;
-      },
-    );
-    await db.delete(Table_User, where: '$UserId = ?', whereArgs: [id]);
-  }
-
-  Future<void> deleteAllUsersDatabase() async {
-    Database db = await MyDatabase().initDatabase();
-    userList.clear();
-    await db.delete(Table_User);
-  }
-
-  Future<void> deleteSomeUsersDatabase(Set<int> ids) async {
-    for (int i in ids) {
-      await deleteUserDatabase(i);
-    }
-  }
-
-  // to favourite unfavourite users
-  Future<void> changeFavouriteDatabase(int id, int value) async {
-    Database db = await MyDatabase().initDatabase();
-    await db.execute('''
-      UPDATE $Table_User
-      SET $isFavourite = ?
-      WHERE $UserId = ?
-      ''', [value, id]);
-  }
-
-  // to remove all favourite users
-  Future<void> removeAllFavouriteDatabase() async {
-    Database db = await MyDatabase().initDatabase();
-    await db.execute('UPDATE $Table_User SET $isFavourite = ?', [0]);
-  }
-
-  // to change few favourite users
-  Future<void> changeSomeFavouriteDatabase(Set<int> ids) async {
-    for (int i in ids) {
-      changeFavouriteDatabase(i, 0);
-    }
-  }
-
-  Future<void> updateUserDatabase(int id, Map<String, dynamic> mp) async {
-    Database db = await MyDatabase().initDatabase();
-
-    for (var element in userList) {
-      if (element[UserId] == id) {
-        element = mp;
-      }
-    }
-    mp[Hobbies] = jsonEncode(mp[Hobbies]);
-    await db.update(Table_User, mp, where: '$UserId = ?', whereArgs: [id]);
-  }
-
   List<Map<String, dynamic>> _getHobbies(List<Map<String, dynamic>> temp) {
     List<Map<String, dynamic>> ans = temp.map(
       (e) {
@@ -195,83 +213,36 @@ class User {
     return ans;
   }
 
-  void tempInsert() async {
-    List<Map<String, dynamic>> ul = [
-      {
-        Name: "User1",
-        Email: "abc@gmail.com",
-        Mobile: "1234567890",
-        Hobbies: {"Reading": false, "Music": true, "Dance": false},
-        City: "Jamnagar",
-        Gender: 'Male',
-        DOB: '23/01/2007',
-        Password: "secret",
-        isFavourite: 0,
-      },
-      {
-        Name: "User2",
-        Email: "hello@gmail.com",
-        Mobile: "9876543211",
-        Hobbies: {"Reading": true, "Music": true, "Dance": false},
-        City: "Rajkot",
-        Gender: 'Female',
-        DOB: '23/07/2005',
-        Password: "Super@Secret9",
-        isFavourite: 1,
-      },
-      {
-        Name: "User3",
-        Email: "myemail@gmail.com",
-        Mobile: "9824201302",
-        Hobbies: {"Reading": true, "Music": true, "Dance": true},
-        City: "Baroda",
-        Gender: 'Male',
-        DOB: '23/07/2006',
-        Password: "Super@Secret9",
-        isFavourite: 1,
-      },
-      {
-        Name: "User4",
-        Email: "myemail@gmail.com",
-        Mobile: "9824201303",
-        Hobbies: {"Reading": true, "Music": true, "Dance": true},
-        City: "Baroda",
-        Gender: 'Male',
-        DOB: '23/07/2006',
-        Password: "Super@Secret9",
-        isFavourite: 0,
-      },
-      {
-        Name: "mno",
-        Email: "myemail@gmail.com",
-        Mobile: "9824201307",
-        Hobbies: {"Reading": true, "Music": true, "Dance": true},
-        City: "Baroda",
-        Gender: 'Male',
-        DOB: '23/07/2004',
-        Password: "Super@Secret9",
-        isFavourite: 0,
-      },
-      {
-        Name: "pqr",
-        Email: "myemail@gmail.com",
-        Mobile: "9824201308",
-        Hobbies: {"Reading": true, "Music": true, "Dance": true},
-        City: "Baroda",
-        Gender: 'Male',
-        DOB: '23/07/1980',
-        Password: "Super@Secret9",
-        isFavourite: 0,
-      }
-    ];
 
-    for (var ele in ul) {
+
+  void tempInsert() async {
+
+    for (var ele in tempUsers) {
       addUserDatabase(ele);
     }
   }
-}
 
-/*
+  List<Map<String,dynamic>> addHobbies(List<Map<String,dynamic>> data){
+    var random = Random();
+    for(var ele in data){
+      int ind = random.nextInt(tempUsers.length);
+      ele[Hobbies] =tempUsers[ind][Hobbies];
+      // ele[isFavourite] = ele[isFavourite] ? 1 : 0;
+    }
+    return data;
+  }
+
+  int getAPIid(int id){
+    int ind = 0;
+    for (var element in userList) {
+      if(element[UserId] == id){
+        ind = int.parse(element['id']);
+      }
+    }
+    return ind;
+  }
+
+  List<Map<String,dynamic>> tempUsers = [
     {
       Name: "User1",
       Email: "abc@gmail.com",
@@ -379,5 +350,9 @@ class User {
       Password: "Super@Secret9",
       isFavourite: 1,
       Age: 19
-    },
- */
+    }
+    ];
+
+}
+
+

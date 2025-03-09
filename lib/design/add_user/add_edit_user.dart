@@ -463,16 +463,35 @@ class _UserFormState extends State<UserForm> {
                   // Submit Button
 
                   // region Button
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          Map<String, dynamic> mp = await sendData();
-                          if (context.mounted) {
-                            Navigator.pop(context, mp);
-                          }
-                        }
-                      },
-                      child: Text(isEdit ? 'Edit User' : 'Register'))
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                                padding: WidgetStateProperty.all(
+                                    const EdgeInsets.all(12)),
+                                backgroundColor: WidgetStateProperty.all(
+                                    Colors.pink.shade400)
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                Map<String, dynamic> mp = await sendData();
+                                if (context.mounted) {
+                                  Navigator.pop(context, mp);
+                                }
+                              }
+                            },
+                            child: Text(
+                                isEdit ? 'Edit User' : 'Register',
+                                style: const TextStyle(
+                                  fontFamily: RobotoFlex,
+                                  fontSize: 20,
+                                  color: Colors.white),
+                            ),
+                        ),
+                      ),
+                    ],
+                  )
                   // endregion Button
                 ],
               ),

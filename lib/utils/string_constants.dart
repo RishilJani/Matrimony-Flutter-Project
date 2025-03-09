@@ -1,3 +1,4 @@
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names
 const String MyDatabaseName = "myDatabase.db";
 const String Table_User = 'User';
 int DB_Version = 2;

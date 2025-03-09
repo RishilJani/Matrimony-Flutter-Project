@@ -21,7 +21,7 @@ class _UserListPageState extends State<UserListPage> {
   List<Map<String, dynamic>> data = [];
   TextEditingController searchController = TextEditingController();
 
-  bool isAllFavourite = true;
+
   bool isSelectionMode = false;
 
   Set<int> selectedUsers = {};
@@ -128,10 +128,7 @@ class _UserListPageState extends State<UserListPage> {
               ))
             else
               const Center(
-                  child: Text(
-                "User not found",
-                style: TextStyle(fontSize: 20),
-              ))
+                  child: CircularProgressIndicator())
           ],
         ),
       ),
@@ -252,14 +249,18 @@ class _UserListPageState extends State<UserListPage> {
                     ),
                     onPressed: () async {
                       if (data[i][isFavourite] == 0) {
-                        _user.changeFavouriteDatabase(data[i][UserId], 1);
-                        setState(() {
+                        _user.changeFavouriteDatabase(data[i][UserId], 1).then((value) {
+                          setState(() {
                           getData();
-                          isAllFavourite = changeAllFavourite();
                         });
+                        },);
                       } else {
-                        await unFavouriteDialog(context: context, id: ind);
-                        getData();
+                        unFavouriteDialog(context: context, id: ind).then((value) {
+                          setState(() {
+                            getData();
+                          });
+                        },);
+
                       }
                     },
                   ),
@@ -275,6 +276,7 @@ class _UserListPageState extends State<UserListPage> {
                       size: 25,
                     ),
                     onPressed: () async {
+
                       await deleteDialog(i: ind, context: context);
                       setState(() {
                         getData();
@@ -299,7 +301,6 @@ class _UserListPageState extends State<UserListPage> {
       } else {
         data = await _user.getAllDatabase();
       }
-      isAllFavourite = changeAllFavourite();
     } else {
       if (widget.isFav) {
         data = _user.searchFavouriteUser(searchController.text);
@@ -307,66 +308,10 @@ class _UserListPageState extends State<UserListPage> {
         data = _user.searchUser(searchController.text);
       }
     }
+
     setState(() {
-      if (isRev) {
-        data = data.reversed.toList();
-      } else {
-        data = data.toList();
-      }
+      data = isRev ? data.reversed.toList() : data.toList();
     });
-  }
-
-  void unFavouriteAll() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: const Text(
-            "Unfavourite",
-            style: TextStyle(fontFamily: RobotoFlex),
-          ),
-          content: const Text(
-            "Are you sure want to remove all from Favourite?",
-            style: TextStyle(fontFamily: RobotoFlex),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                _user.removeAllFavouriteDatabase();
-                setState(() {
-                  isAllFavourite = false;
-                  getData();
-                });
-
-                Navigator.pop(context);
-              },
-              child: const Text(
-                "Yes",
-                style: TextStyle(fontFamily: RobotoFlex),
-              ),
-            ),
-            TextButton(
-              child: const Text(
-                "No",
-                style: TextStyle(fontFamily: RobotoFlex),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  bool changeAllFavourite() {
-    for (var ele in data) {
-      if (ele[isFavourite] == 1) {
-        return true;
-      }
-    }
-    return false;
   }
 
   // region sort
